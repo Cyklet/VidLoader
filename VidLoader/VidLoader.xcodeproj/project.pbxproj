@@ -17,6 +17,14 @@
 		0B354B012396953C009CE690 /* DataExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AF72396953C009CE690 /* DataExtensions.swift */; };
 		0B354B022396953C009CE690 /* URLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AF82396953C009CE690 /* URLExtensions.swift */; };
 		0B354B032396953C009CE690 /* HTTPURLResponseExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AF92396953C009CE690 /* HTTPURLResponseExtensions.swift */; };
+		0B51984C239A648000AEC201 /* FileHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B51984B239A648000AEC201 /* FileHandlerTests.swift */; };
+		0B51984E239A64CB00AEC201 /* MockedFileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B51984D239A64CB00AEC201 /* MockedFileManager.swift */; };
+		0B519850239A65BE00AEC201 /* MockedVidLoaderExecutionQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B51984F239A65BE00AEC201 /* MockedVidLoaderExecutionQueue.swift */; };
+		0B519852239A667B00AEC201 /* ItemInformationExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519851239A667B00AEC201 /* ItemInformationExtensions.swift */; };
+		0B519855239A6BC700AEC201 /* NetworkHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519854239A6BC700AEC201 /* NetworkHandlerTests.swift */; };
+		0B519857239A6C2200AEC201 /* MockedReachable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519856239A6C2200AEC201 /* MockedReachable.swift */; };
+		0B51985A239A805400AEC201 /* SchemeHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519859239A805400AEC201 /* SchemeHandlerTests.swift */; };
+		0B51985C239A869D00AEC201 /* ResourceLoadingErrorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B51985B239A869D00AEC201 /* ResourceLoadingErrorExtensions.swift */; };
 		0BA35D14238551E2004B2F31 /* VidLoader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA35D0A238551E2004B2F31 /* VidLoader.framework */; };
 		0BA35D1B238551E2004B2F31 /* VidLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 0BA35D0D238551E2004B2F31 /* VidLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0BA35D5423855206004B2F31 /* FileManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D2723855206004B2F31 /* FileManageable.swift */; };
@@ -79,6 +87,14 @@
 		0B354AF72396953C009CE690 /* DataExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DataExtensions.swift; sourceTree = "<group>"; };
 		0B354AF82396953C009CE690 /* URLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = URLExtensions.swift; sourceTree = "<group>"; };
 		0B354AF92396953C009CE690 /* HTTPURLResponseExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HTTPURLResponseExtensions.swift; sourceTree = "<group>"; };
+		0B51984B239A648000AEC201 /* FileHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileHandlerTests.swift; sourceTree = "<group>"; };
+		0B51984D239A64CB00AEC201 /* MockedFileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedFileManager.swift; sourceTree = "<group>"; };
+		0B51984F239A65BE00AEC201 /* MockedVidLoaderExecutionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedVidLoaderExecutionQueue.swift; sourceTree = "<group>"; };
+		0B519851239A667B00AEC201 /* ItemInformationExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemInformationExtensions.swift; sourceTree = "<group>"; };
+		0B519854239A6BC700AEC201 /* NetworkHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHandlerTests.swift; sourceTree = "<group>"; };
+		0B519856239A6C2200AEC201 /* MockedReachable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedReachable.swift; sourceTree = "<group>"; };
+		0B519859239A805400AEC201 /* SchemeHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SchemeHandlerTests.swift; sourceTree = "<group>"; };
+		0B51985B239A869D00AEC201 /* ResourceLoadingErrorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoadingErrorExtensions.swift; sourceTree = "<group>"; };
 		0BA35D0A238551E2004B2F31 /* VidLoader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VidLoader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BA35D0D238551E2004B2F31 /* VidLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidLoader.h; sourceTree = "<group>"; };
 		0BA35D0E238551E2004B2F31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -148,6 +164,9 @@
 				0B354AEC2396953C009CE690 /* MockedError.swift */,
 				0B354AED2396953C009CE690 /* CustomDataTask.swift */,
 				0B354AEE2396953C009CE690 /* MockedRequestable.swift */,
+				0B51984D239A64CB00AEC201 /* MockedFileManager.swift */,
+				0B51984F239A65BE00AEC201 /* MockedVidLoaderExecutionQueue.swift */,
+				0B519856239A6C2200AEC201 /* MockedReachable.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -163,6 +182,9 @@
 		0B354AF02396953C009CE690 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0B519858239A802A00AEC201 /* ResourceLoader */,
+				0B519853239A6BBA00AEC201 /* NetworkHandler */,
+				0B51984A239A646B00AEC201 /* FileHandler */,
 				0B354AF12396953C009CE690 /* PlaylistLoaderTests.swift */,
 				0B354AF22396953C009CE690 /* VidLoaderExecutionQueueTests.swift */,
 			);
@@ -184,8 +206,34 @@
 				0B354AF72396953C009CE690 /* DataExtensions.swift */,
 				0B354AF82396953C009CE690 /* URLExtensions.swift */,
 				0B354AF92396953C009CE690 /* HTTPURLResponseExtensions.swift */,
+				0B519851239A667B00AEC201 /* ItemInformationExtensions.swift */,
+				0B51985B239A869D00AEC201 /* ResourceLoadingErrorExtensions.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		0B51984A239A646B00AEC201 /* FileHandler */ = {
+			isa = PBXGroup;
+			children = (
+				0B51984B239A648000AEC201 /* FileHandlerTests.swift */,
+			);
+			path = FileHandler;
+			sourceTree = "<group>";
+		};
+		0B519853239A6BBA00AEC201 /* NetworkHandler */ = {
+			isa = PBXGroup;
+			children = (
+				0B519854239A6BC700AEC201 /* NetworkHandlerTests.swift */,
+			);
+			path = NetworkHandler;
+			sourceTree = "<group>";
+		};
+		0B519858239A802A00AEC201 /* ResourceLoader */ = {
+			isa = PBXGroup;
+			children = (
+				0B519859239A805400AEC201 /* SchemeHandlerTests.swift */,
+			);
+			path = ResourceLoader;
 			sourceTree = "<group>";
 		};
 		0BA35D00238551E2004B2F31 = {
@@ -506,11 +554,19 @@
 			buildActionMask = 2147483647;
 			files = (
 				0B354AFE2396953C009CE690 /* VidLoaderExecutionQueueTests.swift in Sources */,
+				0B51985C239A869D00AEC201 /* ResourceLoadingErrorExtensions.swift in Sources */,
 				0B354B032396953C009CE690 /* HTTPURLResponseExtensions.swift in Sources */,
 				0B354AFF2396953C009CE690 /* TupleEquatable.swift in Sources */,
+				0B519852239A667B00AEC201 /* ItemInformationExtensions.swift in Sources */,
 				0B354AFA2396953C009CE690 /* MockedError.swift in Sources */,
+				0B51984E239A64CB00AEC201 /* MockedFileManager.swift in Sources */,
 				0B354AFC2396953C009CE690 /* MockedRequestable.swift in Sources */,
 				0B354B012396953C009CE690 /* DataExtensions.swift in Sources */,
+				0B519850239A65BE00AEC201 /* MockedVidLoaderExecutionQueue.swift in Sources */,
+				0B51985A239A805400AEC201 /* SchemeHandlerTests.swift in Sources */,
+				0B519855239A6BC700AEC201 /* NetworkHandlerTests.swift in Sources */,
+				0B519857239A6C2200AEC201 /* MockedReachable.swift in Sources */,
+				0B51984C239A648000AEC201 /* FileHandlerTests.swift in Sources */,
 				0B354B002396953C009CE690 /* StreamResourceExtensions.swift in Sources */,
 				0B354B022396953C009CE690 /* URLExtensions.swift in Sources */,
 				0B354AFB2396953C009CE690 /* CustomDataTask.swift in Sources */,

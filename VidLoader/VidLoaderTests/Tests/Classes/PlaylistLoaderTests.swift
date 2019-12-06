@@ -70,6 +70,28 @@ final class PlaylistLoaderTests: XCTestCase {
         XCTAssertEqual(resultError, expectedError)
         XCTAssertEqual(mockedDataTask.resumeDidCall, true)
     }
+    
+    func testLoadResourceWhenFailedThenCompletionWithUnknownError() {
+        // GIVEN
+        let mockedIdentifier = "FailedIdentifier"
+        let expectedError: DownloadError = .unknown
+        let mockedDataTask: CustomDataTask = .mocked()
+        mockedRequastable.mockedResponse = (nil, nil, nil)
+        mockedRequastable.mockedDataTask = mockedDataTask
+        var resultError: DownloadError?
+
+        // WHEN
+        playlistLoader.load(identifier: mockedIdentifier, at: .mocked()) { response in
+            switch response {
+            case .success: return
+            case .failure(let error): resultError = error as? DownloadError
+            }
+        }
+
+        // THEN
+        XCTAssertEqual(resultError, expectedError)
+        XCTAssertEqual(mockedDataTask.resumeDidCall, true)
+    }
 
     func testLoadResourceWhenSuccessThenCompletionWithSuccess() {
         // GIVEN

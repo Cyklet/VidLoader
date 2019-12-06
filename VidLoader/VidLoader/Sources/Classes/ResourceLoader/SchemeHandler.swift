@@ -9,7 +9,7 @@
 import AVFoundation
 
 struct SchemeHandler {
-    let keyScheme = "vidloader-ecnryption-key"
+    let keyScheme = "vidloader-encryption-key"
     let newScheme = "vidloader-new-scheme"
     let validScheme = "https"
 

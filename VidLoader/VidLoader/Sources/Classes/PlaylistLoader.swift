@@ -40,7 +40,8 @@ final class PlaylistLoader: PlaylistLoadable {
             completion(.success(()))
         }
 
-        let dataTask = requestable.dataTask(with: URLRequest(url: url)) { data, response, error in
+        let dataTask = requestable.dataTask(with: URLRequest(url: url)) { [weak self] data, response, error in
+            self?.removeFromRelay(identifier)
             guard let response = response as? HTTPURLResponse, let data = data else {
                 return completion(.failure(error ?? DownloadError.unknown))
             }

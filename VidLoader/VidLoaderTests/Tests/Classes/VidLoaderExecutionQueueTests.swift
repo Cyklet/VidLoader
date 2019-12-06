@@ -10,7 +10,7 @@ import XCTest
 
 final class VidLoaderExecutionQueueTests: XCTestCase {
 
-    func testCalculationOnSameExecutionQueue() {
+    func testCalculationWhenSameExecutionQueueThenResultIsCorrect() {
         // GIVEN
         let completedExpectation = expectation(description: "Completed")
         let executionQueue = VidLoaderExecutionQueue(label: "CustomQueueLabel")
@@ -32,7 +32,7 @@ final class VidLoaderExecutionQueueTests: XCTestCase {
         waitForExpectations(timeout: 0.1, handler: nil)
     }
 
-    func testCalculationOnDifferentExecutionsQueues() {
+    func testCalculationWhenDifferentExecutionsQueuesThenResultWrong() {
         // GIVEN
         let expectedResult = 1.0
         var finalResult = 1.0
