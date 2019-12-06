@@ -9,13 +9,17 @@
 import Foundation
 
 protocol VidLoaderExecutionQueueable {
-    func async(label: String, execution: @escaping () -> Void)
+    func async(execution: @escaping () -> Void)
 }
 
 final class VidLoaderExecutionQueue: VidLoaderExecutionQueueable {
-    func async(label: String, execution: @escaping () -> Void) {
-        DispatchQueue(label: label).async {
-            execution()
-        }
+    private let queue: DispatchQueue
+
+    init(label: String) {
+        queue = DispatchQueue(label: label)
+    }
+
+    func async(execution: @escaping () -> Void) {
+        queue.async { execution() }
     }
 }

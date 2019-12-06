@@ -17,7 +17,7 @@ class FileHandler: FileHandleable {
     private let executionQueue: VidLoaderExecutionQueueable
 
     init(fileManager: FileManageable = FileManager.default,
-         executionQueue: VidLoaderExecutionQueueable = VidLoaderExecutionQueue.init()) {
+         executionQueue: VidLoaderExecutionQueueable = VidLoaderExecutionQueue(label: "com.vidloader.file_manager_queue")) {
         self.fileManager = fileManager
         self.executionQueue = executionQueue
     }
@@ -26,7 +26,7 @@ class FileHandler: FileHandleable {
 
     func deleteContent(for asset: ItemInformation) {
         guard let location = asset.location, asset.isReachable else { return }
-        executionQueue.async(label: "com.vidloader.file_manager_queue") { [weak self] in
+        executionQueue.async { [weak self] in
             try? self?.fileManager.removeItem(atPath: location.path)
         }
     }
