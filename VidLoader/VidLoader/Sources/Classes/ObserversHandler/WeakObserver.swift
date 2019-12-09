@@ -9,7 +9,7 @@
 import Foundation
 
 struct WeakObserver<T: AnyObject> where T: Equatable {
-    weak var reference: T?
+    private(set) weak var reference: T?
 
     init(reference: T) {
         self.reference = reference

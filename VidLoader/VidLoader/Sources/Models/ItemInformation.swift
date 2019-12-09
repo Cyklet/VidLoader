@@ -9,7 +9,7 @@
 import Foundation
 
 /// ItemInformation is a stream description that is used and saved in the download task
-public struct ItemInformation: Codable {
+public struct ItemInformation: Codable, Equatable {
     /// Item unique identifier
     public let identifier: String
     /// The path where the stream was downloaded

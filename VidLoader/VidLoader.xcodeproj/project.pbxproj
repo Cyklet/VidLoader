@@ -72,6 +72,8 @@
 		0BEC4B06239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B05239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift */; };
 		0BEC4B08239EA75900AA39D9 /* ResourceLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B07239EA75900AA39D9 /* ResourceLoaderTests.swift */; };
 		0BEC4B0A239EA8E700AA39D9 /* MockedParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B09239EA8E700AA39D9 /* MockedParser.swift */; };
+		0BEC4B0D239ED63000AA39D9 /* WeakObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B0C239ED63000AA39D9 /* WeakObserverTests.swift */; };
+		0BEC4B0F239ED82F00AA39D9 /* ObserversHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B0E239ED82F00AA39D9 /* ObserversHandlerTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -153,6 +155,8 @@
 		0BEC4B05239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoadingRequestExtensions.swift; sourceTree = "<group>"; };
 		0BEC4B07239EA75900AA39D9 /* ResourceLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoaderTests.swift; sourceTree = "<group>"; };
 		0BEC4B09239EA8E700AA39D9 /* MockedParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockedParser.swift; sourceTree = "<group>"; };
+		0BEC4B0C239ED63000AA39D9 /* WeakObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakObserverTests.swift; sourceTree = "<group>"; };
+		0BEC4B0E239ED82F00AA39D9 /* ObserversHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserversHandlerTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,6 +203,7 @@
 		0B354AF02396953C009CE690 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0BEC4B0B239ED61200AA39D9 /* ObserversHandler */,
 				0B519858239A802A00AEC201 /* ResourceLoader */,
 				0B519853239A6BBA00AEC201 /* NetworkHandler */,
 				0B51984A239A646B00AEC201 /* FileHandler */,
@@ -424,6 +429,15 @@
 			path = Extensions;
 			sourceTree = "<group>";
 		};
+		0BEC4B0B239ED61200AA39D9 /* ObserversHandler */ = {
+			isa = PBXGroup;
+			children = (
+				0BEC4B0C239ED63000AA39D9 /* WeakObserverTests.swift */,
+				0BEC4B0E239ED82F00AA39D9 /* ObserversHandlerTests.swift */,
+			);
+			path = ObserversHandler;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -587,6 +601,7 @@
 				0B354AFF2396953C009CE690 /* TupleEquatable.swift in Sources */,
 				0B519852239A667B00AEC201 /* ItemInformationExtensions.swift in Sources */,
 				0B51984E239A64CB00AEC201 /* MockedFileManager.swift in Sources */,
+				0BEC4B0F239ED82F00AA39D9 /* ObserversHandlerTests.swift in Sources */,
 				0B519864239AF06300AEC201 /* FuncCheck.swift in Sources */,
 				0B354AFC2396953C009CE690 /* MockedRequestable.swift in Sources */,
 				0B354B012396953C009CE690 /* DataExtensions.swift in Sources */,
@@ -599,6 +614,7 @@
 				0B519857239A6C2200AEC201 /* MockedReachable.swift in Sources */,
 				0B51985E239ABC7D00AEC201 /* ResourcesDelegatesHandlerTests.swift in Sources */,
 				0B51984C239A648000AEC201 /* FileHandlerTests.swift in Sources */,
+				0BEC4B0D239ED63000AA39D9 /* WeakObserverTests.swift in Sources */,
 				0B354B002396953C009CE690 /* StreamResourceExtensions.swift in Sources */,
 				0B354B022396953C009CE690 /* URLExtensions.swift in Sources */,
 				0B354AFB2396953C009CE690 /* CustomDataTask.swift in Sources */,

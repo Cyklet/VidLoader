@@ -50,7 +50,8 @@ class ObserversHandler: ObserversHandleable {
     }
 
     private func remove(observer: WeakObserver<VidObserver>, with type: ObserverType) {
-        guard let newObservers = observers[type]?.filter({ $0 != observer && $0.reference != nil }) else {
+        guard let newObservers = observers[type]?.filter({ $0 != observer && $0.reference != nil }),
+            !newObservers.isEmpty else {
             observers[type] = nil
             return
         }
