@@ -38,8 +38,8 @@ final class PlaylistLoaderTests: XCTestCase {
         let mockedResponse: HTTPURLResponse = .mocked(url: mockedURL)
         let mockedResource = StreamResource.mocked(response: mockedResponse, data: data)
         let expectedResult: (String, StreamResource)? = (mockedIdentifier, mockedResource)
-        mockedRequastable.mockedResponse = (data, mockedResponse, nil)
-        mockedRequastable.mockedDataTask = .mocked()
+        mockedRequastable.completionHandlerStub = (data, mockedResponse, nil)
+        mockedRequastable.dataTaskStub = .mocked()
         playlistLoader.load(identifier: mockedIdentifier, at: mockedURL) { _ in }
 
         // WHEN
@@ -52,23 +52,23 @@ final class PlaylistLoaderTests: XCTestCase {
     func testLoadResourceWhenFailedThenCompletionWithError() {
         // GIVEN
         let mockedIdentifier = "FailedIdentifier"
-        let expectedError: MockedError = .test
+        let expectedError: ResourceLoadingError = .unknown
         let mockedDataTask: CustomDataTask = .mocked()
-        mockedRequastable.mockedResponse = (nil, nil, expectedError)
-        mockedRequastable.mockedDataTask = mockedDataTask
-        var resultError: MockedError?
+        mockedRequastable.completionHandlerStub = (nil, nil, expectedError)
+        mockedRequastable.dataTaskStub = mockedDataTask
+        var resultError: ResourceLoadingError?
 
         // WHEN
         playlistLoader.load(identifier: mockedIdentifier, at: .mocked()) { response in
             switch response {
             case .success: return
-            case .failure(let error): resultError = error as? MockedError
+            case .failure(let error): resultError = error as? ResourceLoadingError
             }
         }
 
         // THEN
         XCTAssertEqual(resultError, expectedError)
-        XCTAssertEqual(mockedDataTask.resumeDidCall, true)
+        XCTAssertTrue(mockedDataTask.resumeFunCheck.wasCalled())
     }
     
     func testLoadResourceWhenFailedThenCompletionWithUnknownError() {
@@ -76,8 +76,8 @@ final class PlaylistLoaderTests: XCTestCase {
         let mockedIdentifier = "FailedIdentifier"
         let expectedError: DownloadError = .unknown
         let mockedDataTask: CustomDataTask = .mocked()
-        mockedRequastable.mockedResponse = (nil, nil, nil)
-        mockedRequastable.mockedDataTask = mockedDataTask
+        mockedRequastable.completionHandlerStub = (nil, nil, nil)
+        mockedRequastable.dataTaskStub = mockedDataTask
         var resultError: DownloadError?
 
         // WHEN
@@ -90,15 +90,15 @@ final class PlaylistLoaderTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(resultError, expectedError)
-        XCTAssertEqual(mockedDataTask.resumeDidCall, true)
+        XCTAssertTrue(mockedDataTask.resumeFunCheck.wasCalled())
     }
 
     func testLoadResourceWhenSuccessThenCompletionWithSuccess() {
         // GIVEN
         let mockedIdentifier = "SuccessIdentifier"
         let mockedDataTask: CustomDataTask = .mocked()
-        mockedRequastable.mockedResponse = (.mocked(), HTTPURLResponse.mocked(), nil)
-        mockedRequastable.mockedDataTask = mockedDataTask
+        mockedRequastable.completionHandlerStub = (.mocked(), HTTPURLResponse.mocked(), nil)
+        mockedRequastable.dataTaskStub = mockedDataTask
         var result = false
 
         // WHEN
@@ -111,7 +111,7 @@ final class PlaylistLoaderTests: XCTestCase {
 
         // THEN
         XCTAssertTrue(result)
-        XCTAssertEqual(mockedDataTask.resumeDidCall, true)
+        XCTAssertTrue(mockedDataTask.resumeFunCheck.wasCalled())
     }
 
     func testCancelWhenItemDownloadedThenNoNextItem() {
@@ -121,8 +121,8 @@ final class PlaylistLoaderTests: XCTestCase {
         let data = Data.mocked(string: mockedIdentifier)
         let mockedURL: URL = .mocked(stringURL: "https://test.next.resource")
         let mockedResponse: HTTPURLResponse = .mocked(url: mockedURL)
-        mockedRequastable.mockedResponse = (data, mockedResponse, nil)
-        mockedRequastable.mockedDataTask = mockedDataTask
+        mockedRequastable.completionHandlerStub = (data, mockedResponse, nil)
+        mockedRequastable.dataTaskStub = mockedDataTask
         playlistLoader.load(identifier: mockedIdentifier, at: mockedURL) { _ in }
 
         // WHEN
@@ -131,8 +131,8 @@ final class PlaylistLoaderTests: XCTestCase {
 
         // THEN
         XCTAssertNil(resultResource)
-        XCTAssertEqual(mockedDataTask.resumeDidCall, true)
-        XCTAssertEqual(mockedDataTask.cancelDidCall, true)
+        XCTAssertTrue(mockedDataTask.resumeFunCheck.wasCalled())
+        XCTAssertTrue(mockedDataTask.cancelFunCheck.wasCalled())
     }
 
     func testCancelWhenMultipleItemsDownloadedThenNextItemExist() {
@@ -144,8 +144,8 @@ final class PlaylistLoaderTests: XCTestCase {
         let mockedResponse: HTTPURLResponse = .mocked(url: mockedURL)
         let mockedResource = StreamResource.mocked(response: mockedResponse, data: data)
         let expectedResult: (String, StreamResource)? = (mockedIdentifier2, mockedResource)
-        mockedRequastable.mockedResponse = (data, mockedResponse, nil)
-        mockedRequastable.mockedDataTask = .mocked()
+        mockedRequastable.completionHandlerStub = (data, mockedResponse, nil)
+        mockedRequastable.dataTaskStub = .mocked()
         playlistLoader.load(identifier: mockedIdentifier1, at: mockedURL) { _ in }
         playlistLoader.load(identifier: mockedIdentifier2, at: mockedURL) { _ in }
 

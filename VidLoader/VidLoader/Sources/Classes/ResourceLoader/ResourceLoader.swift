@@ -1,39 +1,39 @@
 import AVFoundation
 
-struct ReasourceLoaderObserver {
-    let taskDidFailed: Completion<ResourceLoadingError>
+struct ResourceLoaderObserver {
+    let taskDidFail: Completion<ResourceLoadingError>
     let assetDidLoad: () -> Void
-
-    init(taskDidFailed: @escaping Completion<ResourceLoadingError>,
+    
+    init(taskDidFail: @escaping Completion<ResourceLoadingError>,
          assetDidLoad: @escaping () -> Void) {
-        self.taskDidFailed = taskDidFailed
+        self.taskDidFail = taskDidFail
         self.assetDidLoad = assetDidLoad
     }
 }
 
 final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     let queue = DispatchQueue(label: "com.vidloader.resource_loader_dispatch_url")
-    private let observer: ReasourceLoaderObserver
+    private let observer: ResourceLoaderObserver
     private let parser: Parser
     private let streamResource: StreamResource
     private let requestable: Requestable
     private var didProvideFirstResponse = false
-    private let schemeHandler: SchemeHandler
-
-    init(observer: ReasourceLoaderObserver,
+    private let schemeHandler: SchemeHandleable
+    
+    init(observer: ResourceLoaderObserver,
          streamResource: StreamResource,
          parser: Parser = M3U8Parser(),
          requestable: Requestable = URLSession.shared,
-         schemeHandler: SchemeHandler = .init()) {
+         schemeHandler: SchemeHandleable = SchemeHandler.init()) {
         self.observer = observer
         self.streamResource = streamResource
         self.parser = parser
         self.requestable = requestable
         self.schemeHandler = schemeHandler
     }
-
+    
     // MARK: - AVAssetResourceLoaderDelegate
-
+    
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader,
                         shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         guard let url = loadingRequest.request.url else { return false }
@@ -52,14 +52,14 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
             }
             didProvideFirstResponse = true
         }
-
+        
         return true
     }
-
+    
     // MARK: - Private
-
+    
     private func request(with url: URL,
-                             completion: @escaping Completion<Result<(HTTPURLResponse, Data), Error>>) {
+                         completion: @escaping Completion<Result<(HTTPURLResponse, Data), Error>>) {
         let request = URLRequest(url: url)
         let task = requestable.dataTask(with: request) { data, response, error in
             guard let response = response as? HTTPURLResponse, let data = data else {
@@ -69,17 +69,17 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
         }
         task.resume()
     }
-
+    
     private func prepareContent(_ streamResource: StreamResource,
-                                    for loadingRequest: AVAssetResourceLoadingRequest) {
+                                for loadingRequest: AVAssetResourceLoadingRequest) {
         parseResponseData(streamResource.data, completion: { data in
             loadingRequest.setup(response: streamResource.response, data: data)
         })
     }
-
+    
     private func performPlaylistRequest(with url: URL, loadingRequest: AVAssetResourceLoadingRequest) {
-        guard let adoptedURL = url.withScheme(scheme: schemeHandler.validScheme) else {
-            return observer.taskDidFailed(.urlScheme)
+        guard let adoptedURL = url.withScheme(scheme: .original) else {
+            return observer.taskDidFail(.urlScheme)
         }
         request(with: adoptedURL) { [weak self] result in
             switch result {
@@ -87,16 +87,16 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
                 let streamResource = StreamResource(response: response.0, data: response.1)
                 self?.prepareContent(streamResource, for: loadingRequest)
             case .failure(let error):
-                self?.observer.taskDidFailed(.custom(error))
+                self?.observer.taskDidFail(.custom(error))
             }
         }
     }
-
+    
     private func parseResponseData(_ data: Data, completion: @escaping (Data) -> Void) {
         parser.adjust(data: data, completion: { [weak self] result in
             switch result {
             case .success(let data): completion(data)
-            case .failure(let error): self?.observer.taskDidFailed(.m3u8(error))
+            case .failure(let error): self?.observer.taskDidFail(.m3u8(error))
             }
         })
     }

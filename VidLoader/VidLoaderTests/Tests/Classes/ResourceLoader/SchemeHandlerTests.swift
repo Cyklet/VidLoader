@@ -18,10 +18,10 @@ final class SchemeHandlerTests: XCTestCase {
         schemeHandler = SchemeHandler()
     }
     
-    func testExtractKeyFromURLWhenLinkHasKeySchemeThenResultIsKeyData() {
+    func test_ExtractKeyFromURL_LinkHasKeyScheme_ResultIsKeyData() {
         // GIVEN
         let base64Key = "YWdlbnRfMDA3"
-        let url = URL.mocked(stringURL: "\(schemeHandler.keyScheme):\(base64Key)")
+        let url = URL.mocked(stringURL: "\(SchemeType.key.rawValue):\(base64Key)")
         let expectedKeyData =  Data(base64Encoded: base64Key)
         
         // WHEN
@@ -31,9 +31,9 @@ final class SchemeHandlerTests: XCTestCase {
         XCTAssertEqual(expectedKeyData, resultKeyData)
     }
     
-    func testExtractKeyFromURLWhenLinkHasWrongKeyThenResultIsNil() {
+    func test_ExtractKeyFromURL_LinkHasWrongKey_ResultIsNil() {
         // GIVEN
-        let url = URL.mocked(stringURL: "\(schemeHandler.validScheme):a_key_here")
+        let url = URL.mocked(stringURL: "\(SchemeType.original.rawValue):a_key_here")
         
         // WHEN
         let resultKeyData = schemeHandler.persistentKey(from: url)
@@ -42,10 +42,10 @@ final class SchemeHandlerTests: XCTestCase {
         XCTAssertNil(resultKeyData)
     }
     
-    func testExtractKeyFromURLWhenKeyIsWrongEncryptedThenResultIsNil() {
+    func test_ExtractKeyFromURL_KeyIsWrongEncrypted_ResultIsNil() {
         // GIVEN
         let stringKey = "agent_007"
-        let url = URL.mocked(stringURL: "\(schemeHandler.keyScheme):\(stringKey)")
+        let url = URL.mocked(stringURL: "\(SchemeType.key.rawValue):\(stringKey)")
         
         // WHEN
         let resultKeyData = schemeHandler.persistentKey(from: url)
@@ -54,7 +54,7 @@ final class SchemeHandlerTests: XCTestCase {
         XCTAssertNil(resultKeyData)
     }
     
-    func testGenerateURLAssetWhenLinkIsNilThenAssetIsNil() {
+    func test_GenerateURLAsset_LinkIsNil_AssetIsNil() {
         // GIVEN
         let url: URL? = nil
         let expectedResult: Result<AVURLAsset, ResourceLoadingError> = .failure(.urlScheme)
@@ -66,10 +66,10 @@ final class SchemeHandlerTests: XCTestCase {
         XCTAssertEqual(expectedResult, finalResult)
     }
     
-    func testGenerateURLAssetWhenLinkIsVaildThenAssetURLHasNewScheme() {
+    func test_GenerateURLAsset_LinkIsVaild_AssetURLHasNewScheme() {
         // GIVEN
-        let expectedScheme = schemeHandler.newScheme
-        let url = URL.mocked(stringURL: "\(schemeHandler.validScheme)://url_to_m3u8.co.co")
+        let expectedScheme = SchemeType.custom.rawValue
+        let url = URL.mocked(stringURL: "\(SchemeType.original.rawValue)://url_to_m3u8.co.co")
         
         // WHEN
         let resultScheme = try? schemeHandler.urlAsset(with: url).get().url.scheme

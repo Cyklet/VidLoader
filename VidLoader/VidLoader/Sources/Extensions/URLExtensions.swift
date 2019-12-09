@@ -9,9 +9,9 @@
 import Foundation
 
 extension URL {    
-    func withScheme(scheme: String?) -> URL? {
+    func withScheme(scheme: SchemeType?) -> URL? {
         var urlComponents = URLComponents(url: self, resolvingAgainstBaseURL: false)
-        urlComponents?.scheme = scheme
+        urlComponents?.scheme = scheme?.rawValue
 
         return urlComponents?.url
     }

@@ -30,11 +30,10 @@ struct M3U8Playlist: StreamContentRepresentable {
             let keyURL = URL.init(string: keyStringURL) else {
                 return completion(.failure(.keyURLMissing))
         }
-        let keyScheme = schemeHandler.keyScheme
         downloadKey(url: keyURL, completion: { result in
             switch result {
             case .success(let key):
-                guard let keyContentURL = URL(string: key)?.withScheme(scheme: keyScheme) else {
+                guard let keyContentURL = URL(string: key)?.withScheme(scheme: .key) else {
                     return completion(.failure(.keyContentWrong))
                 }
                 let value = response.replacingOccurrences(of: keyURL.absoluteString, with: keyContentURL.absoluteString)

@@ -9,7 +9,7 @@
 import AVFoundation
 
 extension AVAssetResourceLoadingRequest {
-    func setup(response: URLResponse, data: Data) {
+    @objc public func setup(response: URLResponse, data: Data) {
         contentInformationRequest?.contentType = response.mimeType
         contentInformationRequest?.isByteRangeAccessSupported = true
         contentInformationRequest?.contentLength = response.expectedContentLength

@@ -254,10 +254,10 @@ public final class VidLoader: VidLoadable {
             guard let upToDateAsset = task.asset else { return }
             self?.session.sendAssetLoaded(asset: upToDateAsset)
         }
-        let taskDidFailed: (Error) -> Void = { [weak self] error in
+        let taskDidFail: (Error) -> Void = { [weak self] error in
             self?.handle(event: .failed(error: .init(error: error)), activeItem: asset)
         }
-        let observer = ReasourceLoaderObserver(taskDidFailed: taskDidFailed, assetDidLoad: assetDidLoad)
+        let observer = ResourceLoaderObserver(taskDidFail: taskDidFail, assetDidLoad: assetDidLoad)
         let resourceLoader = ResourceLoader(observer: observer, streamResource: streamResource)
         task.urlAsset.resourceLoader.setDelegate(resourceLoader, queue: resourceLoader.queue)
         task.urlAsset.resourceLoader.preloadsEligibleContentKeys = true

@@ -9,10 +9,10 @@
 import AVFoundation
 
 final class KeyLoader: NSObject, AVAssetResourceLoaderDelegate {
-    private let schemeHandler: SchemeHandler
+    private let schemeHandler: SchemeHandleable
     let queue = DispatchQueue(label: "com.vidloader.resource_loader_key_dispatch_url")
 
-    init(schemeHandler: SchemeHandler = .init()) {
+    init(schemeHandler: SchemeHandleable = SchemeHandler.init()) {
         self.schemeHandler = schemeHandler
     }
 

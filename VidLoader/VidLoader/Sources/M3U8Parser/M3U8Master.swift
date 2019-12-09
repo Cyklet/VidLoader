@@ -9,12 +9,6 @@
 import AVFoundation
 
 struct M3U8Master: StreamContentRepresentable {
-    private let schemeHandler: SchemeHandler
-
-    init(schemeHandler: SchemeHandler = .init()) {
-        self.schemeHandler = schemeHandler
-    }
-
     // MARK: - StreamContentRepresentable
 
     func adjust(response: String, completion: @escaping (Result<String, M3U8Error>) -> Void) {
@@ -25,8 +19,8 @@ struct M3U8Master: StreamContentRepresentable {
 
     private func replaceSchemes(in response: String) -> String {
         let suffix = "://"
-        return response.replacingOccurrences(of: schemeHandler.validScheme + suffix,
-                                             with: schemeHandler.newScheme + suffix)
+        return response.replacingOccurrences(of: SchemeType.original.rawValue + suffix,
+                                             with: SchemeType.custom.rawValue + suffix)
     }
     
 }

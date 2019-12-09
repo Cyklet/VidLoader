@@ -8,13 +8,20 @@
 
 import AVFoundation
 
-struct SchemeHandler {
-    let keyScheme = "vidloader-encryption-key"
-    let newScheme = "vidloader-new-scheme"
-    let validScheme = "https"
+protocol SchemeHandleable {
+    func urlAsset(with mediaURL: URL?) -> Result<AVURLAsset, ResourceLoadingError>
+    func persistentKey(from url: URL) -> Data?
+}
 
+enum SchemeType: String {
+    case key = "vidloader-encryption-key"
+    case custom = "vidloader-new-scheme"
+    case original = "https"
+}
+
+struct SchemeHandler: SchemeHandleable {
     func urlAsset(with mediaURL: URL?) -> Result<AVURLAsset, ResourceLoadingError> {
-        guard let url = mediaURL?.withScheme(scheme: newScheme) else {
+        guard let url = mediaURL?.withScheme(scheme: .custom) else {
             return .failure(.urlScheme)
         }
 
@@ -22,7 +29,7 @@ struct SchemeHandler {
     }
 
     func persistentKey(from url: URL) -> Data? {
-        guard url.scheme == keyScheme,
+        guard url.scheme == SchemeType.key.rawValue,
             let adoptURL = url.withScheme(scheme: nil) else { return nil }
 
         return Data(base64Encoded: adoptURL.absoluteString)

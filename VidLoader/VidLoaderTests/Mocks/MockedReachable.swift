@@ -11,8 +11,8 @@
 final class MockedReachable: Reachable {
     var connection: Reachability.Connection = .unavailable
     
-    var startNotifierDidCall: Bool?
+    var startNotifierFunCheck = EmptyFuncCheck()
     func startNotifier() throws {
-        startNotifierDidCall = true
+        startNotifierFunCheck.call()
     }
 }

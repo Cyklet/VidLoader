@@ -14,7 +14,7 @@ protocol ResourcesDelegatesHandleable{
 }
 
 final class ResourcesDelegatesHandler: ResourcesDelegatesHandleable {
-    private var resourcesLoaders: [String: ResourceLoader] = [:]
+    private(set) var resourcesLoaders: [String: ResourceLoader] = [:]
 
     // MARK: - ResourcesDelegatesHandleable
 
