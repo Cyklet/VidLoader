@@ -9,10 +9,10 @@
 @testable import VidLoader
 
 extension ItemInformation {
-    static func mocked(identifier: String = "", title: String? = nil, path: String? = nil,
-                       mediaLink: String = "", progress: Double = 0, state: DownloadState = .unknown,
-                       downloadedBytes: Double = 0, artworkData: Data? = nil) -> ItemInformation {
-        return ItemInformation(identifier: identifier, title: identifier, path: path,
+    static func mock(identifier: String = "", title: String? = nil, path: String? = nil,
+                     mediaLink: String = "", progress: Double = 0, state: DownloadState = .unknown,
+                     downloadedBytes: Int = 0, artworkData: Data? = nil) -> ItemInformation {
+        return ItemInformation(identifier: identifier, title: title, path: path,
                                mediaLink: mediaLink, progress: progress, state: state,
                                downloadedBytes: downloadedBytes, artworkData: artworkData)
     }

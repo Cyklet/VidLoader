@@ -1,5 +1,5 @@
 //
-//  MockedParser.swift
+//  MockParser.swift
 //  VidLoaderTests
 //
 //  Created by Petre on 12/9/19.
@@ -8,7 +8,7 @@
 
 @testable import VidLoader
 
-final class MockedParser: Parser {
+final class MockParser: Parser {
     var adjustFunCheck = FuncCheck<Data>()
     var adjustStub: Result<Data, M3U8Error> = .failure(.dataConversion)
     func adjust(data: Data, completion: @escaping (Result<Data, M3U8Error>) -> Void) {

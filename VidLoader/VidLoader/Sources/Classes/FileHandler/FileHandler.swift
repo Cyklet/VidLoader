@@ -9,7 +9,7 @@
 import Foundation
 
 protocol FileHandleable {
-    func deleteContent(for asset: ItemInformation)
+    func deleteContent(for item: ItemInformation)
 }
 
 class FileHandler: FileHandleable {
@@ -24,8 +24,8 @@ class FileHandler: FileHandleable {
 
     // MARK: - FileHandleable
 
-    func deleteContent(for asset: ItemInformation) {
-        guard let location = asset.location, asset.isReachable else { return }
+    func deleteContent(for item: ItemInformation) {
+        guard let location = item.location, item.isReachable else { return }
         executionQueue.async { [weak self] in
             try? self?.fileManager.removeItem(atPath: location.path)
         }

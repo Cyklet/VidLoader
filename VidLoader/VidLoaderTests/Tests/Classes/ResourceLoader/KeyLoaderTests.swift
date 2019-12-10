@@ -11,24 +11,24 @@ import AVFoundation
 
 final class KeyLoaderTests: XCTestCase {
     private var keyLoader: KeyLoader!
-    private var schemeHandler: MockedSchemeHandler!
+    private var schemeHandler: MockSchemeHandler!
     
     override func setUp() {
         super.setUp()
         
-        schemeHandler = MockedSchemeHandler()
+        schemeHandler = MockSchemeHandler()
     }
     
     func test_LoadKey_NoKeyScheme_NoSetupCalledInLoadingRequest() {
         // GIVEN
-        let expectedURL = URL.mocked()
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: expectedURL)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(requestInfo: requestInfo)
+        let expectedURL = URL.mock()
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: expectedURL)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(requestInfo: requestInfo)
         schemeHandler.persistentKeyStub = nil
         keyLoader = KeyLoader(schemeHandler: schemeHandler)
         
         // WHEN
-        let resultShouldWait = keyLoader.resourceLoader(.mocked(),
+        let resultShouldWait = keyLoader.resourceLoader(.mock(),
                                                         shouldWaitForLoadingOfRequestedResource: loadingRequest)
         
         // THEN
@@ -39,15 +39,15 @@ final class KeyLoaderTests: XCTestCase {
     
     func test_LoadKey_WithKeyScheme_SetupCalledInLoadingRequest() {
         // GIVEN
-        let expectedURL = URL.mocked()
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: expectedURL)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(requestInfo: requestInfo)
-        let mockedData = Data.mocked(string: "key_mocked_data")
-        schemeHandler.persistentKeyStub = mockedData
+        let expectedURL = URL.mock()
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: expectedURL)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(requestInfo: requestInfo)
+        let mockData = Data.mock(string: "mock_key_data")
+        schemeHandler.persistentKeyStub = mockData
         keyLoader = KeyLoader(schemeHandler: schemeHandler)
         
         // WHEN
-        let resultShouldWait = keyLoader.resourceLoader(.mocked(),
+        let resultShouldWait = keyLoader.resourceLoader(.mock(),
                                                         shouldWaitForLoadingOfRequestedResource: loadingRequest)
         
         // THEN

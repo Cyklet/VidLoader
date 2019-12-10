@@ -21,8 +21,8 @@ final class ResourcesDelegatesHandlerTests: XCTestCase {
     func test_AddDelegate_EmptyArray_ArrayHasOneItem() {
         // GIVEN
         let identifier = "itemIdentifier"
-        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, assetDidLoad: { }),
-                                    streamResource: StreamResource(response: .mocked(), data: .mocked()))
+        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, keyDidLoad: { }),
+                                    streamResource: StreamResource(response: .mock(), data: .mock()))
         let expectedResources = [identifier: loader]
         
         // WHEN
@@ -36,8 +36,8 @@ final class ResourcesDelegatesHandlerTests: XCTestCase {
     func test_AddDelegate_AlreadyExist_ArrayHasOneItem() {
         // GIVEN
         let identifier = "itemIdentifier"
-        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, assetDidLoad: { }),
-                                    streamResource: StreamResource(response: .mocked(), data: .mocked()))
+        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, keyDidLoad: { }),
+                                    streamResource: StreamResource(response: .mock(), data: .mock()))
         let expectedResources = [identifier: loader]
         delegatesHandler.add(identifier: identifier, loader: loader)
         
@@ -52,8 +52,8 @@ final class ResourcesDelegatesHandlerTests: XCTestCase {
     func test_KeepResources_NothingToKeep_ResultIsEmpty() {
         // GIVEN
         let identifier = "itemIdentifier"
-        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, assetDidLoad: { }),
-                                    streamResource: StreamResource(response: .mocked(), data: .mocked()))
+        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, keyDidLoad: { }),
+                                    streamResource: StreamResource(response: .mock(), data: .mock()))
         let expectedResources = [String: ResourceLoader]()
         delegatesHandler.add(identifier: identifier, loader: loader)
         
@@ -68,8 +68,8 @@ final class ResourcesDelegatesHandlerTests: XCTestCase {
     func test_KeepResources_ItemExist_ResourceHasKept() {
         // GIVEN
         let identifier = "itemIdentifier"
-        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, assetDidLoad: { }),
-                                    streamResource: StreamResource(response: .mocked(), data: .mocked()))
+        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, keyDidLoad: { }),
+                                    streamResource: StreamResource(response: .mock(), data: .mock()))
         let expectedResources = [identifier: loader]
         delegatesHandler.add(identifier: identifier, loader: loader)
         
@@ -84,8 +84,8 @@ final class ResourcesDelegatesHandlerTests: XCTestCase {
     func test_KeepNewIdentifier_NoIdInArray_ResultIsEmpty() {
         // GIVEN
         let identifier = "itemIdentifier"
-        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, assetDidLoad: { }),
-                                    streamResource: StreamResource(response: .mocked(), data: .mocked()))
+        let loader = ResourceLoader(observer: .init(taskDidFail: { _ in }, keyDidLoad: { }),
+                                    streamResource: StreamResource(response: .mock(), data: .mock()))
         let expectedResources = [String: ResourceLoader]()
         delegatesHandler.add(identifier: identifier, loader: loader)
         

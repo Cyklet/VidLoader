@@ -7,6 +7,7 @@
 //
 
 import AVFoundation
+@testable import VidLoader
 
 private enum RequestInfoKey: String {
     case headers = "RequestInfoHTTPHeaders"
@@ -23,17 +24,17 @@ extension AVAssetResourceLoadingRequest {
             return number?.boolValue
         }
         set(newValue) {
-            let number: NSNumber? = newValue.flatMap(NSNumber.init(booleanLiteral:))
+            let number: NSNumber? = newValue ?|> NSNumber.init(booleanLiteral:)
             objc_setAssociatedObject(self, &AVAssetResourceLoadingRequest.setupAssociationKey, number, .OBJC_ASSOCIATION_RETAIN)
         }
     }
-    @objc func mockedSetup(response: URLResponse, data: Data) {
+    @objc func mockSetup(response: URLResponse, data: Data) {
         setupFuncDidCall = true
     }
 
-    static func mocked(with resourceLoader: AVAssetResourceLoader = .mocked(),
-                       requestInfo: NSDictionary = mockedRequestInfo(),
-                       requestID: Int = 1) -> AVAssetResourceLoadingRequest {
+    static func mock(with resourceLoader: AVAssetResourceLoader = .mock(),
+                     requestInfo: NSDictionary = mockRequestInfo(),
+                     requestID: Int = 1) -> AVAssetResourceLoadingRequest {
         let finalSelector = Selector(("initWithResourceLoader:requestInfo:requestID:"))
         let initialSelector = #selector(NSObject.init)
         let initialInit = class_getInstanceMethod(self, initialSelector)!
@@ -47,7 +48,7 @@ extension AVAssetResourceLoadingRequest {
             request = finalBlockInit(obj, finalSelector, resourceLoader, requestInfo, requestID)
             swizzle(className: self,
                     original: #selector(setup(response:data:)),
-                    new: #selector(mockedSetup(response:data:)))
+                    new: #selector(mockSetup(response:data:)))
             return request
         }
         method_setImplementation(initialInit, imp_implementationWithBlock(newBlock))
@@ -57,17 +58,17 @@ extension AVAssetResourceLoadingRequest {
         return request
     }
 
-    static func mockedRequestInfo(headers: NSDictionary = mockedHeaders,
-                                  isRenewalRequest: Int = 0,
-                                  isStopSupported: Int = 1,
-                                  infoURL: URL = .mocked()) -> NSDictionary {
+    static func mockRequestInfo(headers: NSDictionary = mockHeaders,
+                                isRenewalRequest: Int = 0,
+                                isStopSupported: Int = 1,
+                                infoURL: URL = .mock()) -> NSDictionary {
         return [RequestInfoKey.headers.rawValue: headers,
                 RequestInfoKey.isRenewalRequest.rawValue: isRenewalRequest,
                 RequestInfoKey.isStopSupported.rawValue: isStopSupported,
                 RequestInfoKey.infoURL.rawValue: infoURL]
     }
-
-    private static var mockedHeaders: NSDictionary {
+    
+    private static var mockHeaders: NSDictionary {
         return ["Accept-Encoding": "gzip", "User-Agent": "1", "X-Playback-Session-Id": "1"]
     }
 }

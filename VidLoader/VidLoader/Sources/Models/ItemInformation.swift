@@ -21,7 +21,7 @@ public struct ItemInformation: Codable, Equatable {
     /// Item title that will be presented in the phone settings
     public let title: String?
     /// Current downloaded bytes
-    public let downloadedBytes: Double
+    public let downloadedBytes: Int
     /// Item thumbnail that will be presented in the phone settings
     let artworkData: Data?
     /// Current item download progress
@@ -29,7 +29,7 @@ public struct ItemInformation: Codable, Equatable {
 
     init(identifier: String, title: String?, path: String? = nil,
          mediaLink: String = "", progress: Double = 0,
-         state: DownloadState, downloadedBytes: Double = 0,
+         state: DownloadState, downloadedBytes: Int = 0,
          artworkData: Data?) {
         self.identifier = identifier
         self.title = title
@@ -56,7 +56,7 @@ public struct ItemInformation: Codable, Equatable {
     var isFailed: Bool {
         switch state {
         case .failed: return true
-        case .assetInfoLoaded, .canceled, .completed, .running,
+        case .keyLoaded, .canceled, .completed, .running,
              .unknown, .waiting, .suspended, .prefetching: return false
         }
     }
@@ -64,14 +64,14 @@ public struct ItemInformation: Codable, Equatable {
     var inProgress: Bool {
         switch state {
         case .failed, .canceled, .completed, .unknown, .prefetching, .waiting: return false
-        case .running, .suspended, .assetInfoLoaded: return true
+        case .running, .suspended, .keyLoaded: return true
         }
     }
 
     var isCancelled: Bool {
         switch state {
         case .canceled: return true
-        case .assetInfoLoaded, .failed,
+        case .keyLoaded, .failed,
              .completed,
              .running, .unknown, .waiting,
              .suspended, .prefetching: return false
@@ -104,7 +104,7 @@ extension ItemInformation {
                                 artworkData: $1.artworkData) }
     )
 
-    static let _downloadedBytes = Lens<ItemInformation, Double>(
+    static let _downloadedBytes = Lens<ItemInformation, Int>(
         get: { $0.downloadedBytes },
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $1.path,
                                 mediaLink: $1.mediaLink, progress: $1.progress,

@@ -2,12 +2,12 @@ import AVFoundation
 
 struct ResourceLoaderObserver {
     let taskDidFail: Completion<ResourceLoadingError>
-    let assetDidLoad: () -> Void
+    let keyDidLoad: () -> Void
     
     init(taskDidFail: @escaping Completion<ResourceLoadingError>,
-         assetDidLoad: @escaping () -> Void) {
+         keyDidLoad: @escaping () -> Void) {
         self.taskDidFail = taskDidFail
-        self.assetDidLoad = assetDidLoad
+        self.keyDidLoad = keyDidLoad
     }
 }
 
@@ -43,7 +43,7 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
                                           expectedContentLength: persistentKey.count,
                                           textEncodingName: nil)
             loadingRequest.setup(response: keyResponse, data: persistentKey)
-            observer.assetDidLoad()
+            observer.keyDidLoad()
         } else {
             if !didProvideFirstResponse {
                 prepareContent(streamResource, for: loadingRequest)

@@ -22,7 +22,7 @@ final class CustomDataTask: URLSessionDataTask {
 
 extension CustomDataTask {
     // URLSessionDataTask.init() is deprecated in ios 13, maybe swizzling method to dodge it
-    static func mocked() -> CustomDataTask {
+    static func mock() -> CustomDataTask {
         return CustomDataTask()
     }
 }

@@ -12,24 +12,24 @@ import AVFoundation
 
 final class ResourceLoaderTests: XCTestCase {
     private var resourceLoaderObserver: ResourceLoaderObserver!
-    private var parser: MockedParser!
-    private var requestable: MockedRequestable!
-    private var schemeHandler: MockedSchemeHandler!
+    private var parser: MockParser!
+    private var requestable: MockRequestable!
+    private var schemeHandler: MockSchemeHandler!
     private var resourceLoader: ResourceLoader!
     
     override func setUp() {
         super.setUp()
         
-        parser = MockedParser()
-        requestable = MockedRequestable()
+        parser = MockParser()
+        requestable = MockRequestable()
     }
     
-    private func setupResourceLoader(streamResource: StreamResource = .mocked(),
-                                     schemeHandler: MockedSchemeHandler = .init(),
+    private func setupResourceLoader(streamResource: StreamResource = .mock(),
+                                     schemeHandler: MockSchemeHandler = .init(),
                                      taskDidFail: @escaping Completion<ResourceLoadingError> = { _ in },
-                                     assetDidLoad: @escaping () -> Void = { }) {
+                                     keyDidLoad: @escaping () -> Void = { }) {
         resourceLoaderObserver = ResourceLoaderObserver(taskDidFail: taskDidFail,
-                                                        assetDidLoad: assetDidLoad)
+                                                        keyDidLoad: keyDidLoad)
         resourceLoader = ResourceLoader(observer: resourceLoaderObserver,
                                         streamResource: streamResource,
                                         parser: parser,
@@ -39,14 +39,14 @@ final class ResourceLoaderTests: XCTestCase {
     
     func test_CheckKeyResource_KeyExist_ResourceSetupWasCalled() {
         // GIVEN
-        var assetDidLoad = false
-        var schemeHandler = MockedSchemeHandler()
-        schemeHandler.persistentKeyStub = Data.mocked(string: "random_data")
-        setupResourceLoader(schemeHandler: schemeHandler, assetDidLoad: { assetDidLoad = true })
-        let url = URL.mocked()
-        let avResourceLoader = AVAssetResourceLoader.mocked(url: url)
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: url)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(with: avResourceLoader, requestInfo: requestInfo)
+        var keyDidLoad = false
+        var schemeHandler = MockSchemeHandler()
+        schemeHandler.persistentKeyStub = Data.mock(string: "random_data")
+        setupResourceLoader(schemeHandler: schemeHandler, keyDidLoad: { keyDidLoad = true })
+        let url = URL.mock()
+        let avResourceLoader = AVAssetResourceLoader.mock(url: url)
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: url)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(with: avResourceLoader, requestInfo: requestInfo)
         
         // WHEN
         let requestShouldWait = resourceLoader.resourceLoader(avResourceLoader,
@@ -55,7 +55,7 @@ final class ResourceLoaderTests: XCTestCase {
         // THEN
         XCTAssertTrue(requestShouldWait)
         XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
-        XCTAssertTrue(assetDidLoad)
+        XCTAssertTrue(keyDidLoad)
     }
     
     func test_CheckMasterResource_ResourceHasWrongData_TaskDidFail() {
@@ -63,16 +63,16 @@ final class ResourceLoaderTests: XCTestCase {
         let expectedParserError: M3U8Error = .dataConversion
         let expectedError: ResourceLoadingError = .m3u8(expectedParserError)
         var resultError: ResourceLoadingError?
-        var assetDidLoad = false
-        let expectedData = Data.mocked(string: "expected_data")
-        setupResourceLoader(streamResource: StreamResource.mocked(data: expectedData),
+        var keyDidLoad = false
+        let expectedData = Data.mock(string: "expected_data")
+        setupResourceLoader(streamResource: StreamResource.mock(data: expectedData),
                             taskDidFail: { error in resultError = error },
-                            assetDidLoad: { assetDidLoad = true })
+                            keyDidLoad: { keyDidLoad = true })
         parser.adjustStub = .failure(expectedParserError)
-        let url = URL.mocked()
-        let avResourceLoader = AVAssetResourceLoader.mocked(url: url)
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: url)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(with: avResourceLoader, requestInfo: requestInfo)
+        let url = URL.mock()
+        let avResourceLoader = AVAssetResourceLoader.mock(url: url)
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: url)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(with: avResourceLoader, requestInfo: requestInfo)
         
         // WHEN
         let requestShouldWait = resourceLoader.resourceLoader(avResourceLoader,
@@ -82,23 +82,23 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertTrue(requestShouldWait)
         XCTAssertNil(loadingRequest.setupFuncDidCall)
         XCTAssertEqual(expectedError, resultError)
-        XCTAssertFalse(assetDidLoad)
+        XCTAssertFalse(keyDidLoad)
         XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
     }
     
     func test_CheckMasterResource_ResourceHasValidData_ResourceSetupWasCalled() {
         // GIVEN
         var resultError: ResourceLoadingError?
-        var assetDidLoad = false
-        let expectedData = Data.mocked(string: "expected_data")
-        setupResourceLoader(streamResource: StreamResource.mocked(data: expectedData),
+        var keyDidLoad = false
+        let expectedData = Data.mock(string: "expected_data")
+        setupResourceLoader(streamResource: StreamResource.mock(data: expectedData),
                             taskDidFail: { error in resultError = error },
-                            assetDidLoad: { assetDidLoad = true })
+                            keyDidLoad: { keyDidLoad = true })
         parser.adjustStub = .success(expectedData)
-        let url = URL.mocked()
-        let avResourceLoader = AVAssetResourceLoader.mocked(url: url)
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: url)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(with: avResourceLoader, requestInfo: requestInfo)
+        let url = URL.mock()
+        let avResourceLoader = AVAssetResourceLoader.mock(url: url)
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: url)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(with: avResourceLoader, requestInfo: requestInfo)
         
         // WHEN
         let requestShouldWait = resourceLoader.resourceLoader(avResourceLoader,
@@ -108,24 +108,24 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertTrue(requestShouldWait)
         XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
         XCTAssertNil(resultError)
-        XCTAssertFalse(assetDidLoad)
+        XCTAssertFalse(keyDidLoad)
         XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
     }
     
     func test_CheckPlaylistResource_ResourceRequestFailed_TaskDidFail() {
         // GIVEN
-        let mockedError: ResourceLoadingError = .unknown
-        let expectedError: ResourceLoadingError = .custom(mockedError)
+        let mockError: ResourceLoadingError = .unknown
+        let expectedError: ResourceLoadingError = .custom(mockError)
         var resultError: ResourceLoadingError?
-        var assetDidLoad = false
-        requestable.completionHandlerStub = (nil, nil, mockedError)
-        requestable.dataTaskStub = .mocked()
+        var keyDidLoad = false
+        requestable.completionHandlerStub = (nil, nil, mockError)
+        requestable.dataTaskStub = .mock()
         setupResourceLoader(taskDidFail: { error in resultError = error },
-                            assetDidLoad: { assetDidLoad = true })
-        let url = URL.mocked()
-        let avResourceLoader = AVAssetResourceLoader.mocked(url: url)
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: url)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(with: avResourceLoader, requestInfo: requestInfo)
+                            keyDidLoad: { keyDidLoad = true })
+        let url = URL.mock()
+        let avResourceLoader = AVAssetResourceLoader.mock(url: url)
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: url)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(with: avResourceLoader, requestInfo: requestInfo)
         let _ = resourceLoader.resourceLoader(avResourceLoader,
                                               shouldWaitForLoadingOfRequestedResource: loadingRequest)
         
@@ -137,7 +137,7 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertTrue(requestShouldWait)
         XCTAssertNil(loadingRequest.setupFuncDidCall)
         XCTAssertEqual(resultError, expectedError)
-        XCTAssertFalse(assetDidLoad)
+        XCTAssertFalse(keyDidLoad)
     }
     
     func test_CheckPlaylistResource_ResourceHasWrongData_TaskDidFail() {
@@ -145,19 +145,19 @@ final class ResourceLoaderTests: XCTestCase {
         let expectedParserError: M3U8Error = .dataConversion
         let expectedError: ResourceLoadingError = .m3u8(expectedParserError)
         var resultError: ResourceLoadingError?
-        var assetDidLoad = false
-        let expectedData = Data.mocked(string: "expected_data")
-        setupResourceLoader(streamResource: StreamResource.mocked(data: expectedData),
+        var keyDidLoad = false
+        let expectedData = Data.mock(string: "expected_data")
+        setupResourceLoader(streamResource: StreamResource.mock(data: expectedData),
                             taskDidFail: { error in resultError = error },
-                            assetDidLoad: { assetDidLoad = true })
+                            keyDidLoad: { keyDidLoad = true })
         parser.adjustStub = .failure(expectedParserError)
-        let url = URL.mocked()
-        let mockedResponse: HTTPURLResponse = .mocked(url: url)
-        requestable.completionHandlerStub = (.mocked(), mockedResponse, nil)
-        requestable.dataTaskStub = .mocked()
-        let avResourceLoader = AVAssetResourceLoader.mocked(url: url)
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: url)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(with: avResourceLoader, requestInfo: requestInfo)
+        let url = URL.mock()
+        let mockResponse: HTTPURLResponse = .mock(url: url)
+        requestable.completionHandlerStub = (.mock(), mockResponse, nil)
+        requestable.dataTaskStub = .mock()
+        let avResourceLoader = AVAssetResourceLoader.mock(url: url)
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: url)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(with: avResourceLoader, requestInfo: requestInfo)
         let _ = resourceLoader.resourceLoader(avResourceLoader,
                                               shouldWaitForLoadingOfRequestedResource: loadingRequest)
         
@@ -169,26 +169,26 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertTrue(requestShouldWait)
         XCTAssertNil(loadingRequest.setupFuncDidCall)
         XCTAssertEqual(expectedError, resultError)
-        XCTAssertFalse(assetDidLoad)
+        XCTAssertFalse(keyDidLoad)
         XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
     }
     
     func test_CheckPlaylistResource_ResourceHasValidData_ResourceSetupWasCalled() {
         // GIVEN
         var resultError: ResourceLoadingError?
-        var assetDidLoad = false
-        let expectedData = Data.mocked(string: "expected_data")
-        setupResourceLoader(streamResource: StreamResource.mocked(data: expectedData),
+        var keyDidLoad = false
+        let expectedData = Data.mock(string: "expected_data")
+        setupResourceLoader(streamResource: StreamResource.mock(data: expectedData),
                             taskDidFail: { error in resultError = error },
-                            assetDidLoad: { assetDidLoad = true })
+                            keyDidLoad: { keyDidLoad = true })
         parser.adjustStub = .success(expectedData)
-        let url = URL.mocked()
-        let mockedResponse: HTTPURLResponse = .mocked(url: url)
-        requestable.completionHandlerStub = (.mocked(), mockedResponse, nil)
-        requestable.dataTaskStub = .mocked()
-        let avResourceLoader = AVAssetResourceLoader.mocked(url: url)
-        let requestInfo = AVAssetResourceLoadingRequest.mockedRequestInfo(infoURL: url)
-        let loadingRequest = AVAssetResourceLoadingRequest.mocked(with: avResourceLoader, requestInfo: requestInfo)
+        let url = URL.mock()
+        let mockResponse: HTTPURLResponse = .mock(url: url)
+        requestable.completionHandlerStub = (.mock(), mockResponse, nil)
+        requestable.dataTaskStub = .mock()
+        let avResourceLoader = AVAssetResourceLoader.mock(url: url)
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: url)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(with: avResourceLoader, requestInfo: requestInfo)
         let _ = resourceLoader.resourceLoader(avResourceLoader,
                                               shouldWaitForLoadingOfRequestedResource: loadingRequest)
         
@@ -200,7 +200,7 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertTrue(requestShouldWait)
         XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
         XCTAssertNil(resultError)
-        XCTAssertFalse(assetDidLoad)
+        XCTAssertFalse(keyDidLoad)
         XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
     }
 }

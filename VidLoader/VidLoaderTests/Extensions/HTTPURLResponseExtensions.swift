@@ -9,8 +9,8 @@
 import Foundation
 
 extension HTTPURLResponse {
-    static func mocked(url: URL = .mocked(), mimeType: String? = nil,
-                       expectedContentLength: Int = 0, textEncodingName: String? = nil) -> HTTPURLResponse {
+    static func mock(url: URL = .mock(), mimeType: String? = nil,
+                     expectedContentLength: Int = 0, textEncodingName: String? = nil) -> HTTPURLResponse {
         return HTTPURLResponse(url: url, mimeType: mimeType,
                                expectedContentLength: expectedContentLength, textEncodingName: textEncodingName)
     }

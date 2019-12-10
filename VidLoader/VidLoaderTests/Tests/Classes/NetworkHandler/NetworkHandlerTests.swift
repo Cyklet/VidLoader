@@ -10,12 +10,12 @@ import XCTest
 
 final class NetworkHandlerTests: XCTestCase {
     private var networkHandler: Network!
-    private var reachable: MockedReachable!
+    private var reachable: MockReachable!
     
     override func setUp() {
         super.setUp()
         
-        reachable = MockedReachable()
+        reachable = MockReachable()
         networkHandler = NetworkHandler(reachable: reachable)
     }
     

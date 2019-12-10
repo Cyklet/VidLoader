@@ -1,5 +1,5 @@
 //
-//  MockedVidLoaderExecutionQueue.swift
+//  MockVidLoaderExecutionQueue.swift
 //  VidLoaderTests
 //
 //  Created by Petre on 12/6/19.
@@ -8,7 +8,7 @@
 
 @testable import VidLoader
 
-final class MockedVidLoaderExecutionQueue: VidLoaderExecutionQueueable {
+final class MockVidLoaderExecutionQueue: VidLoaderExecutionQueueable {
     
     var asyncFunCheck = EmptyFuncCheck()
     func async(execution: @escaping () -> Void) {

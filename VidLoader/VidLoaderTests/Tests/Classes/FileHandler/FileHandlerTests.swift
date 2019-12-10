@@ -10,21 +10,21 @@ import XCTest
 @testable import VidLoader
 
 final class FileHandlerTests: XCTestCase {
-    private var fileManager: MockedFileManager!
-    private var executionQueue: MockedVidLoaderExecutionQueue!
+    private var fileManager: MockFileManager!
+    private var executionQueue: MockVidLoaderExecutionQueue!
     private var fileHandler: FileHandleable!
     
     override func setUp() {
         super.setUp()
         
-        fileManager = MockedFileManager()
-        executionQueue = MockedVidLoaderExecutionQueue()
+        fileManager = MockFileManager()
+        executionQueue = MockVidLoaderExecutionQueue()
         fileHandler = FileHandler(fileManager: fileManager, executionQueue: executionQueue)
     }
     
     func testDeleteItemWhenPathIsNilThenRemoveWillNotBeCalled() {
         // GIVEN
-        let item = ItemInformation.mocked()
+        let item = ItemInformation.mock()
         
         // WHEN
         fileHandler.deleteContent(for: item)
@@ -36,7 +36,7 @@ final class FileHandlerTests: XCTestCase {
     
     func testDeleteItemWhenPathExistAndNotReachableThenRemoveWillNotBeCalled() {
         // GIVEN
-        let item = ItemInformation.mocked(path: "stream")
+        let item = ItemInformation.mock(path: "stream")
         
         // WHEN
         fileHandler.deleteContent(for: item)
@@ -50,7 +50,7 @@ final class FileHandlerTests: XCTestCase {
         // GIVEN
         let enumerator = FileManager.default.enumerator(atPath: NSHomeDirectory())
         let fileRelativePath = enumerator?.nextObject() as? String
-        let item = ItemInformation.mocked(path: fileRelativePath)
+        let item = ItemInformation.mock(path: fileRelativePath)
         
         // WHEN
         fileHandler.deleteContent(for: item)

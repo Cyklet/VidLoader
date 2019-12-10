@@ -172,7 +172,7 @@ public final class VidLoader: VidLoadable {
         })
         session.allTasks(completion: { [weak self] allTasks in
             let items = allTasks.compactMap { task -> (String, ItemInformation)? in
-                guard let item = task.asset else { return nil }
+                guard let item = task.item else { return nil }
                 return (item.identifier, item)
             }
             self?.activeItems = Dictionary(items, uniquingKeysWith: { $1 })
@@ -197,7 +197,7 @@ public final class VidLoader: VidLoadable {
         case .failed, .unknown, .canceled:
             remove(item: newItem)
             startNewTaskIfNeeded()
-        case .assetInfoLoaded:
+        case .keyLoaded:
             activeItems[activeItem.identifier] = newItem
             startNewTaskIfNeeded()
         case .prefetching, .running, .suspended, .waiting:
@@ -240,27 +240,27 @@ public final class VidLoader: VidLoadable {
     }
 
     private func startTask(urlAsset: AVURLAsset, streamResource: StreamResource, item: ItemInformation) {
-        guard let task = session.addNewTask(urlAsset: urlAsset, asset: item) else {
+        guard let task = session.addNewTask(urlAsset: urlAsset, for: item) else {
             return
         }
-        setupResourceDelegate(asset: item, task: task, streamResource: streamResource)
+        setupResourceDelegate(item: item, task: task, streamResource: streamResource)
         task.resume()
     }
 
-    func setupResourceDelegate(asset: ItemInformation,
+    func setupResourceDelegate(item: ItemInformation,
                                task: AVAssetDownloadTask,
                                streamResource: StreamResource) {
-        let assetDidLoad: () -> Void = { [weak self] in
-            guard let upToDateAsset = task.asset else { return }
-            self?.session.sendAssetLoaded(asset: upToDateAsset)
+        let keyDidLoad: () -> Void = { [weak self] in
+            guard let upToDateItem = task.item else { return }
+            self?.session.sendKeyLoaded(item: upToDateItem)
         }
         let taskDidFail: (Error) -> Void = { [weak self] error in
-            self?.handle(event: .failed(error: .init(error: error)), activeItem: asset)
+            self?.handle(event: .failed(error: .init(error: error)), activeItem: item)
         }
-        let observer = ResourceLoaderObserver(taskDidFail: taskDidFail, assetDidLoad: assetDidLoad)
+        let observer = ResourceLoaderObserver(taskDidFail: taskDidFail, keyDidLoad: keyDidLoad)
         let resourceLoader = ResourceLoader(observer: observer, streamResource: streamResource)
         task.urlAsset.resourceLoader.setDelegate(resourceLoader, queue: resourceLoader.queue)
         task.urlAsset.resourceLoader.preloadsEligibleContentKeys = true
-        resourcesDelegatesHandler.add(identifier: asset.identifier, loader: resourceLoader)
+        resourcesDelegatesHandler.add(identifier: item.identifier, loader: resourceLoader)
     }
 }

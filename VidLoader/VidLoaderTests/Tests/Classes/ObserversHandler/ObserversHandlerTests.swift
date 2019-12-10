@@ -25,7 +25,7 @@ final class ObserversHandlerTests: XCTestCase {
         
         // WHEN
         observersHandler.remove(observer)
-        observersHandler.fire(for: .all, with: .mocked())
+        observersHandler.fire(for: .all, with: .mock())
         
         // THEN
         XCTAssertNil(resultItem)
@@ -33,7 +33,7 @@ final class ObserversHandlerTests: XCTestCase {
     
     func test_FireObserver_ItemRemovedObserversRemained_ClosureCalled() {
                 // GIVEN
-        let expectedItem = ItemInformation.mocked(identifier: "I_am_expected_>_<")
+        let expectedItem = ItemInformation.mock(identifier: "I_am_expected_>_<")
         var resultItem: ItemInformation?
         let observerToRemove = VidObserver(type: .all, stateChanged: { item in resultItem = item })
         let observer = VidObserver(type: .all, stateChanged: { item in resultItem = item })
@@ -50,7 +50,7 @@ final class ObserversHandlerTests: XCTestCase {
     
     func test_FireAllTypeObserver_ItemExist_ClosureCalled() {
         // GIVEN
-        let expectedItem = ItemInformation.mocked()
+        let expectedItem = ItemInformation.mock()
         var resultItem: ItemInformation?
         let observer = VidObserver(type: .all, stateChanged: { item in resultItem = item })
         observersHandler.add(observer)
@@ -70,7 +70,7 @@ final class ObserversHandlerTests: XCTestCase {
         observersHandler.add(observer)
         
         // WHEN
-        observersHandler.fire(for: .all, with: .mocked(identifier: "do_I_exist"))
+        observersHandler.fire(for: .all, with: .mock(identifier: "do_I_exist"))
         
         // THEN
         XCTAssertNil(resultItem)
@@ -79,7 +79,7 @@ final class ObserversHandlerTests: XCTestCase {
     func test_FireSingleTypeObserver_ItemExist_ClosureCalled() {
         // GIVEN
         let givenIdentifier = "do_I_exist"
-        let expectedItem = ItemInformation.mocked(identifier: givenIdentifier)
+        let expectedItem = ItemInformation.mock(identifier: givenIdentifier)
         var resultItem: ItemInformation?
         let observer = VidObserver(type: .single(givenIdentifier), stateChanged: { item in resultItem = item })
         observersHandler.add(observer)
@@ -100,7 +100,7 @@ final class ObserversHandlerTests: XCTestCase {
         observersHandler.add(observer)
         
         // WHEN
-        observersHandler.fire(for: .single(fireIdentifier), with: .mocked(identifier: fireIdentifier))
+        observersHandler.fire(for: .single(fireIdentifier), with: .mock(identifier: fireIdentifier))
         
         // THEN
         XCTAssertNil(resultItem)
@@ -110,11 +110,11 @@ final class ObserversHandlerTests: XCTestCase {
         // GIVEN
         var resultItem: ItemInformation?
         var observer: VidObserver? = VidObserver(type: .all, stateChanged: { item in resultItem = item })
-        observer.flatMap(observersHandler.add)
+        observer ?|> observersHandler.add
         observer = nil
         
         // WHEN
-        observersHandler.fire(for: .all, with: .mocked())
+        observersHandler.fire(for: .all, with: .mock())
         
         // THEN
         XCTAssertNil(resultItem)

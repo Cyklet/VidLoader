@@ -9,9 +9,9 @@
 import Foundation
 
 extension Data {
-    static func mocked(string: String = "") -> Data {
+    static func mock(string: String = "") -> Data {
         guard let data = string.data(using: .utf8) else {
-            fatalError("mocked Data is nil for string: \(string)")
+            fatalError("mock Data is nil for string: \(string)")
         }
         return data
     }

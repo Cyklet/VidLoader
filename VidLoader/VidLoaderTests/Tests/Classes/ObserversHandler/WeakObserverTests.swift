@@ -14,7 +14,7 @@ final class WeakObserverTests: XCTestCase {
     func test_CheckObjectReference_Released_ObjectReferenceReleased() {
         // GIVEN
         var object: NSObject? = NSObject()
-        let weakObserver: WeakObserver<NSObject>? = object.flatMap(WeakObserver.init)
+        let weakObserver: WeakObserver<NSObject>? = object ?|> WeakObserver.init
         
         // WHEN
         object = nil

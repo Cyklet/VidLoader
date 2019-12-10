@@ -1,5 +1,5 @@
 //
-//  MockedReachable.swift
+//  MockReachable.swift
 //  VidLoaderTests
 //
 //  Created by Petre on 12/6/19.
@@ -8,7 +8,7 @@
 
 @testable import VidLoader
 
-final class MockedReachable: Reachable {
+final class MockReachable: Reachable {
     var connection: Reachability.Connection = .unavailable
     
     var startNotifierFunCheck = EmptyFuncCheck()

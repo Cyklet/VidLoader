@@ -9,7 +9,7 @@
 @testable import VidLoader
 
 extension StreamResource {
-    static func mocked(response: HTTPURLResponse = .mocked(), data: Data = .mocked()) -> StreamResource {
+    static func mock(response: HTTPURLResponse = .mock(), data: Data = .mock()) -> StreamResource {
         return StreamResource(response: response, data: data)
     }
 }

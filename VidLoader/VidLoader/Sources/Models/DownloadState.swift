@@ -17,7 +17,7 @@ public enum DownloadState: Equatable, Codable {
     case completed
     case canceled
     case failed(error: DownloadError)
-    case assetInfoLoaded
+    case keyLoaded
 
     init(taskState: URLSessionTask.State, progress: Double) {
         self = DownloadState.new(from: taskState, progress: progress)
@@ -40,7 +40,7 @@ public enum DownloadState: Equatable, Codable {
     }
 
     private enum Base: String, Codable {
-      case prefetching, running, suspended, completed, canceled, unknown, waiting, failed, assetInfoLoaded
+      case prefetching, running, suspended, completed, canceled, unknown, waiting, failed, keyLoaded
     }
 
     public init(from decoder: Decoder) throws {
@@ -66,8 +66,8 @@ public enum DownloadState: Equatable, Codable {
         case .failed:
             let error = try container.decode(DownloadError.self, forKey: .downloadError)
             self = .failed(error: error)
-        case .assetInfoLoaded:
-            self = .assetInfoLoaded
+        case .keyLoaded:
+            self = .keyLoaded
         }
     }
 
@@ -93,8 +93,8 @@ public enum DownloadState: Equatable, Codable {
         case .failed(let error):
             try container.encode(Base.failed, forKey: .base)
             try container.encode(error, forKey: .downloadError)
-        case .assetInfoLoaded:
-            try container.encode(Base.assetInfoLoaded, forKey: .base)
+        case .keyLoaded:
+            try container.encode(Base.keyLoaded, forKey: .base)
         }
     }
 }

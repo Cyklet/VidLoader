@@ -1,5 +1,5 @@
 //
-//  MockedSchemeHandler.swift
+//  MockSchemeHandler.swift
 //  VidLoaderTests
 //
 //  Created by Petre on 12/6/19.
@@ -9,7 +9,7 @@
 @testable import VidLoader
 import AVFoundation
 
-struct MockedSchemeHandler: SchemeHandleable {
+struct MockSchemeHandler: SchemeHandleable {
     
     var urlAssetFunCheck = FuncCheck<URL?>()
     var urlAssetStub: Result<AVURLAsset, ResourceLoadingError> = .failure(.unknown)

@@ -1,5 +1,5 @@
 //
-//  MockedFileManager.swift
+//  MockFileManager.swift
 //  VidLoaderTests
 //
 //  Created by Petre on 12/6/19.
@@ -8,7 +8,7 @@
 
 @testable import VidLoader
 
-final class MockedFileManager: FileManageable {
+final class MockFileManager: FileManageable {
     
     var removeItemFunCheck = FuncCheck<String>()
     func removeItem(atPath path: String) throws {

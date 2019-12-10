@@ -9,7 +9,7 @@
 import AVFoundation
 
 extension AVAssetResourceLoader {
-    static func mocked(url: URL = .mocked()) -> AVAssetResourceLoader {
+    static func mock(url: URL = .mock()) -> AVAssetResourceLoader {
         return AVURLAsset(url: url).resourceLoader
     }
 }

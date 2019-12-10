@@ -1,5 +1,5 @@
 //
-//  MockedRequestable.swift
+//  MockRequestable.swift
 //  VidLoaderTests
 //
 //  Created by Petre on 03.12.19.
@@ -8,7 +8,7 @@
 
 @testable import VidLoader
 
-final class MockedRequestable: Requestable {
+final class MockRequestable: Requestable {
 
     var completionHandlerStub: (Data?, URLResponse?, Error?)
     var dataTaskStub: CustomDataTask!

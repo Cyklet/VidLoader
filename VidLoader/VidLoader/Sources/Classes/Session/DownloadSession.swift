@@ -8,14 +8,12 @@
 
 import AVFoundation
 
-private typealias SessionAction = Completion<ItemInformation?>
-
 protocol Session {
     func allTasks(completion: Completion<[AVAssetDownloadTask]>?)
     func task(identifier: String, completion: Completion<AVAssetDownloadTask?>?)
-    func addNewTask(urlAsset: AVURLAsset, asset: ItemInformation) -> AVAssetDownloadTask?
+    func addNewTask(urlAsset: AVURLAsset, for item: ItemInformation) -> AVAssetDownloadTask?
     func cancelTask(identifier: String, hasNotFound: @escaping () -> Void)
-    func sendAssetLoaded(asset: ItemInformation)
+    func sendKeyLoaded(item: ItemInformation)
     func suspendAllTasks()
     func resumeAllTasks()
     func setup(injectedSession: AVAssetDownloadURLSession?, stateChanged: ((DownloadState, ItemInformation) -> Void)?)
@@ -47,29 +45,29 @@ final class DownloadSession: NSObject {
     }
 
     /// The `didFinishDownloadingTo` method is called in many cases, we need to check asset state
-    fileprivate func handleDownloadState(asset: ItemInformation, task: AVAssetDownloadTask) {
+    fileprivate func handleDownloadState(item: ItemInformation, task: AVAssetDownloadTask) {
         // When task was cancelled `didFinishDownloadingTo` delegate is calling
         // with completed state. `isCancelled` state is set in `cancelTask` function
         // and saved in task description. Also we need to handle cancelation here because
         // we need video location that is coming in `didFinishDownloadingTo`
-        if task.error == nil || asset.isCancelled {
-            sendCompleteState(asset: asset)
+        if task.error == nil || item.isCancelled {
+            sendCompleteState(item: item)
 
             return
         }
-        let newAsset = asset |> ItemInformation._state .~ .failed(error: .init(error: task.error))
-        task.saveAsset(newAsset)
-        sendCompleteState(asset: newAsset)
+        let newItem = item |> ItemInformation._state .~ .failed(error: .init(error: task.error))
+        task.save(item: newItem)
+        sendCompleteState(item: newItem)
     }
 
-    fileprivate func sendCompleteState(asset: ItemInformation) {
-        switch asset.state {
+    fileprivate func sendCompleteState(item: ItemInformation) {
+        switch item.state {
         case .failed(let error):
-            stateChanged?(.failed(error: error), asset)
+            stateChanged?(.failed(error: error), item)
         case .canceled:
-            stateChanged?(.canceled, asset)
+            stateChanged?(.canceled, item)
         default:
-            stateChanged?(.completed, asset)
+            stateChanged?(.completed, item)
         }
     }
 }
@@ -77,7 +75,7 @@ final class DownloadSession: NSObject {
 extension DownloadSession: Session {
     func task(identifier: String, completion: Completion<AVAssetDownloadTask?>?) {
         allTasks { tasks in
-            let task = tasks.first(where: { $0.asset?.identifier == identifier })
+            let task = tasks.first(where: { $0.item?.identifier == identifier })
             completion?(task)
         }
     }
@@ -86,17 +84,17 @@ extension DownloadSession: Session {
         session.getAllTasks { completion?($0.compactMap { $0 as? AVAssetDownloadTask }) }
     }
 
-    func addNewTask(urlAsset: AVURLAsset, asset: ItemInformation) -> AVAssetDownloadTask? {
+    func addNewTask(urlAsset: AVURLAsset, for item: ItemInformation) -> AVAssetDownloadTask? {
         let task = session.makeAssetDownloadTask(asset: urlAsset,
-                                                 assetTitle: asset.title ?? "",
-                                                 assetArtworkData: asset.artworkData,
+                                                 assetTitle: item.title ?? "",
+                                                 assetArtworkData: item.artworkData,
                                                  options: nil)
         guard let downloadTask = task else {
-            stateChanged?(.failed(error: .taskNotCreated), asset)
+            stateChanged?(.failed(error: .taskNotCreated), item)
             return nil
         }
-        downloadTask.saveAsset(asset)
-        stateChanged?(asset.state, asset)
+        downloadTask.save(item: item)
+        stateChanged?(item.state, item)
 
         return downloadTask
     }
@@ -124,13 +122,13 @@ extension DownloadSession: Session {
         }
     }
 
-    func sendAssetLoaded(asset: ItemInformation) {
-        task(identifier: asset.identifier) { [weak self] task in
+    func sendKeyLoaded(item: ItemInformation) {
+        task(identifier: item.identifier) { [weak self] task in
             guard let task = task else { return }
-            let state: DownloadState = .assetInfoLoaded
-            let newAsset = asset |> ItemInformation._state .~ state
-            task.saveAsset(newAsset)
-            self?.stateChanged?(state, newAsset)
+            let state: DownloadState = .keyLoaded
+            let newItem = item |> ItemInformation._state .~ state
+            task.save(item: newItem)
+            self?.stateChanged?(state, newItem)
         }
     }
 }
@@ -141,15 +139,15 @@ extension DownloadSession: AVAssetDownloadDelegate {
     // `didFinishDownloadingTo` delegate is calling first after this `didCompleteWithError` is also calling
     func urlSession(_ session: URLSession, assetDownloadTask: AVAssetDownloadTask, didFinishDownloadingTo location: URL) {
         assetDownloadTask.update(location: location)
-        guard let asset = assetDownloadTask.asset else { return }
+        guard let item = assetDownloadTask.item else { return }
         switch assetDownloadTask.state {
         case .suspended:
-            stateChanged?(.suspended(asset.progress), asset)
+            stateChanged?(.suspended(item.progress), item)
         // `.canceling` can be thrown when application just launched with active downloads
         case .canceling:
-            stateChanged?(.canceled, asset)
+            stateChanged?(.canceled, item)
         case .running, .completed:
-            handleDownloadState(asset: asset, task: assetDownloadTask)
+            handleDownloadState(item: item, task: assetDownloadTask)
         @unknown default:
             print("Unimplemented cases")
         }
@@ -164,8 +162,8 @@ extension DownloadSession: AVAssetDownloadDelegate {
         let progress = loadedTimeRanges.reduce(0) { $0 + $1.timeRangeValue.seconds / timeRangeExpectedToLoad.seconds }
         assetDownloadTask.update(progress: min(1, max(0, progress)),
                                  downloadedBytes: assetDownloadTask.countOfBytesReceived)
-        guard assetDownloadTask.state == .running, let asset = assetDownloadTask.asset else { return }
-        stateChanged?(.running(progress), asset)
+        guard assetDownloadTask.state == .running, let item = assetDownloadTask.item else { return }
+        stateChanged?(.running(progress), item)
     }
 
     // All main logic is doing in `didFinishDownloadingTo` delegate because
@@ -179,15 +177,14 @@ extension DownloadSession: AVAssetDownloadDelegate {
                     didCompleteWithError error: Error?) {
         // This is a very strange case, when `didCompleteWithError` is being
         // called after AVAssetDownloadTask.cancel()
-        print("didCompleteWithError AVAssetDownloadTask.cancel()")
-        guard let asset = task.asset else { return }
+        guard let item = task.item else { return }
 
-        guard !asset.isCancelled else {
-//            stateChanged?(.canceled, asset) /////// side effects ????/// // / //
+        guard !item.isCancelled else {
+//            stateChanged?(.canceled, asset) ? ** side effects ** ?
             return
         }
         guard let error = error, !task.hasFailed else { return }
         let state: DownloadState = .failed(error: .custom(VidLoaderError(error: error)))
-        stateChanged?(state, asset |> ItemInformation._state .~ state)
+        stateChanged?(state, item |> ItemInformation._state .~ state)
     }
 }

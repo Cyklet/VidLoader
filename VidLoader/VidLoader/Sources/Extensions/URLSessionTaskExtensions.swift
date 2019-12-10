@@ -9,43 +9,43 @@
 import Foundation
 
 extension URLSessionTask {
-    var asset: ItemInformation? {
+    var item: ItemInformation? {
         guard let data = taskDescription?.data else { return nil }
 
         return try? JSONDecoder().decode(ItemInformation.self, from: data)
     }
 
     var hasFailed: Bool {
-        guard let state = asset?.state else { return false }
+        guard let state = item?.state else { return false }
         switch state {
         case .failed: return  true
-        case .assetInfoLoaded, .canceled, .completed, .prefetching,
+        case .keyLoaded, .canceled, .completed, .prefetching,
              .running, .unknown, .waiting,
              .suspended: return false
         }
     }
 
     func update(progress: Double, downloadedBytes: Int64) {
-        let bytes = Double(Int(exactly: downloadedBytes) ?? .max)
-        asset
+        let bytes = Int(exactly: downloadedBytes) ?? .max
+        item
             ?|> ItemInformation._progress .~ progress
             ?|> ItemInformation._downloadedBytes .~ bytes
-            ?|> saveAsset
+            ?|> save
     }
 
     func update(location: URL) {
-        asset
+        item
             ?|> ItemInformation._path .~ location.relativePath
-            ?|> saveAsset
+            ?|> save
     }
 
     func update(state: DownloadState) {
-        asset
+        item
             ?|> ItemInformation._state .~ state
-            ?|> saveAsset
+            ?|> save
     }
 
-    func saveAsset(_ asset: ItemInformation) {
-        taskDescription = (try? JSONEncoder().encode(asset))?.string
+    func save(item: ItemInformation) {
+        taskDescription = (try? JSONEncoder().encode(item))?.string
     }
 }
