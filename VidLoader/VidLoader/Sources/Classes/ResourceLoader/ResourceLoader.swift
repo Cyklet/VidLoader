@@ -87,7 +87,7 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
                 let streamResource = StreamResource(response: response.0, data: response.1)
                 self?.prepareContent(streamResource, for: loadingRequest)
             case .failure(let error):
-                self?.observer.taskDidFail(.custom(error))
+                self?.observer.taskDidFail(.custom(.init(error: error)))
             }
         }
     }

@@ -72,7 +72,7 @@ final class DownloadSessionTests: XCTestCase {
         XCTAssertNil(resultTask)
     }
     
-    func test_CreateNewTask_CreationSucceded_NewTaskReturned() {
+    func test_CreateNewTask_CreationSucceeded_NewTaskReturned() {
         // GIVEN
         let givenIdentifier = "new_task_identifier"
         let givenTitle = "new_task_title"

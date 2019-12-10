@@ -8,9 +8,9 @@
 
 import Foundation
 
-enum M3U8Error: Error {
+enum M3U8Error: Error, Equatable {
     case dataConversion
     case keyURLMissing
     case keyContentWrong
-    case server(Error?)
+    case custom(VidLoaderError?)
 }

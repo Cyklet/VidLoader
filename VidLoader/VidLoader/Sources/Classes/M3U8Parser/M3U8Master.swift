@@ -12,7 +12,11 @@ struct M3U8Master: StreamContentRepresentable {
     // MARK: - StreamContentRepresentable
 
     func adjust(response: String, completion: @escaping (Result<String, M3U8Error>) -> Void) {
-        completion(.success(replaceSchemes(in: response)))
+        let updatedResponse = replaceSchemes(in: response)
+        guard updatedResponse == response else {
+            return completion(.success(updatedResponse))
+        }
+        completion(.failure(.dataConversion))
     }
 
     // MARK: - Private functions

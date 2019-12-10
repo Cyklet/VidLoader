@@ -115,7 +115,7 @@ final class ResourceLoaderTests: XCTestCase {
     func test_CheckPlaylistResource_ResourceRequestFailed_TaskDidFail() {
         // GIVEN
         let mockError: ResourceLoadingError = .unknown
-        let expectedError: ResourceLoadingError = .custom(mockError)
+        let expectedError: ResourceLoadingError = .custom(.init(error: mockError))
         var resultError: ResourceLoadingError?
         var keyDidLoad = false
         requestable.completionHandlerStub = (nil, nil, mockError)

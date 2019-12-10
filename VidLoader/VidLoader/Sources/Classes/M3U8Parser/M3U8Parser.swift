@@ -18,6 +18,11 @@ protocol StreamContentRepresentable {
 
 struct M3U8Parser: Parser {
     private let streamInf = "#EXT-X-STREAM-INF"
+    private let requestable: Requestable
+    
+    init(requestable: Requestable = URLSession.shared) {
+        self.requestable = requestable
+    }
     
     // MARK: - Parser
     
@@ -42,6 +47,6 @@ struct M3U8Parser: Parser {
     private func content(response: String) -> StreamContentRepresentable {
         let items = response.components(separatedBy: streamInf)
 
-        return items.count > 1 ? M3U8Master() : M3U8Playlist()
+        return items.count > 1 ? M3U8Master() : M3U8Playlist(requestable: requestable)
     }
 }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		0B1495B3239FEF2D007ED700 /* AVURLAssetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1495B2239FEF2D007ED700 /* AVURLAssetExtensions.swift */; };
 		0B1495B523A002C1007ED700 /* CMTimeRangeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1495B423A002C1007ED700 /* CMTimeRangeExtensions.swift */; };
+		0B1495BC23A0104D007ED700 /* M3U8MasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1495BB23A0104D007ED700 /* M3U8MasterTests.swift */; };
 		0B354AFB2396953C009CE690 /* CustomDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AED2396953C009CE690 /* CustomDataTask.swift */; };
 		0B354AFC2396953C009CE690 /* MockRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AEE2396953C009CE690 /* MockRequestable.swift */; };
 		0B354AFD2396953C009CE690 /* PlaylistLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AF12396953C009CE690 /* PlaylistLoaderTests.swift */; };
@@ -30,6 +31,8 @@
 		0B519860239AC77800AEC201 /* KeyLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B51985F239AC77800AEC201 /* KeyLoaderTests.swift */; };
 		0B519862239AC9EE00AEC201 /* MockSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519861239AC9EE00AEC201 /* MockSchemeHandler.swift */; };
 		0B519864239AF06300AEC201 /* FuncCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519863239AF06300AEC201 /* FuncCheck.swift */; };
+		0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */; };
+		0B9AD2AE23A0274C00158D50 /* M3U8ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */; };
 		0BA35D14238551E2004B2F31 /* VidLoader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA35D0A238551E2004B2F31 /* VidLoader.framework */; };
 		0BA35D1B238551E2004B2F31 /* VidLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 0BA35D0D238551E2004B2F31 /* VidLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0BA35D5423855206004B2F31 /* FileManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D2723855206004B2F31 /* FileManageable.swift */; };
@@ -95,6 +98,7 @@
 /* Begin PBXFileReference section */
 		0B1495B2239FEF2D007ED700 /* AVURLAssetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVURLAssetExtensions.swift; sourceTree = "<group>"; };
 		0B1495B423A002C1007ED700 /* CMTimeRangeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTimeRangeExtensions.swift; sourceTree = "<group>"; };
+		0B1495BB23A0104D007ED700 /* M3U8MasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8MasterTests.swift; sourceTree = "<group>"; };
 		0B354AED2396953C009CE690 /* CustomDataTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDataTask.swift; sourceTree = "<group>"; };
 		0B354AEE2396953C009CE690 /* MockRequestable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRequestable.swift; sourceTree = "<group>"; };
 		0B354AF12396953C009CE690 /* PlaylistLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistLoaderTests.swift; sourceTree = "<group>"; };
@@ -116,6 +120,8 @@
 		0B51985F239AC77800AEC201 /* KeyLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyLoaderTests.swift; sourceTree = "<group>"; };
 		0B519861239AC9EE00AEC201 /* MockSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSchemeHandler.swift; sourceTree = "<group>"; };
 		0B519863239AF06300AEC201 /* FuncCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuncCheck.swift; sourceTree = "<group>"; };
+		0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8PlaylistTests.swift; sourceTree = "<group>"; };
+		0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8ParserTests.swift; sourceTree = "<group>"; };
 		0BA35D0A238551E2004B2F31 /* VidLoader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VidLoader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BA35D0D238551E2004B2F31 /* VidLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidLoader.h; sourceTree = "<group>"; };
 		0BA35D0E238551E2004B2F31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -190,6 +196,32 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0B1495B623A00FB8007ED700 /* UtilsTests */ = {
+			isa = PBXGroup;
+			children = (
+				0B354AF22396953C009CE690 /* VidLoaderExecutionQueueTests.swift */,
+			);
+			path = UtilsTests;
+			sourceTree = "<group>";
+		};
+		0B1495B723A00FD0007ED700 /* ExternalFrameworks */ = {
+			isa = PBXGroup;
+			children = (
+				0BA35D4A23855206004B2F31 /* Reachability.swift */,
+			);
+			path = ExternalFrameworks;
+			sourceTree = "<group>";
+		};
+		0B1495BA23A01024007ED700 /* M3U8Parser */ = {
+			isa = PBXGroup;
+			children = (
+				0B1495BB23A0104D007ED700 /* M3U8MasterTests.swift */,
+				0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */,
+				0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */,
+			);
+			path = M3U8Parser;
+			sourceTree = "<group>";
+		};
 		0B354AEB2396953C009CE690 /* Mocks */ = {
 			isa = PBXGroup;
 			children = (
@@ -209,6 +241,7 @@
 		0B354AEF2396953C009CE690 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				0B1495B623A00FB8007ED700 /* UtilsTests */,
 				0B354AF02396953C009CE690 /* Classes */,
 			);
 			path = Tests;
@@ -217,13 +250,12 @@
 		0B354AF02396953C009CE690 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				0B1495BA23A01024007ED700 /* M3U8Parser */,
 				0BEC4B10239EDEF500AA39D9 /* Session */,
 				0BEC4B0B239ED61200AA39D9 /* ObserversHandler */,
 				0B519858239A802A00AEC201 /* ResourceLoader */,
 				0B519853239A6BBA00AEC201 /* NetworkHandler */,
 				0B51984A239A646B00AEC201 /* FileHandler */,
-				0B354AF12396953C009CE690 /* PlaylistLoaderTests.swift */,
-				0B354AF22396953C009CE690 /* VidLoaderExecutionQueueTests.swift */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -274,6 +306,7 @@
 		0B519858239A802A00AEC201 /* ResourceLoader */ = {
 			isa = PBXGroup;
 			children = (
+				0B354AF12396953C009CE690 /* PlaylistLoaderTests.swift */,
 				0B519859239A805400AEC201 /* SchemeHandlerTests.swift */,
 				0B51985D239ABC7D00AEC201 /* ResourcesDelegatesHandlerTests.swift */,
 				0B51985F239AC77800AEC201 /* KeyLoaderTests.swift */,
@@ -325,14 +358,12 @@
 		0BA35D2423855206004B2F31 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				0B1495B723A00FD0007ED700 /* ExternalFrameworks */,
+				0BA35D3423855206004B2F31 /* VidLoader.swift */,
 				0BA35D2523855206004B2F31 /* Classes */,
-				0BA35D3D23855206004B2F31 /* M3U8Parser */,
 				0BA35D4223855206004B2F31 /* Utils */,
 				0BA35D4623855206004B2F31 /* Models */,
-				0BA35D4A23855206004B2F31 /* Reachability.swift */,
 				0BA35D4B23855206004B2F31 /* Extensions */,
-				0BA35D5223855206004B2F31 /* Operators.swift */,
-				0BA35D5323855206004B2F31 /* Lens.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -341,13 +372,11 @@
 			isa = PBXGroup;
 			children = (
 				0BA35D2623855206004B2F31 /* FileHandler */,
-				0BA35D2923855206004B2F31 /* PlaylistLoader.swift */,
-				0BA35D2A23855206004B2F31 /* VidLoaderExecutionQueue.swift */,
 				0BA35D2B23855206004B2F31 /* NetworkHandler */,
 				0BA35D2E23855206004B2F31 /* ResourceLoader */,
-				0BA35D3423855206004B2F31 /* VidLoader.swift */,
 				0BA35D3523855206004B2F31 /* ObserversHandler */,
 				0BA35D3923855206004B2F31 /* Session */,
+				0BA35D3D23855206004B2F31 /* M3U8Parser */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -373,6 +402,7 @@
 		0BA35D2E23855206004B2F31 /* ResourceLoader */ = {
 			isa = PBXGroup;
 			children = (
+				0BA35D2923855206004B2F31 /* PlaylistLoader.swift */,
 				0BA35D2F23855206004B2F31 /* SchemeHandler.swift */,
 				0BA35D3023855206004B2F31 /* ResourceLoadingError.swift */,
 				0BA35D3123855206004B2F31 /* ResourceLoader.swift */,
@@ -416,6 +446,9 @@
 		0BA35D4223855206004B2F31 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				0BA35D2A23855206004B2F31 /* VidLoaderExecutionQueue.swift */,
+				0BA35D5223855206004B2F31 /* Operators.swift */,
+				0BA35D5323855206004B2F31 /* Lens.swift */,
 				0BA35D4323855206004B2F31 /* Requestable.swift */,
 				0BA35D4423855206004B2F31 /* Reachable.swift */,
 				0BA35D4523855206004B2F31 /* Atomic.swift */,
@@ -621,9 +654,11 @@
 				0B51985C239A869D00AEC201 /* ResourceLoadingErrorExtensions.swift in Sources */,
 				0B1495B3239FEF2D007ED700 /* AVURLAssetExtensions.swift in Sources */,
 				0BEC4B02239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift in Sources */,
+				0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */,
 				0B354B032396953C009CE690 /* HTTPURLResponseExtensions.swift in Sources */,
 				0B519862239AC9EE00AEC201 /* MockSchemeHandler.swift in Sources */,
 				0BEC4B04239E9FFF00AA39D9 /* Swizzling.swift in Sources */,
+				0B9AD2AE23A0274C00158D50 /* M3U8ParserTests.swift in Sources */,
 				0BEC4B14239EE01300AA39D9 /* DownloadSessionTests.swift in Sources */,
 				0BEC4B06239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift in Sources */,
 				0B354AFF2396953C009CE690 /* TupleEquatable.swift in Sources */,
@@ -636,6 +671,7 @@
 				0BEC4B16239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift in Sources */,
 				0B354B012396953C009CE690 /* DataExtensions.swift in Sources */,
 				0BEC4B18239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift in Sources */,
+				0B1495BC23A0104D007ED700 /* M3U8MasterTests.swift in Sources */,
 				0B519850239A65BE00AEC201 /* MockVidLoaderExecutionQueue.swift in Sources */,
 				0B519860239AC77800AEC201 /* KeyLoaderTests.swift in Sources */,
 				0B51985A239A805400AEC201 /* SchemeHandlerTests.swift in Sources */,

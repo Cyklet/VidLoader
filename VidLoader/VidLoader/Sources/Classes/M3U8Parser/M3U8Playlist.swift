@@ -9,7 +9,6 @@
 import AVFoundation
 
 struct M3U8Playlist: StreamContentRepresentable {
-    private let schemeHandler: SchemeHandler
     private let requestable: Requestable
     private let keyRegex: String = {
         let encryptionKeyPrefix = "URI=\""
@@ -17,9 +16,7 @@ struct M3U8Playlist: StreamContentRepresentable {
         return "(?<=\(encryptionKeyPrefix))[^\n,\"]+"
     }()
 
-    init(schemeHandler: SchemeHandler = .init(),
-         requestable: Requestable = URLSession.shared) {
-        self.schemeHandler = schemeHandler
+    init(requestable: Requestable) {
         self.requestable = requestable
     }
 
@@ -27,7 +24,7 @@ struct M3U8Playlist: StreamContentRepresentable {
 
     func adjust(response: String, completion: @escaping (Result<String, M3U8Error>) -> Void) {
         guard let keyStringURL = response.matches(for: keyRegex).first,
-            let keyURL = URL.init(string: keyStringURL) else {
+            let keyURL = URL(string: keyStringURL) else {
                 return completion(.failure(.keyURLMissing))
         }
         downloadKey(url: keyURL, completion: { result in
@@ -49,7 +46,7 @@ struct M3U8Playlist: StreamContentRepresentable {
     private func downloadKey(url: URL, completion: @escaping (Result<String, M3U8Error>) -> Void) {
         let task = requestable.dataTask(with: URLRequest(url: url)) { data, _, error in
             guard let data = data else {
-                return completion(.failure(.server(error)))
+                return completion(.failure(.custom(error ?|> VidLoaderError.init)))
             }
             completion(.success(data.base64EncodedString()))
         }
