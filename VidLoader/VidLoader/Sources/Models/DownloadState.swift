@@ -19,21 +19,7 @@ public enum DownloadState: Equatable, Codable {
     case failed(error: DownloadError)
     case keyLoaded
 
-    init(taskState: URLSessionTask.State, progress: Double) {
-        self = DownloadState.new(from: taskState, progress: progress)
-    }
-
     // MARK: - Private
-
-    private static func new(from taskState: URLSessionTask.State, progress: Double) -> DownloadState {
-        switch taskState {
-        case .completed: return .completed
-        case .running: return .running(progress)
-        case .suspended: return .suspended(progress)
-        case .canceling: return .unknown
-        @unknown default: return .unknown
-        }
-    }
 
     private enum CodingKeys: String, CodingKey {
       case base, downloadError, progress

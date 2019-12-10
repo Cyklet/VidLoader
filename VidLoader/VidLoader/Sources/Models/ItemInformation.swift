@@ -53,14 +53,6 @@ public struct ItemInformation: Codable, Equatable {
         return (try? location.checkResourceIsReachable()) ?? false
     }
 
-    var isFailed: Bool {
-        switch state {
-        case .failed: return true
-        case .keyLoaded, .canceled, .completed, .running,
-             .unknown, .waiting, .suspended, .prefetching: return false
-        }
-    }
-    
     var inProgress: Bool {
         switch state {
         case .failed, .canceled, .completed, .unknown, .prefetching, .waiting: return false

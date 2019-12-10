@@ -28,13 +28,15 @@ extension AVAssetResourceLoadingRequest {
             objc_setAssociatedObject(self, &AVAssetResourceLoadingRequest.setupAssociationKey, number, .OBJC_ASSOCIATION_RETAIN)
         }
     }
+
     @objc func mockSetup(response: URLResponse, data: Data) {
         setupFuncDidCall = true
     }
 
     static func mock(with resourceLoader: AVAssetResourceLoader = .mock(),
                      requestInfo: NSDictionary = mockRequestInfo(),
-                     requestID: Int = 1) -> AVAssetResourceLoadingRequest {
+                     requestID: Int = 1,
+                     shouldSwizzle: Bool = true) -> AVAssetResourceLoadingRequest {
         let finalSelector = Selector(("initWithResourceLoader:requestInfo:requestID:"))
         let initialSelector = #selector(NSObject.init)
         let initialInit = class_getInstanceMethod(self, initialSelector)!
@@ -46,15 +48,15 @@ extension AVAssetResourceLoadingRequest {
         var request: AVAssetResourceLoadingRequest!
         let newBlock: InitialInit = { obj, sel in
             request = finalBlockInit(obj, finalSelector, resourceLoader, requestInfo, requestID)
-            swizzle(className: self,
-                    original: #selector(setup(response:data:)),
-                    new: #selector(mockSetup(response:data:)))
+            if shouldSwizzle {
+                swizzle(className: self, original: #selector(setup(response:data:)), new: #selector(mockSetup(response:data:)))
+            }
             return request
         }
         method_setImplementation(initialInit, imp_implementationWithBlock(newBlock))
         let newSelector = Selector(("new"))
         perform(newSelector)
-
+        
         return request
     }
 

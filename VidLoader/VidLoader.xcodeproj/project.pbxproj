@@ -33,6 +33,11 @@
 		0B519864239AF06300AEC201 /* FuncCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519863239AF06300AEC201 /* FuncCheck.swift */; };
 		0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */; };
 		0B9AD2AE23A0274C00158D50 /* M3U8ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */; };
+		0B9AD2B423A0317600158D50 /* DataExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */; };
+		0B9AD2B623A0335700158D50 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */; };
+		0B9AD2B823A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B723A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift */; };
+		0B9AD2BB23A03C0B00158D50 /* ItemInformationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2BA23A03C0B00158D50 /* ItemInformationTests.swift */; };
+		0B9AD2BD23A043D800158D50 /* DownloadStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2BC23A043D800158D50 /* DownloadStateTests.swift */; };
 		0BA35D14238551E2004B2F31 /* VidLoader.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0BA35D0A238551E2004B2F31 /* VidLoader.framework */; };
 		0BA35D1B238551E2004B2F31 /* VidLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 0BA35D0D238551E2004B2F31 /* VidLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0BA35D5423855206004B2F31 /* FileManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D2723855206004B2F31 /* FileManageable.swift */; };
@@ -122,6 +127,11 @@
 		0B519863239AF06300AEC201 /* FuncCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuncCheck.swift; sourceTree = "<group>"; };
 		0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8PlaylistTests.swift; sourceTree = "<group>"; };
 		0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8ParserTests.swift; sourceTree = "<group>"; };
+		0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionsTests.swift; sourceTree = "<group>"; };
+		0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
+		0B9AD2B723A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoadingRequestExtensionsTests.swift; sourceTree = "<group>"; };
+		0B9AD2BA23A03C0B00158D50 /* ItemInformationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemInformationTests.swift; sourceTree = "<group>"; };
+		0B9AD2BC23A043D800158D50 /* DownloadStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadStateTests.swift; sourceTree = "<group>"; };
 		0BA35D0A238551E2004B2F31 /* VidLoader.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = VidLoader.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		0BA35D0D238551E2004B2F31 /* VidLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VidLoader.h; sourceTree = "<group>"; };
 		0BA35D0E238551E2004B2F31 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -241,6 +251,8 @@
 		0B354AEF2396953C009CE690 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				0B9AD2B923A03C0300158D50 /* Models */,
+				0B9AD2B223A0316200158D50 /* ExtensionsTests */,
 				0B1495B623A00FB8007ED700 /* UtilsTests */,
 				0B354AF02396953C009CE690 /* Classes */,
 			);
@@ -313,6 +325,25 @@
 				0BEC4B07239EA75900AA39D9 /* ResourceLoaderTests.swift */,
 			);
 			path = ResourceLoader;
+			sourceTree = "<group>";
+		};
+		0B9AD2B223A0316200158D50 /* ExtensionsTests */ = {
+			isa = PBXGroup;
+			children = (
+				0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */,
+				0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */,
+				0B9AD2B723A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift */,
+			);
+			path = ExtensionsTests;
+			sourceTree = "<group>";
+		};
+		0B9AD2B923A03C0300158D50 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				0B9AD2BA23A03C0B00158D50 /* ItemInformationTests.swift */,
+				0B9AD2BC23A043D800158D50 /* DownloadStateTests.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		0BA35D00238551E2004B2F31 = {
@@ -654,9 +685,12 @@
 				0B51985C239A869D00AEC201 /* ResourceLoadingErrorExtensions.swift in Sources */,
 				0B1495B3239FEF2D007ED700 /* AVURLAssetExtensions.swift in Sources */,
 				0BEC4B02239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift in Sources */,
+				0B9AD2BB23A03C0B00158D50 /* ItemInformationTests.swift in Sources */,
 				0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */,
 				0B354B032396953C009CE690 /* HTTPURLResponseExtensions.swift in Sources */,
+				0B9AD2B823A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift in Sources */,
 				0B519862239AC9EE00AEC201 /* MockSchemeHandler.swift in Sources */,
+				0B9AD2BD23A043D800158D50 /* DownloadStateTests.swift in Sources */,
 				0BEC4B04239E9FFF00AA39D9 /* Swizzling.swift in Sources */,
 				0B9AD2AE23A0274C00158D50 /* M3U8ParserTests.swift in Sources */,
 				0BEC4B14239EE01300AA39D9 /* DownloadSessionTests.swift in Sources */,
@@ -677,11 +711,13 @@
 				0B51985A239A805400AEC201 /* SchemeHandlerTests.swift in Sources */,
 				0B519855239A6BC700AEC201 /* NetworkHandlerTests.swift in Sources */,
 				0BEC4B0A239EA8E700AA39D9 /* MockParser.swift in Sources */,
+				0B9AD2B423A0317600158D50 /* DataExtensionsTests.swift in Sources */,
 				0BEC4B08239EA75900AA39D9 /* ResourceLoaderTests.swift in Sources */,
 				0B519857239A6C2200AEC201 /* MockReachable.swift in Sources */,
 				0B1495B523A002C1007ED700 /* CMTimeRangeExtensions.swift in Sources */,
 				0B51985E239ABC7D00AEC201 /* ResourcesDelegatesHandlerTests.swift in Sources */,
 				0B51984C239A648000AEC201 /* FileHandlerTests.swift in Sources */,
+				0B9AD2B623A0335700158D50 /* StringExtensionsTests.swift in Sources */,
 				0BEC4B0D239ED63000AA39D9 /* WeakObserverTests.swift in Sources */,
 				0B354B002396953C009CE690 /* StreamResourceExtensions.swift in Sources */,
 				0B354B022396953C009CE690 /* URLExtensions.swift in Sources */,
