@@ -11,6 +11,10 @@ import AVFoundation
 final class MockAVAssetDownloadTask: AVAssetDownloadTask {
 
     init(noUse: Bool? = nil) {}
+    
+    override var urlAsset: AVURLAsset {
+        return .mock()
+    }
 
     var resumeFunc = EmptyFuncCheck()
     override func resume() {

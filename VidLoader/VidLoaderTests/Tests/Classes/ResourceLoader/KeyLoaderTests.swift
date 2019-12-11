@@ -33,7 +33,7 @@ final class KeyLoaderTests: XCTestCase {
         
         // THEN
         XCTAssertTrue(resultShouldWait)
-        XCTAssertTrue(schemeHandler.persistentKeyFunCheck.wasCalled(with: expectedURL))
+        XCTAssertTrue(schemeHandler.persistentKeyFuncCheck.wasCalled(with: expectedURL))
         XCTAssertNil(loadingRequest.setupFuncDidCall)
     }
     
@@ -52,7 +52,7 @@ final class KeyLoaderTests: XCTestCase {
         
         // THEN
         XCTAssertTrue(resultShouldWait)
-        XCTAssertTrue(schemeHandler.persistentKeyFunCheck.wasCalled(with: expectedURL))
+        XCTAssertTrue(schemeHandler.persistentKeyFuncCheck.wasCalled(with: expectedURL))
         XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
     }
 }

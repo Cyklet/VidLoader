@@ -9,7 +9,7 @@
 import Foundation
 
 /// Observe types that can be used to handle download states
-public enum ObserverType: Hashable {
+public enum ObserverType: Hashable, Equatable {
     /// Only observer with identifier will be fired
     case single(String)
     /// All observer of all downloads will be fired

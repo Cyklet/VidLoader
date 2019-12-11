@@ -11,17 +11,17 @@ import AVFoundation
 
 struct MockSchemeHandler: SchemeHandleable {
     
-    var urlAssetFunCheck = FuncCheck<URL?>()
+    var urlAssetFuncCheck = FuncCheck<URL?>()
     var urlAssetStub: Result<AVURLAsset, ResourceLoadingError> = .failure(.unknown)
     func urlAsset(with mediaURL: URL?) -> Result<AVURLAsset, ResourceLoadingError> {
-        urlAssetFunCheck.call(mediaURL)
+        urlAssetFuncCheck.call(mediaURL)
         return urlAssetStub
     }
     
-    var persistentKeyFunCheck = FuncCheck<URL>()
+    var persistentKeyFuncCheck = FuncCheck<URL>()
     var persistentKeyStub: Data?
     func persistentKey(from url: URL) -> Data? {
-        persistentKeyFunCheck.call(url)
+        persistentKeyFuncCheck.call(url)
         return persistentKeyStub
     }
 }

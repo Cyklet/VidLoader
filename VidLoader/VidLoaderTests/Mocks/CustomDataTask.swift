@@ -9,14 +9,14 @@
 import Foundation
 
 final class CustomDataTask: URLSessionDataTask {
-    var cancelFunCheck = EmptyFuncCheck()
+    var cancelFuncCheck = EmptyFuncCheck()
     override func cancel() {
-        cancelFunCheck.call()
+        cancelFuncCheck.call()
     }
 
-    var resumeFunCheck = EmptyFuncCheck()
+    var resumeFuncCheck = EmptyFuncCheck()
     override func resume() {
-        resumeFunCheck.call()
+        resumeFuncCheck.call()
     }
 }
 

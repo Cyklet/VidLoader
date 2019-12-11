@@ -8,7 +8,11 @@
 
 import AVFoundation
 
-final class KeyLoader: NSObject, AVAssetResourceLoaderDelegate {
+protocol KeyLoadable: AVAssetResourceLoaderDelegate {
+    var queue: DispatchQueue { get }
+}
+
+final class KeyLoader: NSObject, KeyLoadable {
     private let schemeHandler: SchemeHandleable
     let queue = DispatchQueue(label: "com.vidloader.resource_loader_key_dispatch_url")
 

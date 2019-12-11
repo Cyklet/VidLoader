@@ -30,7 +30,15 @@
 		0B51985E239ABC7D00AEC201 /* ResourcesDelegatesHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B51985D239ABC7D00AEC201 /* ResourcesDelegatesHandlerTests.swift */; };
 		0B519860239AC77800AEC201 /* KeyLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B51985F239AC77800AEC201 /* KeyLoaderTests.swift */; };
 		0B519862239AC9EE00AEC201 /* MockSchemeHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519861239AC9EE00AEC201 /* MockSchemeHandler.swift */; };
-		0B519864239AF06300AEC201 /* FuncCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519863239AF06300AEC201 /* FuncCheck.swift */; };
+		0B519864239AF06300AEC201 /* FunCheck.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B519863239AF06300AEC201 /* FunCheck.swift */; };
+		0B7C1C9A23A139A500F9E69A /* VidLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1C9923A139A500F9E69A /* VidLoaderTests.swift */; };
+		0B7C1C9C23A13A1D00F9E69A /* MockSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1C9B23A13A1D00F9E69A /* MockSession.swift */; };
+		0B7C1C9E23A13F6C00F9E69A /* MockPlaylistLoadable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1C9D23A13F6C00F9E69A /* MockPlaylistLoadable.swift */; };
+		0B7C1CA023A1410A00F9E69A /* MockNetwork.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1C9F23A1410A00F9E69A /* MockNetwork.swift */; };
+		0B7C1CA223A141F100F9E69A /* MockResourcesDelegatesHandleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA123A141F100F9E69A /* MockResourcesDelegatesHandleable.swift */; };
+		0B7C1CA423A1426500F9E69A /* MockFileHandleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA323A1426500F9E69A /* MockFileHandleable.swift */; };
+		0B7C1CA623A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */; };
+		0B7C1CA823A1438200F9E69A /* MockObserversHandleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */; };
 		0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */; };
 		0B9AD2AE23A0274C00158D50 /* M3U8ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */; };
 		0B9AD2B423A0317600158D50 /* DataExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */; };
@@ -124,7 +132,15 @@
 		0B51985D239ABC7D00AEC201 /* ResourcesDelegatesHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourcesDelegatesHandlerTests.swift; sourceTree = "<group>"; };
 		0B51985F239AC77800AEC201 /* KeyLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyLoaderTests.swift; sourceTree = "<group>"; };
 		0B519861239AC9EE00AEC201 /* MockSchemeHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSchemeHandler.swift; sourceTree = "<group>"; };
-		0B519863239AF06300AEC201 /* FuncCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FuncCheck.swift; sourceTree = "<group>"; };
+		0B519863239AF06300AEC201 /* FunCheck.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FunCheck.swift; sourceTree = "<group>"; };
+		0B7C1C9923A139A500F9E69A /* VidLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VidLoaderTests.swift; sourceTree = "<group>"; };
+		0B7C1C9B23A13A1D00F9E69A /* MockSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockSession.swift; sourceTree = "<group>"; };
+		0B7C1C9D23A13F6C00F9E69A /* MockPlaylistLoadable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaylistLoadable.swift; sourceTree = "<group>"; };
+		0B7C1C9F23A1410A00F9E69A /* MockNetwork.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetwork.swift; sourceTree = "<group>"; };
+		0B7C1CA123A141F100F9E69A /* MockResourcesDelegatesHandleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockResourcesDelegatesHandleable.swift; sourceTree = "<group>"; };
+		0B7C1CA323A1426500F9E69A /* MockFileHandleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFileHandleable.swift; sourceTree = "<group>"; };
+		0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAVAssetResourceLoaderDelegate.swift; sourceTree = "<group>"; };
+		0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObserversHandleable.swift; sourceTree = "<group>"; };
 		0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8PlaylistTests.swift; sourceTree = "<group>"; };
 		0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8ParserTests.swift; sourceTree = "<group>"; };
 		0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionsTests.swift; sourceTree = "<group>"; };
@@ -244,6 +260,13 @@
 				0BEC4B09239EA8E700AA39D9 /* MockParser.swift */,
 				0BEC4B15239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift */,
 				0BEC4B17239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift */,
+				0B7C1C9B23A13A1D00F9E69A /* MockSession.swift */,
+				0B7C1C9D23A13F6C00F9E69A /* MockPlaylistLoadable.swift */,
+				0B7C1C9F23A1410A00F9E69A /* MockNetwork.swift */,
+				0B7C1CA123A141F100F9E69A /* MockResourcesDelegatesHandleable.swift */,
+				0B7C1CA323A1426500F9E69A /* MockFileHandleable.swift */,
+				0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */,
+				0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -255,6 +278,7 @@
 				0B9AD2B223A0316200158D50 /* ExtensionsTests */,
 				0B1495B623A00FB8007ED700 /* UtilsTests */,
 				0B354AF02396953C009CE690 /* Classes */,
+				0B7C1C9923A139A500F9E69A /* VidLoaderTests.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -276,7 +300,7 @@
 			isa = PBXGroup;
 			children = (
 				0B354AF42396953C009CE690 /* TupleEquatable.swift */,
-				0B519863239AF06300AEC201 /* FuncCheck.swift */,
+				0B519863239AF06300AEC201 /* FunCheck.swift */,
 				0BEC4B03239E9FFF00AA39D9 /* Swizzling.swift */,
 			);
 			path = Utils;
@@ -688,6 +712,7 @@
 				0B9AD2BB23A03C0B00158D50 /* ItemInformationTests.swift in Sources */,
 				0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */,
 				0B354B032396953C009CE690 /* HTTPURLResponseExtensions.swift in Sources */,
+				0B7C1C9A23A139A500F9E69A /* VidLoaderTests.swift in Sources */,
 				0B9AD2B823A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift in Sources */,
 				0B519862239AC9EE00AEC201 /* MockSchemeHandler.swift in Sources */,
 				0B9AD2BD23A043D800158D50 /* DownloadStateTests.swift in Sources */,
@@ -700,13 +725,18 @@
 				0B51984E239A64CB00AEC201 /* MockFileManager.swift in Sources */,
 				0BEC4B0F239ED82F00AA39D9 /* ObserversHandlerTests.swift in Sources */,
 				0BEC4B12239EDF0600AA39D9 /* DownloadErrorTests.swift in Sources */,
-				0B519864239AF06300AEC201 /* FuncCheck.swift in Sources */,
+				0B7C1CA023A1410A00F9E69A /* MockNetwork.swift in Sources */,
+				0B519864239AF06300AEC201 /* FunCheck.swift in Sources */,
 				0B354AFC2396953C009CE690 /* MockRequestable.swift in Sources */,
 				0BEC4B16239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift in Sources */,
 				0B354B012396953C009CE690 /* DataExtensions.swift in Sources */,
 				0BEC4B18239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift in Sources */,
+				0B7C1C9E23A13F6C00F9E69A /* MockPlaylistLoadable.swift in Sources */,
 				0B1495BC23A0104D007ED700 /* M3U8MasterTests.swift in Sources */,
+				0B7C1C9C23A13A1D00F9E69A /* MockSession.swift in Sources */,
+				0B7C1CA423A1426500F9E69A /* MockFileHandleable.swift in Sources */,
 				0B519850239A65BE00AEC201 /* MockVidLoaderExecutionQueue.swift in Sources */,
+				0B7C1CA623A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift in Sources */,
 				0B519860239AC77800AEC201 /* KeyLoaderTests.swift in Sources */,
 				0B51985A239A805400AEC201 /* SchemeHandlerTests.swift in Sources */,
 				0B519855239A6BC700AEC201 /* NetworkHandlerTests.swift in Sources */,
@@ -717,10 +747,12 @@
 				0B1495B523A002C1007ED700 /* CMTimeRangeExtensions.swift in Sources */,
 				0B51985E239ABC7D00AEC201 /* ResourcesDelegatesHandlerTests.swift in Sources */,
 				0B51984C239A648000AEC201 /* FileHandlerTests.swift in Sources */,
+				0B7C1CA223A141F100F9E69A /* MockResourcesDelegatesHandleable.swift in Sources */,
 				0B9AD2B623A0335700158D50 /* StringExtensionsTests.swift in Sources */,
 				0BEC4B0D239ED63000AA39D9 /* WeakObserverTests.swift in Sources */,
 				0B354B002396953C009CE690 /* StreamResourceExtensions.swift in Sources */,
 				0B354B022396953C009CE690 /* URLExtensions.swift in Sources */,
+				0B7C1CA823A1438200F9E69A /* MockObserversHandleable.swift in Sources */,
 				0B354AFB2396953C009CE690 /* CustomDataTask.swift in Sources */,
 				0B354AFD2396953C009CE690 /* PlaylistLoaderTests.swift in Sources */,
 			);

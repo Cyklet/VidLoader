@@ -10,9 +10,9 @@
 
 final class MockFileManager: FileManageable {
     
-    var removeItemFunCheck = FuncCheck<String>()
+    var removeItemFuncCheck = FuncCheck<String>()
     func removeItem(atPath path: String) throws {
-        removeItemFunCheck.call(path)
+        removeItemFuncCheck.call(path)
     }
     
 }

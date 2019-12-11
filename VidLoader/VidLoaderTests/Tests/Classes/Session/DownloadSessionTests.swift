@@ -92,7 +92,7 @@ final class DownloadSessionTests: XCTestCase {
         let resultTask = session.addNewTask(urlAsset: .mock(), for: expectedItem)
         
         // THEN
-        XCTAssertTrue(avDownloadSession.makeAssetDownloadTaskFunCheck.wasCalled(with: givenTitle))
+        XCTAssertTrue(avDownloadSession.makeAssetDownloadTaskFuncCheck.wasCalled(with: givenTitle))
         XCTAssertEqual(expectedTask, resultTask)
         XCTAssertEqual(expectedState, resultState)
         XCTAssertEqual(expectedItem, resultItem)
@@ -116,7 +116,7 @@ final class DownloadSessionTests: XCTestCase {
         let resultTask = session.addNewTask(urlAsset: .mock(), for: expectedItem)
         
         // THEN
-        XCTAssertTrue(avDownloadSession.makeAssetDownloadTaskFunCheck.wasCalled(with: expectedTitle))
+        XCTAssertTrue(avDownloadSession.makeAssetDownloadTaskFuncCheck.wasCalled(with: expectedTitle))
         XCTAssertNil(resultTask)
         XCTAssertEqual(expectedState, resultState)
         XCTAssertEqual(expectedItem, resultItem)

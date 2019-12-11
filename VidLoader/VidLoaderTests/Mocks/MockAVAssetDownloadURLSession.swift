@@ -12,20 +12,20 @@ final class MockAVAssetDownloadURLSession: AVAssetDownloadURLSession {
 
     init(noUse: Bool? = nil) {}
     
-    var getAllTaskFunCheck = EmptyFuncCheck()
+    var getAllTaskFuncCheck = EmptyFuncCheck()
     var getAllTasksStub: [MockAVAssetDownloadTask] = []
     override func getAllTasks(completionHandler: @escaping ([URLSessionTask]) -> Void) {
-        getAllTaskFunCheck.call()
+        getAllTaskFuncCheck.call()
         completionHandler(getAllTasksStub)
     }
     
-    var makeAssetDownloadTaskFunCheck = FuncCheck<String>()
+    var makeAssetDownloadTaskFuncCheck = FuncCheck<String>()
     var makeAssetDownloadTaskStub: MockAVAssetDownloadTask?
     override func makeAssetDownloadTask(asset URLAsset: AVURLAsset,
                                         assetTitle title: String,
                                         assetArtworkData artworkData: Data?,
                                         options: [String : Any]? = nil) -> AVAssetDownloadTask? {
-        makeAssetDownloadTaskFunCheck.call(title)
+        makeAssetDownloadTaskFuncCheck.call(title)
         return makeAssetDownloadTaskStub
     }
 }

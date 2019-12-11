@@ -10,9 +10,9 @@
 
 final class MockVidLoaderExecutionQueue: VidLoaderExecutionQueueable {
     
-    var asyncFunCheck = EmptyFuncCheck()
+    var asyncFuncCheck = EmptyFuncCheck()
     func async(execution: @escaping () -> Void) {
-        asyncFunCheck.call()
+        asyncFuncCheck.call()
         execution()
     }
     

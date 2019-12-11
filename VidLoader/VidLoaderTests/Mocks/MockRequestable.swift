@@ -12,9 +12,9 @@ final class MockRequestable: Requestable {
 
     var completionHandlerStub: (Data?, URLResponse?, Error?)
     var dataTaskStub: CustomDataTask!
-    var dataTaskFunCheck = FuncCheck<URLRequest>()
+    var dataTaskFuncCheck = FuncCheck<URLRequest>()
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
-        dataTaskFunCheck.call(request)
+        dataTaskFuncCheck.call(request)
         completionHandler(completionHandlerStub.0, completionHandlerStub.1, completionHandlerStub.2)
         return dataTaskStub
     }

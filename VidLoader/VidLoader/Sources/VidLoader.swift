@@ -65,7 +65,7 @@ public final class VidLoader: VidLoadable {
     /// Maximal concurrent numbers of the active tasks in the session
     private let maxConcurrentDownloads: Int
     /// SchemeHandler is storage with schemes that are used to parse m3u8 and generate final AVURLAsset
-    private let schemeHandler: SchemeHandler
+    private let schemeHandler: SchemeHandleable
     /// ResourcesDelegatesHandler stores all active AVAssetResourceLoaderDelegate, if a download has finished, the delegate will be removed from the handler
     private let resourcesDelegatesHandler: ResourcesDelegatesHandleable
     /// Network handles the internet connection changes, if the user doesn't have access to internet or mobile data is disable,
@@ -74,7 +74,7 @@ public final class VidLoader: VidLoadable {
     /// FileHandler is used to remove the content in case of download failing or cancelling
     private let fileHandler: FileHandleable
     /// KeyLoader is used to provide the encryption key on video player demand
-    private let keyLoader: KeyLoader
+    private let keyLoader: KeyLoadable
     /// ObserversHandler is used to remove / append observers from the client side
     private let observersHandler: ObserversHandleable
 
@@ -86,12 +86,12 @@ public final class VidLoader: VidLoadable {
     init(isMobileDataAccessEnabled: Bool,
          maxConcurrentDownloads: Int,
          session: Session = DownloadSession.init(),
-         playlistLoader: PlaylistLoader = .init(),
+         playlistLoader: PlaylistLoadable = PlaylistLoader.init(),
          network: Network = NetworkHandler.init(),
-         schemeHandler: SchemeHandler = .init(),
+         schemeHandler: SchemeHandleable = SchemeHandler.init(),
          resourcesDelegatesHandler: ResourcesDelegatesHandleable = ResourcesDelegatesHandler.init(),
          fileHandler: FileHandleable = FileHandler.init(),
-         keyLoader: KeyLoader = .init(),
+         keyLoader: KeyLoadable = KeyLoader.init(),
          observersHandler: ObserversHandleable = ObserversHandler.init()) {
         self.maxConcurrentDownloads = maxConcurrentDownloads
         self.session = session
@@ -220,7 +220,8 @@ public final class VidLoader: VidLoadable {
             case .success:
                 self?.handle(event: .waiting, activeItem: item)
                 self?.startNewTaskIfNeeded()
-            case .failure(let error): self?.handle(event: .failed(error: .init(error: error)), activeItem: item)
+            case .failure(let error):
+                self?.handle(event: .failed(error: .init(error: error)), activeItem: item)
             }
         }
         playlistLoader.load(identifier: item.identifier, at: url, completion: handleResult)

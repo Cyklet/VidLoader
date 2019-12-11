@@ -9,10 +9,10 @@
 @testable import VidLoader
 
 final class MockParser: Parser {
-    var adjustFunCheck = FuncCheck<Data>()
+    var adjustFuncCheck = FuncCheck<Data>()
     var adjustStub: Result<Data, M3U8Error> = .failure(.dataConversion)
     func adjust(data: Data, completion: @escaping (Result<Data, M3U8Error>) -> Void) {
-        adjustFunCheck.call(data)
+        adjustFuncCheck.call(data)
         completion(adjustStub)
     }
 }

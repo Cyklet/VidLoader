@@ -30,8 +30,8 @@ final class FileHandlerTests: XCTestCase {
         fileHandler.deleteContent(for: item)
         
         // THEN
-        XCTAssertFalse(fileManager.removeItemFunCheck.wasCalled(with: item.identifier))
-        XCTAssertFalse(executionQueue.asyncFunCheck.wasCalled())
+        XCTAssertFalse(fileManager.removeItemFuncCheck.wasCalled(with: item.identifier))
+        XCTAssertFalse(executionQueue.asyncFuncCheck.wasCalled())
     }
     
     func testDeleteItemWhenPathExistAndNotReachableThenRemoveWillNotBeCalled() {
@@ -42,8 +42,8 @@ final class FileHandlerTests: XCTestCase {
         fileHandler.deleteContent(for: item)
         
         // THEN
-        XCTAssertFalse(fileManager.removeItemFunCheck.wasCalled(with: item.identifier))
-        XCTAssertFalse(executionQueue.asyncFunCheck.wasCalled())
+        XCTAssertFalse(fileManager.removeItemFuncCheck.wasCalled(with: item.identifier))
+        XCTAssertFalse(executionQueue.asyncFuncCheck.wasCalled())
     }
     
     func testDeleteItemWhenPathExistAndReachableThenRemoveWillBeCalled() {
@@ -56,7 +56,7 @@ final class FileHandlerTests: XCTestCase {
         fileHandler.deleteContent(for: item)
         
         // THEN
-        XCTAssertTrue(fileManager.removeItemFunCheck.wasCalled(with: item.identifier))
-        XCTAssertTrue(executionQueue.asyncFunCheck.wasCalled())
+        XCTAssertTrue(fileManager.removeItemFuncCheck.wasCalled(with: item.identifier))
+        XCTAssertTrue(executionQueue.asyncFuncCheck.wasCalled())
     }
 }

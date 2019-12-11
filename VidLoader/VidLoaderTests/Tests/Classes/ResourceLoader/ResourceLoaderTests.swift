@@ -83,7 +83,7 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertNil(loadingRequest.setupFuncDidCall)
         XCTAssertEqual(expectedError, resultError)
         XCTAssertFalse(keyDidLoad)
-        XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
+        XCTAssertTrue(parser.adjustFuncCheck.wasCalled(with: expectedData))
     }
     
     func test_CheckMasterResource_ResourceHasValidData_ResourceSetupWasCalled() {
@@ -109,7 +109,7 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
         XCTAssertNil(resultError)
         XCTAssertFalse(keyDidLoad)
-        XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
+        XCTAssertTrue(parser.adjustFuncCheck.wasCalled(with: expectedData))
     }
     
     func test_CheckPlaylistResource_ResourceRequestFailed_TaskDidFail() {
@@ -170,7 +170,7 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertNil(loadingRequest.setupFuncDidCall)
         XCTAssertEqual(expectedError, resultError)
         XCTAssertFalse(keyDidLoad)
-        XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
+        XCTAssertTrue(parser.adjustFuncCheck.wasCalled(with: expectedData))
     }
     
     func test_CheckPlaylistResource_ResourceHasValidData_ResourceSetupWasCalled() {
@@ -201,6 +201,6 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
         XCTAssertNil(resultError)
         XCTAssertFalse(keyDidLoad)
-        XCTAssertTrue(parser.adjustFunCheck.wasCalled(with: expectedData))
+        XCTAssertTrue(parser.adjustFuncCheck.wasCalled(with: expectedData))
     }
 }

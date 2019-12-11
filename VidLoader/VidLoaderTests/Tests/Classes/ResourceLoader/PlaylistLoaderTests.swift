@@ -68,7 +68,7 @@ final class PlaylistLoaderTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(resultError, expectedError)
-        XCTAssertTrue(mockDataTask.resumeFunCheck.wasCalled())
+        XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
     }
     
     func testLoadResourceWhenFailedThenCompletionWithUnknownError() {
@@ -90,7 +90,7 @@ final class PlaylistLoaderTests: XCTestCase {
 
         // THEN
         XCTAssertEqual(resultError, expectedError)
-        XCTAssertTrue(mockDataTask.resumeFunCheck.wasCalled())
+        XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
     }
 
     func testLoadResourceWhenSuccessThenCompletionWithSuccess() {
@@ -111,7 +111,7 @@ final class PlaylistLoaderTests: XCTestCase {
 
         // THEN
         XCTAssertTrue(result)
-        XCTAssertTrue(mockDataTask.resumeFunCheck.wasCalled())
+        XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
     }
 
     func testCancelWhenItemDownloadedThenNoNextItem() {
@@ -131,8 +131,8 @@ final class PlaylistLoaderTests: XCTestCase {
 
         // THEN
         XCTAssertNil(resultResource)
-        XCTAssertTrue(mockDataTask.resumeFunCheck.wasCalled())
-        XCTAssertTrue(mockDataTask.cancelFunCheck.wasCalled())
+        XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
+        XCTAssertTrue(mockDataTask.cancelFuncCheck.wasCalled())
     }
 
     func testCancelWhenMultipleItemsDownloadedThenNextItemExist() {
