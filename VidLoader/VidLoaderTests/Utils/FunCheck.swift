@@ -22,8 +22,8 @@ class FuncCheck<T> {
 }
 
 extension FuncCheck where T: Equatable {
-    func wasCalled(with argumets: T) -> Bool {
-        return count != 0 && self.arguments == arguments
+    func wasCalled(with expectedArguments: T) -> Bool {
+        return count != 0 && self.arguments == expectedArguments
     }
 }
 

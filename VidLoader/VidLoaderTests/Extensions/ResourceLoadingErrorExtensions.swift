@@ -11,9 +11,10 @@
 extension ResourceLoadingError: Equatable {
     public static func == (lhs: ResourceLoadingError, rhs: ResourceLoadingError) -> Bool {
         switch (lhs, rhs) {
-        case (.unknown, unknown), (.urlScheme, .urlScheme), (.dataAdapt, .dataAdapt),
-             (.m3u8, .m3u8), (.custom, .custom): return true
-        default: return false
+        case (.unknown, unknown), (.urlScheme, .urlScheme), (.m3u8, .m3u8), (.custom, .custom):
+            return true
+        default:
+            return false
         }
     }
 }

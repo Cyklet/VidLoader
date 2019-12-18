@@ -14,7 +14,8 @@ struct ResourceLoaderObserver {
 final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     let queue = DispatchQueue(label: "com.vidloader.resource_loader_dispatch_url")
     private let observer: ResourceLoaderObserver
-    private let parser: Parser
+    private let masterParser: MasterParser
+    private let playlistParser: PlaylistParser
     private let streamResource: StreamResource
     private let requestable: Requestable
     private var didProvideFirstResponse = false
@@ -22,12 +23,14 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     
     init(observer: ResourceLoaderObserver,
          streamResource: StreamResource,
-         parser: Parser = M3U8Parser(),
+         masterParser: MasterParser = M3U8Master(),
+         playlistParser: PlaylistParser = M3U8Playlist(),
          requestable: Requestable = URLSession.shared,
          schemeHandler: SchemeHandleable = SchemeHandler.init()) {
         self.observer = observer
         self.streamResource = streamResource
-        self.parser = parser
+        self.masterParser = masterParser
+        self.playlistParser = playlistParser
         self.requestable = requestable
         self.schemeHandler = schemeHandler
     }
@@ -46,7 +49,7 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
             observer.keyDidLoad()
         } else {
             if !didProvideFirstResponse {
-                prepareContent(streamResource, for: loadingRequest)
+                adjustMasterFile(streamResource: streamResource, loadingRequest: loadingRequest)
             } else {
                 performPlaylistRequest(with: url, loadingRequest: loadingRequest)
             }
@@ -57,7 +60,7 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     }
     
     // MARK: - Private
-    
+        
     private func request(with url: URL,
                          completion: @escaping Completion<Result<(HTTPURLResponse, Data), Error>>) {
         let request = URLRequest(url: url)
@@ -70,34 +73,39 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
         task.resume()
     }
     
-    private func prepareContent(_ streamResource: StreamResource,
-                                for loadingRequest: AVAssetResourceLoadingRequest) {
-        parseResponseData(streamResource.data, completion: { data in
-            loadingRequest.setup(response: streamResource.response, data: data)
-        })
-    }
-    
     private func performPlaylistRequest(with url: URL, loadingRequest: AVAssetResourceLoadingRequest) {
         guard let adoptedURL = url.withScheme(scheme: .original) else {
             return observer.taskDidFail(.urlScheme)
         }
-        request(with: adoptedURL) { [weak self] result in
-            switch result {
-            case .success(let response):
-                let streamResource = StreamResource(response: response.0, data: response.1)
-                self?.prepareContent(streamResource, for: loadingRequest)
-            case .failure(let error):
-                self?.observer.taskDidFail(.custom(.init(error: error)))
-            }
+        request(with: adoptedURL, completion: { [weak self] result in
+            self?.adjustPlaylistFile(result: result, baseURL: url, loadingRequest: loadingRequest)
+        })
+    }
+    
+    // MARK: Parse Files
+    
+    private func adjustMasterFile(streamResource: StreamResource,
+                                  loadingRequest: AVAssetResourceLoadingRequest) {
+        let result = masterParser.adjust(data: streamResource.data)
+        switch result {
+        case .success(let newData): loadingRequest.setup(response: streamResource.response, data: newData)
+        case .failure(let error): observer.taskDidFail(.m3u8(error))
         }
     }
     
-    private func parseResponseData(_ data: Data, completion: @escaping (Data) -> Void) {
-        parser.adjust(data: data, completion: { [weak self] result in
-            switch result {
-            case .success(let data): completion(data)
-            case .failure(let error): self?.observer.taskDidFail(.m3u8(error))
-            }
-        })
+    private func adjustPlaylistFile(result: Result<(HTTPURLResponse, Data), Error>,
+                                    baseURL: URL,
+                                    loadingRequest: AVAssetResourceLoadingRequest) {
+        switch result {
+        case .success(let response):
+            playlistParser.adjust(data: response.1, with: baseURL, completion: { [weak self] result in
+                switch result {
+                case .success(let newData): loadingRequest.setup(response: response.0, data: newData)
+                case .failure(let error): self?.observer.taskDidFail(.m3u8(error))
+                }
+            })
+        case .failure(let error):
+            observer.taskDidFail(.custom(.init(error: error)))
+        }
     }
 }

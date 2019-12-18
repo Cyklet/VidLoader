@@ -19,7 +19,7 @@ final class PlaylistLoaderTests: XCTestCase {
         playlistLoader = PlaylistLoader(requestable: requastable)
     }
 
-    func testNextResourceWhenArrayIsEmptyThenResultNil() {
+    func test_NextResource_ArrayIsEmpty_ResultNil() {
         // GIVEN
         let expectedResource: (String, StreamResource)? = nil
 
@@ -30,7 +30,7 @@ final class PlaylistLoaderTests: XCTestCase {
         XCTAssertTrue(expectedResource == resultResource)
     }
 
-    func testNextResourceWhenArrayIsNotEmptyThenResultExist() {
+    func test_NextResource_ArrayIsNotEmpty_ResultExist() {
         // GIVEN
         let mockIdentifier = "ItemIdentifier"
         let data = Data.mock(string: mockIdentifier)
@@ -49,10 +49,10 @@ final class PlaylistLoaderTests: XCTestCase {
         XCTAssertTrue(finalResult == expectedResult)
     }
 
-    func testLoadResourceWhenFailedThenCompletionWithError() {
+    func test_LoadResource_FailedWithServerError_CompletionWithError() {
         // GIVEN
         let mockIdentifier = "FailedIdentifier"
-        let expectedError: ResourceLoadingError = .unknown
+        let expectedError: ResourceLoadingError = .urlScheme
         let mockDataTask: CustomDataTask = .mock()
         requastable.completionHandlerStub = (nil, nil, expectedError)
         requastable.dataTaskStub = mockDataTask
@@ -71,7 +71,7 @@ final class PlaylistLoaderTests: XCTestCase {
         XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
     }
     
-    func testLoadResourceWhenFailedThenCompletionWithUnknownError() {
+    func test_LoadResource_FailedWithNilError_CompletionWithUnknownError() {
         // GIVEN
         let mockIdentifier = "FailedIdentifier"
         let expectedError: DownloadError = .unknown
@@ -93,7 +93,7 @@ final class PlaylistLoaderTests: XCTestCase {
         XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
     }
 
-    func testLoadResourceWhenSuccessThenCompletionWithSuccess() {
+    func test_LoadResource_Success_CompletionWithSuccess() {
         // GIVEN
         let mockIdentifier = "SuccessIdentifier"
         let mockDataTask: CustomDataTask = .mock()
@@ -114,7 +114,7 @@ final class PlaylistLoaderTests: XCTestCase {
         XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
     }
 
-    func testCancelWhenItemDownloadedThenNoNextItem() {
+    func test_Cancel_ItemDownloaded_NoNextItem() {
         // GIVEN
         let mockIdentifier = "ItemIdentifier"
         let mockDataTask: CustomDataTask = .mock()
@@ -135,7 +135,7 @@ final class PlaylistLoaderTests: XCTestCase {
         XCTAssertTrue(mockDataTask.cancelFuncCheck.wasCalled())
     }
 
-    func testCancelWhenMultipleItemsDownloadedThenNextItemExist() {
+    func test_Cancel_MultipleItemsDownloaded_NextItemExist() {
         // GIVEN
         let mockIdentifier1 = "ItemIdentifier"
         let mockIdentifier2 = "ItemIdentifier2"

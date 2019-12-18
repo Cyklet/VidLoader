@@ -8,23 +8,28 @@
 
 import AVFoundation
 
-struct M3U8Master: StreamContentRepresentable {
-    // MARK: - StreamContentRepresentable
+protocol MasterParser {
+    func adjust(data: Data) -> Result<Data, M3U8Error>
+}
 
-    func adjust(response: String, completion: @escaping (Result<String, M3U8Error>) -> Void) {
-        let updatedResponse = replaceSchemes(in: response)
-        guard updatedResponse == response else {
-            return completion(.success(updatedResponse))
+struct M3U8Master: MasterParser {
+    func adjust(data: Data) -> Result<Data, M3U8Error> {
+        guard let response = data.string else {
+            return .failure(.dataConversion)
         }
-        completion(.failure(.dataConversion))
+        guard let data = replacePaths(response: response).data else {
+            return .failure(.dataConversion)
+        }
+        
+        return .success(data)
     }
-
+    
     // MARK: - Private functions
-
-    private func replaceSchemes(in response: String) -> String {
+    
+    func replacePaths(response: String) -> String {
         let suffix = "://"
+        
         return response.replacingOccurrences(of: SchemeType.original.rawValue + suffix,
                                              with: SchemeType.custom.rawValue + suffix)
     }
-    
 }

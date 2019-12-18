@@ -11,7 +11,6 @@ import Foundation
 enum ResourceLoadingError: Error {
     case unknown
     case urlScheme
-    case dataAdapt
     case m3u8(M3U8Error)
     case custom(VidLoaderError)
 }
