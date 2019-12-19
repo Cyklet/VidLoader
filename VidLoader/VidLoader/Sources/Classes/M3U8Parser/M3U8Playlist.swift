@@ -37,7 +37,16 @@ struct M3U8Playlist: PlaylistParser {
             return completion(.failure(.dataConversion))
         }
         let newResponse = replaceRelativeChunks(response: response, with: baseURL)
-        replacePaths(response: newResponse, with: baseURL, completion: completion)
+        replacePaths(response: newResponse, with: baseURL, completion: { result in
+            switch result {
+            case .success: completion(result)
+            case .failure(let error):
+                switch error {
+                case .custom, .dataConversion, .keyContentWrong: completion(result)
+                case .keyURLMissing: completion(.success(newResponse.data!))
+                }
+            }
+        })
     }
 
     // MARK - Private functions

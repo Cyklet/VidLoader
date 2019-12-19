@@ -20,11 +20,11 @@ final class M3U8PlaylistTests: XCTestCase {
         parser = M3U8Playlist(requestable: requestable)
     }
     
-    func test_AdjustPlaylistSchemes_NoKeywordsFound_AdjustWillFail() {
+    func test_AdjustPlaylistSchemes_WithoutEncryptionKeyInformation_AdjustWillSucceed() {
         // GIVEN
         let baseURL = URL.mock(stringURL: "https://base_url")
         let givenString = "\(SchemeType.original.rawValue)://simple_path"
-        let expectedResult: Result<Data, M3U8Error> = .failure(.keyURLMissing)
+        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: givenString))
         var finalResult: Result<Data, M3U8Error>?
         
         // WHEN
@@ -36,11 +36,11 @@ final class M3U8PlaylistTests: XCTestCase {
         XCTAssertEqual(expectedResult, finalResult)
     }
     
-    func test_AdjustPlaylistSchemes_EncryptionKeywordMissing_AdjustWillFail() {
+    func test_AdjustPlaylistSchemes_WithoutEncryptionKeyKeyword_AdjustWillSucceed() {
         // GIVEN
         let baseURL = URL.mock(stringURL: "https://base_url")
         let givenString = "URI=\"random_url\""
-        let expectedResult: Result<Data, M3U8Error> = .failure(.keyURLMissing)
+        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: givenString))
         var finalResult: Result<Data, M3U8Error>?
         
         // WHEN
@@ -105,6 +105,36 @@ final class M3U8PlaylistTests: XCTestCase {
         let base64String = "Ym9uZF9qYW1lc19ib25k"
         let expectedResponse = """
             #EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"#EXTINF:12.012,\(baseURLString)/1920_00001.ts
+            #EXTINF:12.012,\n\(baseURLString)/1920_00002.ts
+            #EXTINF:12.012,\(baseURLString)/1920_00003.ts\n#EXTINF:12.012,\(baseURLString)/../1920_00004.ts#EXT-X-ENDLIST
+        """
+        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedResponse))
+        var finalResult: Result<Data, M3U8Error>?
+        requestable.dataTaskStub = .mock()
+        let expectedData = Data(base64Encoded: base64String)
+        requestable.completionHandlerStub = (expectedData, HTTPURLResponse.mock(), nil)
+        
+        // WHEN
+        parser.adjust(data: .mock(string: givenResponse), with: baseURL, completion: { result in
+            finalResult = result
+        })
+        
+        // THEN
+        XCTAssertEqual(expectedResult, finalResult)
+    }
+    
+    func test_AdjustPlaylistSchemes_RelativePathsWithoutEncryptionKey_AdjustWillSucceed() {
+        // GIVEN
+        let baseURL = URL.mock(stringURL: "https://base_url")
+        let baseURLString = baseURL.absoluteString
+        let givenResponse = """
+            #EXTINF:12.012,1920_00001.ts
+            #EXTINF:12.012,\n1920_00002.ts
+            #EXTINF:12.012,/1920_00003.ts\n#EXTINF:12.012,../1920_00004.ts#EXT-X-ENDLIST
+        """
+        let base64String = "Ym9uZF9qYW1lc19ib25k"
+        let expectedResponse = """
+            #EXTINF:12.012,\(baseURLString)/1920_00001.ts
             #EXTINF:12.012,\n\(baseURLString)/1920_00002.ts
             #EXTINF:12.012,\(baseURLString)/1920_00003.ts\n#EXTINF:12.012,\(baseURLString)/../1920_00004.ts#EXT-X-ENDLIST
         """
