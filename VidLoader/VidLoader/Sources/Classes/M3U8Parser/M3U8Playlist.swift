@@ -23,7 +23,7 @@ struct M3U8Playlist: PlaylistParser {
     private let relativeChunksRegex: String = {
         let chunkKey = "#EXTINF"
 
-        return "\(chunkKey).*?,[\\n]?((?!\(SchemeType.original.rawValue)).[\\S\\s]+?(?=\\n|#))"
+        return "\(chunkKey).*?[,\\n]((?!\(SchemeType.original.rawValue)).[\\S\\s]+?(?=\\n|#))"
     }()
 
     init(requestable: Requestable = URLSession.shared) {
