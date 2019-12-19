@@ -22,7 +22,7 @@ final class FileHandlerTests: XCTestCase {
         fileHandler = FileHandler(fileManager: fileManager, executionQueue: executionQueue)
     }
     
-    func testDeleteItemWhenPathIsNilThenRemoveWillNotBeCalled() {
+    func test_DeleteItem_PathIsNil_RemoveWillNotBeCalled() {
         // GIVEN
         let item = ItemInformation.mock()
         
@@ -34,7 +34,7 @@ final class FileHandlerTests: XCTestCase {
         XCTAssertFalse(executionQueue.asyncFuncCheck.wasCalled())
     }
     
-    func testDeleteItemWhenPathExistAndNotReachableThenRemoveWillNotBeCalled() {
+    func test_DeleteItem_PathExistAndNotReachable_RemoveWillNotBeCalled() {
         // GIVEN
         let item = ItemInformation.mock(path: "stream")
         
@@ -46,17 +46,18 @@ final class FileHandlerTests: XCTestCase {
         XCTAssertFalse(executionQueue.asyncFuncCheck.wasCalled())
     }
     
-    func testDeleteItemWhenPathExistAndReachableThenRemoveWillBeCalled() {
+    func test_DeleteItem_PathExistAndReachable_RemoveWillBeCalled() {
         // GIVEN
         let enumerator = FileManager.default.enumerator(atPath: NSHomeDirectory())
         let fileRelativePath = enumerator?.nextObject() as? String
         let item = ItemInformation.mock(path: fileRelativePath)
+        let expectedURL = fileRelativePath ?|> URL(fileURLWithPath: NSHomeDirectory()).appendingPathComponent
         
         // WHEN
         fileHandler.deleteContent(for: item)
         
         // THEN
-        XCTAssertTrue(fileManager.removeItemFuncCheck.wasCalled(with: item.identifier))
+        XCTAssertEqual(fileManager.removeItemFuncCheck.arguments, expectedURL?.path)
         XCTAssertTrue(executionQueue.asyncFuncCheck.wasCalled())
     }
 }

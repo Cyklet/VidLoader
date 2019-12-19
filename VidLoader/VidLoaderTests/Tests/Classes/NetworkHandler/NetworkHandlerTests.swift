@@ -19,7 +19,7 @@ final class NetworkHandlerTests: XCTestCase {
         networkHandler = NetworkHandler(reachable: reachable)
     }
     
-    func testNotificationObserverWhenConnectionWasChangedClosureWillBeCalled() {
+    func test_NotificationObserver_ConnectionWasChanged_ClosureWillBeCalled() {
         // GIVEN
         let expectedNetworkState: NetworkState = .available
         var resultNetworkState: NetworkState?
@@ -36,7 +36,7 @@ final class NetworkHandlerTests: XCTestCase {
         XCTAssertEqual(expectedNetworkState, resultNetworkState)
     }
     
-    func testSetNewMobileDataAccessWheValueIsSameThenClosureWillNotBeCalled() {
+    func test_SetNewMobileDataAccess_ValueIsSame_ClosureWillNotBeCalled() {
         // GIVEN
         var resultNetworkState: NetworkState?
         reachable.connection = .wifi
@@ -53,7 +53,7 @@ final class NetworkHandlerTests: XCTestCase {
         XCTAssertNil(resultNetworkState)
     }
     
-    func testEnableMobileDataAccessWheNoChangesThenClosureWillNotBeCalled() {
+    func test_EnableMobileDataAccess_NoChanges_ClosureWillNotBeCalled() {
         // GIVEN
         var resultNetworkState: NetworkState?
         networkHandler.disableMobileDataAccess()
@@ -68,7 +68,7 @@ final class NetworkHandlerTests: XCTestCase {
         XCTAssertNil(resultNetworkState)
     }
     
-    func testEnableMobileDataAccessWhenConnectionChangedThenClosureWillBeCalled() {
+    func test_EnableMobileDataAccess_ConnectionChanged_ClosureWillBeCalled() {
         // GIVEN
         let expectedNetworkState: NetworkState = .available
         var resultNetworkState: NetworkState?
@@ -85,7 +85,7 @@ final class NetworkHandlerTests: XCTestCase {
         XCTAssertEqual(expectedNetworkState, resultNetworkState)
     }
     
-    func testDisableDataAccessWhenOnlyCellularIsAvailableThenNetworkStateIsUnavailable() {
+    func test_DisableDataAccess_OnlyCellularIsAvailable_NetworkStateIsUnavailable() {
         // GIVEN
         let expectedNetworkState: NetworkState = .unavailable
         var resultNetworkState: NetworkState?
@@ -101,7 +101,7 @@ final class NetworkHandlerTests: XCTestCase {
         XCTAssertEqual(expectedNetworkState, resultNetworkState)
     }
     
-    func testDisableDataAccessWhenWifiIsAvailableThenNetworkStateIsAvailable() {
+    func test_DisableDataAccess_WifiIsAvailable_NetworkStateIsAvailable() {
         // GIVEN
         let expectedNetworkState: NetworkState = .available
         var resultNetworkState: NetworkState?

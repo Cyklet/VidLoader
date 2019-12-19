@@ -56,7 +56,7 @@ final class VideoCell: UITableViewCell {
         self.state = state
         print("#### VideoCell: \(state)")
         switch state {
-        case .assetInfoLoaded:
+        case .keyLoaded:
             setupButton(title: "Asset loaded")
         case .canceled, .unknown:
             setupButton(title: "Download")
@@ -83,7 +83,7 @@ final class VideoCell: UITableViewCell {
         switch state {
         case .completed:
             actions?.deleteVideo()
-        case .assetInfoLoaded, .prefetching:
+        case .keyLoaded, .prefetching:
             return
         case .failed:
             actions?.resumeFailedVideo()

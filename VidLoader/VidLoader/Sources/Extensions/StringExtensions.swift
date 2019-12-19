@@ -15,7 +15,9 @@ extension String {
             let results = regex.matches(in: self, range: NSRange(self.startIndex..., in: self))
 
             return results.compactMap {
-                guard let range = Range($0.range, in: self) else { return nil }
+                // M3U8 parsers works with capture groups, last capture group is the correct result
+                let captureGroup = $0.numberOfRanges - 1
+                guard let range = Range($0.range(at: captureGroup), in: self) else { return nil }
                 return String(self[range])
             }
         } catch _ {
@@ -24,7 +26,7 @@ extension String {
     }
 
     var data: Data? {
-        return data(using: .utf8) ?? nil
+        return data(using: .utf8)
     }
 
     var removingIllegalCharacters: String {

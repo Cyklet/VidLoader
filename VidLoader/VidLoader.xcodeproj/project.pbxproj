@@ -40,7 +40,6 @@
 		0B7C1CA623A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */; };
 		0B7C1CA823A1438200F9E69A /* MockObserversHandleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */; };
 		0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */; };
-		0B9AD2AE23A0274C00158D50 /* M3U8ParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */; };
 		0B9AD2B423A0317600158D50 /* DataExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */; };
 		0B9AD2B623A0335700158D50 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */; };
 		0B9AD2B823A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B723A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift */; };
@@ -67,7 +66,6 @@
 		0BA35D6423855206004B2F31 /* VidLoaderError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D3B23855206004B2F31 /* VidLoaderError.swift */; };
 		0BA35D6523855206004B2F31 /* DownloadSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D3C23855206004B2F31 /* DownloadSession.swift */; };
 		0BA35D6623855206004B2F31 /* M3U8Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D3E23855206004B2F31 /* M3U8Error.swift */; };
-		0BA35D6723855206004B2F31 /* M3U8Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D3F23855206004B2F31 /* M3U8Parser.swift */; };
 		0BA35D6823855206004B2F31 /* M3U8Playlist.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D4023855206004B2F31 /* M3U8Playlist.swift */; };
 		0BA35D6923855206004B2F31 /* M3U8Master.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D4123855206004B2F31 /* M3U8Master.swift */; };
 		0BA35D6A23855206004B2F31 /* Requestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D4323855206004B2F31 /* Requestable.swift */; };
@@ -85,11 +83,12 @@
 		0BA35D7623855206004B2F31 /* CMTimeRangeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D5123855206004B2F31 /* CMTimeRangeExtensions.swift */; };
 		0BA35D7723855206004B2F31 /* Operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D5223855206004B2F31 /* Operators.swift */; };
 		0BA35D7823855206004B2F31 /* Lens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D5323855206004B2F31 /* Lens.swift */; };
+		0BE0DF4F23AAC65C0064F50E /* MockMasterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE0DF4E23AAC65C0064F50E /* MockMasterParser.swift */; };
+		0BE0DF5123AAC6720064F50E /* MockPlaylistParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE0DF5023AAC6720064F50E /* MockPlaylistParser.swift */; };
 		0BEC4B02239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B01239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift */; };
 		0BEC4B04239E9FFF00AA39D9 /* Swizzling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B03239E9FFF00AA39D9 /* Swizzling.swift */; };
 		0BEC4B06239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B05239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift */; };
 		0BEC4B08239EA75900AA39D9 /* ResourceLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B07239EA75900AA39D9 /* ResourceLoaderTests.swift */; };
-		0BEC4B0A239EA8E700AA39D9 /* MockParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B09239EA8E700AA39D9 /* MockParser.swift */; };
 		0BEC4B0D239ED63000AA39D9 /* WeakObserverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B0C239ED63000AA39D9 /* WeakObserverTests.swift */; };
 		0BEC4B0F239ED82F00AA39D9 /* ObserversHandlerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B0E239ED82F00AA39D9 /* ObserversHandlerTests.swift */; };
 		0BEC4B12239EDF0600AA39D9 /* DownloadErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B11239EDF0600AA39D9 /* DownloadErrorTests.swift */; };
@@ -142,7 +141,6 @@
 		0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAVAssetResourceLoaderDelegate.swift; sourceTree = "<group>"; };
 		0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObserversHandleable.swift; sourceTree = "<group>"; };
 		0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8PlaylistTests.swift; sourceTree = "<group>"; };
-		0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8ParserTests.swift; sourceTree = "<group>"; };
 		0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionsTests.swift; sourceTree = "<group>"; };
 		0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
 		0B9AD2B723A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoadingRequestExtensionsTests.swift; sourceTree = "<group>"; };
@@ -172,7 +170,6 @@
 		0BA35D3B23855206004B2F31 /* VidLoaderError.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VidLoaderError.swift; sourceTree = "<group>"; };
 		0BA35D3C23855206004B2F31 /* DownloadSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DownloadSession.swift; sourceTree = "<group>"; };
 		0BA35D3E23855206004B2F31 /* M3U8Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = M3U8Error.swift; sourceTree = "<group>"; };
-		0BA35D3F23855206004B2F31 /* M3U8Parser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = M3U8Parser.swift; sourceTree = "<group>"; };
 		0BA35D4023855206004B2F31 /* M3U8Playlist.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = M3U8Playlist.swift; sourceTree = "<group>"; };
 		0BA35D4123855206004B2F31 /* M3U8Master.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = M3U8Master.swift; sourceTree = "<group>"; };
 		0BA35D4323855206004B2F31 /* Requestable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Requestable.swift; sourceTree = "<group>"; };
@@ -190,11 +187,12 @@
 		0BA35D5123855206004B2F31 /* CMTimeRangeExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CMTimeRangeExtensions.swift; sourceTree = "<group>"; };
 		0BA35D5223855206004B2F31 /* Operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Operators.swift; sourceTree = "<group>"; };
 		0BA35D5323855206004B2F31 /* Lens.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lens.swift; sourceTree = "<group>"; };
+		0BE0DF4E23AAC65C0064F50E /* MockMasterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMasterParser.swift; sourceTree = "<group>"; };
+		0BE0DF5023AAC6720064F50E /* MockPlaylistParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaylistParser.swift; sourceTree = "<group>"; };
 		0BEC4B01239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoaderExtensions.swift; sourceTree = "<group>"; };
 		0BEC4B03239E9FFF00AA39D9 /* Swizzling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swizzling.swift; sourceTree = "<group>"; };
 		0BEC4B05239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoadingRequestExtensions.swift; sourceTree = "<group>"; };
 		0BEC4B07239EA75900AA39D9 /* ResourceLoaderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResourceLoaderTests.swift; sourceTree = "<group>"; };
-		0BEC4B09239EA8E700AA39D9 /* MockParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockParser.swift; sourceTree = "<group>"; };
 		0BEC4B0C239ED63000AA39D9 /* WeakObserverTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakObserverTests.swift; sourceTree = "<group>"; };
 		0BEC4B0E239ED82F00AA39D9 /* ObserversHandlerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObserversHandlerTests.swift; sourceTree = "<group>"; };
 		0BEC4B11239EDF0600AA39D9 /* DownloadErrorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadErrorTests.swift; sourceTree = "<group>"; };
@@ -243,7 +241,6 @@
 			children = (
 				0B1495BB23A0104D007ED700 /* M3U8MasterTests.swift */,
 				0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */,
-				0B9AD2AD23A0274C00158D50 /* M3U8ParserTests.swift */,
 			);
 			path = M3U8Parser;
 			sourceTree = "<group>";
@@ -257,7 +254,6 @@
 				0B51984F239A65BE00AEC201 /* MockVidLoaderExecutionQueue.swift */,
 				0B519856239A6C2200AEC201 /* MockReachable.swift */,
 				0B519861239AC9EE00AEC201 /* MockSchemeHandler.swift */,
-				0BEC4B09239EA8E700AA39D9 /* MockParser.swift */,
 				0BEC4B15239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift */,
 				0BEC4B17239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift */,
 				0B7C1C9B23A13A1D00F9E69A /* MockSession.swift */,
@@ -267,6 +263,8 @@
 				0B7C1CA323A1426500F9E69A /* MockFileHandleable.swift */,
 				0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */,
 				0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */,
+				0BE0DF4E23AAC65C0064F50E /* MockMasterParser.swift */,
+				0BE0DF5023AAC6720064F50E /* MockPlaylistParser.swift */,
 			);
 			path = Mocks;
 			sourceTree = "<group>";
@@ -491,7 +489,6 @@
 			isa = PBXGroup;
 			children = (
 				0BA35D3E23855206004B2F31 /* M3U8Error.swift */,
-				0BA35D3F23855206004B2F31 /* M3U8Parser.swift */,
 				0BA35D4023855206004B2F31 /* M3U8Playlist.swift */,
 				0BA35D4123855206004B2F31 /* M3U8Master.swift */,
 			);
@@ -663,7 +660,6 @@
 			files = (
 				0BA35D6923855206004B2F31 /* M3U8Master.swift in Sources */,
 				0BA35D6323855206004B2F31 /* DownloadError.swift in Sources */,
-				0BA35D6723855206004B2F31 /* M3U8Parser.swift in Sources */,
 				0BA35D6223855206004B2F31 /* WeakObserver.swift in Sources */,
 				0BA35D7523855206004B2F31 /* AVAssetResourceLoadingRequestExtensions.swift in Sources */,
 				0BA35D6123855206004B2F31 /* ObserversHandler.swift in Sources */,
@@ -717,7 +713,6 @@
 				0B519862239AC9EE00AEC201 /* MockSchemeHandler.swift in Sources */,
 				0B9AD2BD23A043D800158D50 /* DownloadStateTests.swift in Sources */,
 				0BEC4B04239E9FFF00AA39D9 /* Swizzling.swift in Sources */,
-				0B9AD2AE23A0274C00158D50 /* M3U8ParserTests.swift in Sources */,
 				0BEC4B14239EE01300AA39D9 /* DownloadSessionTests.swift in Sources */,
 				0BEC4B06239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift in Sources */,
 				0B354AFF2396953C009CE690 /* TupleEquatable.swift in Sources */,
@@ -733,6 +728,7 @@
 				0BEC4B18239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift in Sources */,
 				0B7C1C9E23A13F6C00F9E69A /* MockPlaylistLoadable.swift in Sources */,
 				0B1495BC23A0104D007ED700 /* M3U8MasterTests.swift in Sources */,
+				0BE0DF4F23AAC65C0064F50E /* MockMasterParser.swift in Sources */,
 				0B7C1C9C23A13A1D00F9E69A /* MockSession.swift in Sources */,
 				0B7C1CA423A1426500F9E69A /* MockFileHandleable.swift in Sources */,
 				0B519850239A65BE00AEC201 /* MockVidLoaderExecutionQueue.swift in Sources */,
@@ -740,7 +736,7 @@
 				0B519860239AC77800AEC201 /* KeyLoaderTests.swift in Sources */,
 				0B51985A239A805400AEC201 /* SchemeHandlerTests.swift in Sources */,
 				0B519855239A6BC700AEC201 /* NetworkHandlerTests.swift in Sources */,
-				0BEC4B0A239EA8E700AA39D9 /* MockParser.swift in Sources */,
+				0BE0DF5123AAC6720064F50E /* MockPlaylistParser.swift in Sources */,
 				0B9AD2B423A0317600158D50 /* DataExtensionsTests.swift in Sources */,
 				0BEC4B08239EA75900AA39D9 /* ResourceLoaderTests.swift in Sources */,
 				0B519857239A6C2200AEC201 /* MockReachable.swift in Sources */,
