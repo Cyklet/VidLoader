@@ -37,6 +37,7 @@ final class M3U8Playlist: PlaylistParser {
             return completion(.failure(.dataConversion))
         }
         let newResponse = replaceRelativeChunks(response: response, with: baseURL)
+        print(newResponse)
         replacePaths(response: newResponse, with: baseURL, completion: { result in
             switch result {
             case .success: completion(result)
@@ -54,6 +55,7 @@ final class M3U8Playlist: PlaylistParser {
     private func replacePaths(response: String,
                               with baseURL: URL,
                               completion: @escaping (Result<Data, M3U8Error>) -> Void) {
+        print(response)
         let keysURLs = response.matches(for: keyRegex).compactMap { generateURL(keyPath: $0, baseURL: baseURL) }
         guard !keysURLs.isEmpty else {
             return completion(.failure(.keyURLMissing))
@@ -112,7 +114,7 @@ final class M3U8Playlist: PlaylistParser {
     }
     
     
-    /// Transform all relative URLs in absolute URLs, if chunk has already a scheme then link will remain untouched
+    /// Transform all relative URLs in absolute URLs, if chunk/key has already a scheme then URL will remain untouched
     /// - Parameters:
     ///   - response: Variant response string
     ///   - baseURL: Master/variant URL
@@ -121,8 +123,9 @@ final class M3U8Playlist: PlaylistParser {
         guard let originalBaseURL = baseURL.withScheme(scheme: .original)?.deletingLastPathComponent() else {
             return response
         }
-        let paths = response.matches(for: relativeChunksRegex)
-        return paths.reduce(into: response) { result, path in
+        let chunks = response.matches(for: relativeChunksRegex)
+        let keys = response.matches(for: keyRegex).filter { URL(string: $0)?.scheme == nil }
+        return (chunks + keys).reduce(into: response) { result, path in
             let absoluteURLString = originalBaseURL.appendingPathComponent(path).absoluteString
             result = result.replacingOccurrences(of: path, with: absoluteURLString)
         }
