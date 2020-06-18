@@ -6,6 +6,7 @@
 //  Copyright © 2019 Petre. All rights reserved.
 //
 
+import AVFoundation
 import Foundation
 
 /// ItemInformation is a stream description that is used and saved in the download task
@@ -26,11 +27,14 @@ public struct ItemInformation: Codable, Equatable {
     let artworkData: Data?
     /// Current item download progress
     let progress: Double
+    /// Tthe lowest media bitrate to be used that is greater than or equal to this value
+    /// Value should be used as NSNumber in bits per second. If no suitable media bitrate is found, the highest media bitrate will be selected
+    let minRequiredBitrate: Int?
 
     init(identifier: String, title: String?, path: String? = nil,
          mediaLink: String = "", progress: Double = 0,
          state: DownloadState, downloadedBytes: Int = 0,
-         artworkData: Data?) {
+         artworkData: Data?, minRequiredBitrate: Int?) {
         self.identifier = identifier
         self.title = title
         self.path = path
@@ -39,6 +43,7 @@ public struct ItemInformation: Codable, Equatable {
         self.state = state
         self.downloadedBytes = downloadedBytes
         self.artworkData = artworkData
+        self.minRequiredBitrate = minRequiredBitrate
     }
 
     public var location: URL? {
@@ -69,6 +74,13 @@ public struct ItemInformation: Codable, Equatable {
              .suspended, .prefetching: return false
         }
     }
+    
+    var options: [String: Any]? {
+        guard let minRequiredBitrate = minRequiredBitrate else {
+            return nil
+        }
+        return [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: NSNumber(integerLiteral: minRequiredBitrate)]
+    }
 }
 
 extension ItemInformation {
@@ -77,7 +89,7 @@ extension ItemInformation {
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $1.path,
                                 mediaLink: $1.mediaLink, progress: $1.progress,
                                 state: $0, downloadedBytes: $1.downloadedBytes,
-                                artworkData: $1.artworkData) }
+                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 
     static let _path = Lens<ItemInformation, String?>(
@@ -85,7 +97,7 @@ extension ItemInformation {
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $0,
                                 mediaLink: $1.mediaLink, progress: $1.progress,
                                 state: $1.state, downloadedBytes: $1.downloadedBytes,
-                                artworkData: $1.artworkData) }
+                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 
     static let _progress = Lens<ItemInformation, Double>(
@@ -93,7 +105,7 @@ extension ItemInformation {
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $1.path,
                                 mediaLink: $1.mediaLink, progress: $0,
                                 state: $1.state, downloadedBytes: $1.downloadedBytes,
-                                artworkData: $1.artworkData) }
+                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 
     static let _downloadedBytes = Lens<ItemInformation, Int>(
@@ -101,6 +113,6 @@ extension ItemInformation {
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $1.path,
                                 mediaLink: $1.mediaLink, progress: $1.progress,
                                 state: $1.state, downloadedBytes: $0,
-                                artworkData: $1.artworkData) }
+                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 }

@@ -88,7 +88,7 @@ extension DownloadSession: Session {
         let task = session.makeAssetDownloadTask(asset: urlAsset,
                                                  assetTitle: item.title ?? "",
                                                  assetArtworkData: item.artworkData,
-                                                 options: nil)
+                                                 options: item.options)
         guard let downloadTask = task else {
             stateChanged?(.failed(error: .taskNotCreated), item)
             return nil

@@ -20,13 +20,7 @@ public protocol VidLoadable {
     func remove(observer: VidObserver?)
 
     /// Call this method to start item download
-    /// - Parameters:
-    ///   - identifier: Item unique identifier
-    ///   - url: Stream URL
-    ///   - title: Item title that will be presented in the phone settings
-    ///   - artworkData: Item thumbnail that will be presented in the phone settings
-    func download(identifier: String, url: URL,
-                  title: String, artworkData: Data?)
+    func download(_ values: DownloadValues)
 
     /// Call cancel method when download must be stoped
     /// - Parameter identifier: Item unique identifier
@@ -113,13 +107,16 @@ public final class VidLoader: VidLoadable {
         observersHandler.remove(observer)
     }
 
-    public func download(identifier: String, url: URL, title: String, artworkData: Data?) {
+    public func download(_ values: DownloadValues) {
+        let identifier = values.identifier
         guard activeItems[identifier] == nil else { return }
+        let url = values.url
         let item = ItemInformation(identifier: identifier,
-                                   title: title.removingIllegalCharacters,
+                                   title: values.title.removingIllegalCharacters,
                                    mediaLink: url.absoluteString,
                                    state: .unknown,
-                                   artworkData: artworkData)
+                                   artworkData: values.artworkData,
+                                   minRequiredBitrate: values.minRequiredBitrate)
         activeItems[identifier] = item
         handle(event: .prefetching, activeItem: item)
         session.task(identifier: identifier, completion: { [weak self] task in
