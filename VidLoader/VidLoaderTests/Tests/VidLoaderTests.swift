@@ -124,7 +124,7 @@ final class VidLoaderTests: XCTestCase {
         vidLoader = createVidLoader()
         
         // WHEN
-        vidLoader.download(identifier: givenIdentifier, url: .mock(), title: "", artworkData: nil)
+        vidLoader.download(.mock(identifier: givenIdentifier))
         
         // THEN
         XCTAssertEqual(session.taskFuncCheck.count, 0)
@@ -136,6 +136,7 @@ final class VidLoaderTests: XCTestCase {
         let givenURL: URL = .mock(stringURL: "persistent_URL")
         let givenTitle = "persistent_title"
         let givenData: Data = .mock()
+        let givenBitrate: Int = 12312
         session.allTasksStub = []
         vidLoader = createVidLoader()
         playlistLoader.loadStub = .success(())
@@ -143,10 +144,13 @@ final class VidLoaderTests: XCTestCase {
                                                 title: givenTitle.removingIllegalCharacters,
                                                 mediaLink: givenURL.absoluteString,
                                                 state: .waiting,
-                                                artworkData: givenData)
+                                                artworkData: givenData,
+                                                minRequiredBitrate: givenBitrate)
         
         // WHEN
-        vidLoader.download(identifier: givenIdentifier, url: givenURL, title: givenTitle, artworkData: givenData)
+        vidLoader.download(.mock(identifier: givenIdentifier, url: givenURL,
+                                 title: givenTitle, artworkData: givenData,
+                                 minRequiredBitrate: givenBitrate))
         
         // THEN
         XCTAssertTrue(session.taskFuncCheck.wasCalled(with: givenIdentifier))
@@ -175,7 +179,7 @@ final class VidLoaderTests: XCTestCase {
         vidLoader = createVidLoader()
         
         // WHEN
-        vidLoader.download(identifier: givenIdentifier, url: givenURL, title: givenTitle, artworkData: givenData)
+        vidLoader.download(.mock(identifier: givenIdentifier, url: givenURL, title: givenTitle, artworkData: givenData))
         
         // THEN
         XCTAssertTrue(session.taskFuncCheck.wasCalled(with: givenIdentifier))
@@ -202,7 +206,7 @@ final class VidLoaderTests: XCTestCase {
                                                 artworkData: givenData)
         
         // WHEN
-        vidLoader.download(identifier: givenIdentifier, url: givenURL, title: givenTitle, artworkData: givenData)
+        vidLoader.download(.mock(identifier: givenIdentifier, url: givenURL, title: givenTitle, artworkData: givenData))
         
         // THEN
         XCTAssertTrue(session.taskFuncCheck.wasCalled(with: givenIdentifier))
