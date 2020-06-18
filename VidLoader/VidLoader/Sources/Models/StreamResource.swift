@@ -9,6 +9,22 @@
 import Foundation
 
 struct StreamResource: Equatable {
+    enum FileType {
+        case master
+        case variant
+    }
     let response: HTTPURLResponse
     let data: Data
+    let fileType: FileType
+    
+    init(response: HTTPURLResponse, data: Data) {
+        self.response = response
+        self.data = data
+        switch variantChunkKey.data {
+        case let .some(chunkKey):
+            fileType = data.range(of: chunkKey) == nil ? .master : .variant
+        case .none:
+            fileType = .master
+        }
+    }
 }

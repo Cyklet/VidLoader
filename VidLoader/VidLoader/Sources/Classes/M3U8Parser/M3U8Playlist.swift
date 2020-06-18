@@ -8,11 +8,13 @@
 
 import AVFoundation
 
+let variantChunkKey = "#EXTINF"
+
 protocol PlaylistParser {
     func adjust(data: Data, with baseURL: URL, completion: @escaping (Result<Data, M3U8Error>) -> Void)
 }
 
-struct M3U8Playlist: PlaylistParser {
+final class M3U8Playlist: PlaylistParser {
     private let requestable: Requestable
     private let keyRegex: String = {
         let encryptionKey = "#EXT-X-KEY"
@@ -21,9 +23,7 @@ struct M3U8Playlist: PlaylistParser {
         return "\(encryptionKey)[\\S\\s\\n]*?\(uriKey)([^\\n,\"]+)"
     }()
     private let relativeChunksRegex: String = {
-        let chunkKey = "#EXTINF"
-
-        return "\(chunkKey).*?[,\\n]((?!\(SchemeType.original.rawValue)).[\\S\\s]+?(?=\\n|#))"
+        return "\(variantChunkKey).*?[,\\n]((?!\(SchemeType.original.rawValue)).[\\S\\s]+?(?=\\n|#))"
     }()
 
     init(requestable: Requestable = URLSession.shared) {
@@ -54,25 +54,52 @@ struct M3U8Playlist: PlaylistParser {
     private func replacePaths(response: String,
                               with baseURL: URL,
                               completion: @escaping (Result<Data, M3U8Error>) -> Void) {
-        guard let keyPath = response.matches(for: keyRegex).first,
-            let keyURL = generateURL(keyPath: keyPath, baseURL: baseURL) else {
-                return completion(.failure(.keyURLMissing))
+        let keysURLs = response.matches(for: keyRegex).compactMap { generateURL(keyPath: $0, baseURL: baseURL) }
+        guard !keysURLs.isEmpty else {
+            return completion(.failure(.keyURLMissing))
         }
-        downloadKey(url: keyURL, completion: { result in
+        download(keysURLs: keysURLs) { result in
+            let newResponse = result.reduce(response, { result, values in
+                result.replacingOccurrences(of: values.0, with: values.1)
+            })
+            guard let data = newResponse.data else {
+                return completion(.failure(.dataConversion))
+            }
+            completion(.success(data))
+        }
+    }
+    
+    
+    /// Recursive download all encryption keys inside of variant response
+    /// - Parameters:
+    ///   - keysURLs: Keys URL that need to be downlaoded
+    ///   - values: Recursive storage for response
+    ///   - completion: Return array of tuple here first element is url from where the key was downloaded and second is modified key with a scheme
+    private func download(keysURLs: [URL], values: [(String, String)] = [], completion: @escaping ([(String, String)]) -> Void) {
+        guard let url = keysURLs.first else {
+            return completion(values)
+        }
+        downloadKey(from: url, completion: { [weak self] result in
             switch result {
-            case .success(let key):
-                guard let keyContentURL = URL(string: key)?.withScheme(scheme: .key) else {
-                    return completion(.failure(.keyContentWrong))
-                }
-                let newResponse = response.replacingOccurrences(of: keyPath, with: keyContentURL.absoluteString)
-                guard let data = newResponse.data else {
-                    return completion(.failure(.dataConversion))
-                }
-                completion(.success(data))
-            case .failure(let error):
-                completion(.failure(error))
+            case let .success(value):
+                self?.download(keysURLs: Array(keysURLs.dropFirst()), values: values + [(url.absoluteString, value)], completion: completion)
+            case .failure:
+                self?.download(keysURLs: Array(keysURLs.dropFirst()), values: values, completion: completion)
             }
         })
+    }
+    
+    private func downloadKey(from url: URL, completion: @escaping (Result<String, M3U8Error>) -> Void) {
+        let task = requestable.dataTask(with: URLRequest(url: url)) { data, _, error in
+            guard let data = data else {
+                return completion(.failure(.custom(error ?|> VidLoaderError.init)))
+            }
+            guard let key = URL(string: data.base64EncodedString())?.withScheme(scheme: .key)?.absoluteString else {
+                return completion(.failure(.keyContentWrong))
+            }
+            completion(.success(key))
+        }
+        task.resume()
     }
     
     private func generateURL(keyPath: String, baseURL: URL) -> URL? {
@@ -84,6 +111,12 @@ struct M3U8Playlist: PlaylistParser {
         return originalBaseURL?.appendingPathComponent(keyPath)
     }
     
+    
+    /// Transform all relative URLs in absolute URLs, if chunk has already a scheme then link will remain untouched
+    /// - Parameters:
+    ///   - response: Variant response string
+    ///   - baseURL: Master/variant URL
+    /// - Returns: Update response with absolute URLs inside of it
     private func replaceRelativeChunks(response: String, with baseURL: URL) -> String {
         guard let originalBaseURL = baseURL.withScheme(scheme: .original)?.deletingLastPathComponent() else {
             return response
@@ -93,15 +126,5 @@ struct M3U8Playlist: PlaylistParser {
             let absoluteURLString = originalBaseURL.appendingPathComponent(path).absoluteString
             result = result.replacingOccurrences(of: path, with: absoluteURLString)
         }
-    }
-    
-    private func downloadKey(url: URL, completion: @escaping (Result<String, M3U8Error>) -> Void) {
-        let task = requestable.dataTask(with: URLRequest(url: url)) { data, _, error in
-            guard let data = data else {
-                return completion(.failure(.custom(error ?|> VidLoaderError.init)))
-            }
-            completion(.success(data.base64EncodedString()))
-        }
-        task.resume()
     }
 }

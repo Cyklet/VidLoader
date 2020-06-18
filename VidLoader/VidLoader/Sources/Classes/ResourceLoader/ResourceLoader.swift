@@ -16,9 +16,8 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     private let observer: ResourceLoaderObserver
     private let masterParser: MasterParser
     private let playlistParser: PlaylistParser
-    private let streamResource: StreamResource
+    private var streamResource: StreamResource?
     private let requestable: Requestable
-    private var didProvideFirstResponse = false
     private let schemeHandler: SchemeHandleable
     
     init(observer: ResourceLoaderObserver,
@@ -46,14 +45,16 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
                                           expectedContentLength: persistentKey.count,
                                           textEncodingName: nil)
             loadingRequest.setup(response: keyResponse, data: persistentKey)
+            print("#### keyDidLoad")
             observer.keyDidLoad()
         } else {
-            if !didProvideFirstResponse {
-                adjustMasterFile(streamResource: streamResource, loadingRequest: loadingRequest)
-            } else {
+            switch streamResource?.fileType {
+            case .master:
+                adjustMasterFile(streamResource: streamResource!, loadingRequest: loadingRequest)
+                streamResource = nil
+            case .none, .variant:
                 performPlaylistRequest(with: url, loadingRequest: loadingRequest)
             }
-            didProvideFirstResponse = true
         }
         
         return true
