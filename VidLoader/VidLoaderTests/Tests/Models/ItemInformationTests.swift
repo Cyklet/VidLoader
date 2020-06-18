@@ -7,6 +7,7 @@
 //
 
 import XCTest
+import AVFoundation
 @testable import VidLoader
 
 final class ItemInformationTests: XCTestCase {
@@ -156,5 +157,33 @@ final class ItemInformationTests: XCTestCase {
         // THEN
         XCTAssertEqual(expectedItem, resultItem)
         XCTAssertEqual(expectedDownloadedBytes, resultDownloadedBytes)
+    }
+    
+    func test_BitrateWasGiven_OptionsWereCalled_OptionsNotNil() {
+        // GIVEN
+        let givenBitrate = 1230
+        let expectedOptions: [String: NSNumber] = [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: NSNumber(integerLiteral: givenBitrate)]
+        
+        let givenItem: ItemInformation = .mock(minRequiredBitrate: givenBitrate)
+        
+        // WHEN
+        let resultOptions = givenItem.options as? [String: NSNumber]
+        
+        // THEN
+        XCTAssertEqual(expectedOptions, resultOptions)
+    }
+    
+    func test_BitrateIsNil_OptionsWereCalled_OptionsAreNil() {
+        // GIVEN
+        let givenBitrate: Int? = nil
+        let expectedOptions: [String: NSNumber]? = nil
+        
+        let givenItem: ItemInformation = .mock(minRequiredBitrate: givenBitrate)
+        
+        // WHEN
+        let resultOptions = givenItem.options as? [String: NSNumber]
+        
+        // THEN
+        XCTAssertEqual(expectedOptions, resultOptions)
     }
 }

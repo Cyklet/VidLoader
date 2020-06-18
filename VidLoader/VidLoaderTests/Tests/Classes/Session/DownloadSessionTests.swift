@@ -76,8 +76,12 @@ final class DownloadSessionTests: XCTestCase {
         // GIVEN
         let givenIdentifier = "new_task_identifier"
         let givenTitle = "new_task_title"
+        let givenBitrate = 1213
+        let givenArtwork = Data.mock(string: "mock_artwork")
         let expectedState: DownloadState = .keyLoaded
-        let expectedItem = ItemInformation.mock(identifier: givenIdentifier, title: givenTitle, state: expectedState)
+        let expectedItem = ItemInformation.mock(identifier: givenIdentifier, title: givenTitle,
+                                                state: expectedState, artworkData: givenArtwork,
+                                                minRequiredBitrate: givenBitrate)
         var resultState: DownloadState?
         var resultItem: ItemInformation?
         session.setup(injectedSession: avDownloadSession, stateChanged: { state, item in

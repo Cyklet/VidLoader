@@ -86,10 +86,12 @@ final class VideoListDataProvider: VideoListDataProviding {
     
     func startDownload(with data: VideoData) {
         guard let url = URL(string: data.stringURL) else { return }
-        vidLoaderHandler.loader.download(identifier: data.identifier,
-                                         url: url,
-                                         title: data.title,
-                                         artworkData: UIImage(named: data.imageName)?.jpegData(compressionQuality: 1))
+        let downloadValues = DownloadValues(identifier: data.identifier,
+                                            url: url,
+                                            title: data.title,
+                                            artworkData: UIImage(named: data.imageName)?.jpegData(compressionQuality: 1),
+                                            minRequiredBitrate: 2081059)
+        vidLoaderHandler.loader.download(downloadValues)
     }
     
     func stopDownload(with data: VideoData) {
@@ -146,7 +148,7 @@ final class VideoListDataProvider: VideoListDataProviding {
     }
 
     private func generateDefaultItems() -> [VideoData] {
-        let defaultURL = ""
+        let defaultURL = "https://devstreaming-cdn.apple.com/videos/wwdc/2017/504op4c3001w2f222/504/hls_vod_mvp.m3u8"
 
         return [VideoData(identifier: "id_1", title: "Item 1", stringURL: defaultURL),
                 VideoData(identifier: "id_2", title: "Item 2", stringURL: defaultURL),
