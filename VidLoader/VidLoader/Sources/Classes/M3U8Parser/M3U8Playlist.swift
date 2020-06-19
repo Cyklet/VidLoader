@@ -37,7 +37,6 @@ final class M3U8Playlist: PlaylistParser {
             return completion(.failure(.dataConversion))
         }
         let newResponse = replaceRelativeChunks(response: response, with: baseURL)
-        print(newResponse)
         replacePaths(response: newResponse, with: baseURL, completion: { result in
             switch result {
             case .success: completion(result)
@@ -55,7 +54,6 @@ final class M3U8Playlist: PlaylistParser {
     private func replacePaths(response: String,
                               with baseURL: URL,
                               completion: @escaping (Result<Data, M3U8Error>) -> Void) {
-        print(response)
         let keysURLs = response.matches(for: keyRegex).compactMap { generateURL(keyPath: $0, baseURL: baseURL) }
         guard !keysURLs.isEmpty else {
             return completion(.failure(.keyURLMissing))

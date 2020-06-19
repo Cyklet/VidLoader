@@ -45,7 +45,6 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
                                           expectedContentLength: persistentKey.count,
                                           textEncodingName: nil)
             loadingRequest.setup(response: keyResponse, data: persistentKey)
-            print("#### keyDidLoad")
             observer.keyDidLoad()
         } else {
             switch streamResource?.fileType {
