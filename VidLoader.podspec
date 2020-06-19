@@ -1,6 +1,6 @@
 Pod::Spec.new do |spec|
   spec.name         = "VidLoader"
-  spec.version      = "1.0.1"
+  spec.version      = "1.0.2"
   spec.summary      = "HLS video streaming download library"
   spec.description  = "A library used to download HLS video streaming with AES-128 encryption"
   spec.homepage     = "https://github.com/Cyklet/VidLoader"
