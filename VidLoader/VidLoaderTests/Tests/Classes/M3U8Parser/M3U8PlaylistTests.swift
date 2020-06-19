@@ -52,12 +52,12 @@ final class M3U8PlaylistTests: XCTestCase {
         XCTAssertEqual(expectedResult, finalResult)
     }
     
-    func test_AdjustPlaylistSchemes_KeyDownloadFailed_AdjustWillFail() {
+    func test_AdjustPlaylistSchemes_KeyDownloadFailed_AdjustWillReturnSameResponse() {
         // GIVEN
         let baseURL = URL.mock(stringURL: "https://base_url")
         let givenString = "#EXT-X-KEYURI=\"https://random_url\""
         let givenError: DownloadError = .unknown
-        let expectedResult: Result<Data, M3U8Error> = .failure(.custom(.init(error: givenError)))
+        let expectedResult: Result<Data, M3U8Error> = .success(givenString.data!)
         var finalResult: Result<Data, M3U8Error>?
         requestable.dataTaskStub = .mock()
         requestable.completionHandlerStub = (nil, nil, givenError)
@@ -101,12 +101,14 @@ final class M3U8PlaylistTests: XCTestCase {
             #EXT-X-KEY:random_staff URI=\"relative_random_path\"#EXTINF:12.012,1920_00001.ts
             #EXTINF:12.012,\n1920_00002.ts
             #EXTINF:12.012,/1920_00003.ts\n#EXTINF:12.012,../1920_00004.ts#EXT-X-ENDLIST
+            #EXT-X-KEY:random_staff URI=\"http://unique_relative_path\"#EXTINF:12.012,1920_00001.ts
         """
         let base64String = "Ym9uZF9qYW1lc19ib25k"
         let expectedResponse = """
             #EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"#EXTINF:12.012,\(baseURLString)/1920_00001.ts
             #EXTINF:12.012,\n\(baseURLString)/1920_00002.ts
             #EXTINF:12.012,\(baseURLString)/1920_00003.ts\n#EXTINF:12.012,\(baseURLString)/../1920_00004.ts#EXT-X-ENDLIST
+            #EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"#EXTINF:12.012,\(baseURLString)/1920_00001.ts
         """
         let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedResponse))
         var finalResult: Result<Data, M3U8Error>?

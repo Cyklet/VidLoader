@@ -52,9 +52,10 @@ The sketchy description how *VidLoader* works is represented in the next diagram
 
 ## Requirements
 
-- iOS 12.0+  
-- A device, <span style="color:red">AVAssetDownloadURLSession doesn't work on the simulator</span>
-
+```diff
++ iOS 12.0+
+@@ AVAssetDownloadURLSession doesn't work on the simulator, a real device is required @@
+```
 ## Installation
 
 ### CocoaPods

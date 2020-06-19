@@ -90,7 +90,7 @@ final class VideoListDataProvider: VideoListDataProviding {
                                             url: url,
                                             title: data.title,
                                             artworkData: UIImage(named: data.imageName)?.jpegData(compressionQuality: 1),
-                                            minRequiredBitrate: 2081059)
+                                            minRequiredBitrate: 1)
         vidLoaderHandler.loader.download(downloadValues)
     }
     

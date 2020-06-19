@@ -209,5 +209,39 @@ final class ResourceLoaderTests: XCTestCase {
         XCTAssertFalse(keyDidLoad)
         XCTAssertEqual(playlistParser.adjustFuncCheck.arguments?.0, expectedData)
         XCTAssertEqual(playlistParser.adjustFuncCheck.arguments?.1, url)
+        XCTAssertNotNil(masterParser.adjustFuncCheck.arguments)
+    }
+    
+    func test_CheckPlaylistResource_WithoutMasterFile_ResourceSetupWasCalled() {
+        // GIVEN
+        var resultError: ResourceLoadingError?
+        var keyDidLoad = false
+        let expectedData = Data.mock(string: "expected_data")
+        playlistParser.adjustStub = .success(.mock())
+        setupResourceLoader(streamResource: StreamResource.mock(data: .mock(string: variantChunkKey)),
+                            taskDidFail: { error in resultError = error },
+                            keyDidLoad: { keyDidLoad = true })
+        let url = URL.mock()
+        let mockResponse: HTTPURLResponse = .mock(url: url)
+        requestable.completionHandlerStub = (expectedData, mockResponse, nil)
+        requestable.dataTaskStub = .mock()
+        let avResourceLoader = AVAssetResourceLoader.mock(url: url)
+        let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: url)
+        let loadingRequest = AVAssetResourceLoadingRequest.mock(with: avResourceLoader, requestInfo: requestInfo)
+        let _ = resourceLoader.resourceLoader(avResourceLoader,
+                                              shouldWaitForLoadingOfRequestedResource: loadingRequest)
+        
+        // WHEN
+        let requestShouldWait = resourceLoader.resourceLoader(avResourceLoader,
+                                                              shouldWaitForLoadingOfRequestedResource: loadingRequest)
+        
+        // THEN
+        XCTAssertTrue(requestShouldWait)
+        XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
+        XCTAssertNil(resultError)
+        XCTAssertFalse(keyDidLoad)
+        XCTAssertEqual(playlistParser.adjustFuncCheck.arguments?.0, expectedData)
+        XCTAssertEqual(playlistParser.adjustFuncCheck.arguments?.1, url)
+        XCTAssertNil(masterParser.adjustFuncCheck.arguments)
     }
 }

@@ -41,6 +41,7 @@
 		0B7C1CA423A1426500F9E69A /* MockFileHandleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA323A1426500F9E69A /* MockFileHandleable.swift */; };
 		0B7C1CA623A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */; };
 		0B7C1CA823A1438200F9E69A /* MockObserversHandleable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */; };
+		0B9A16E3249D237D00E9F837 /* StreamResourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9A16E2249D237D00E9F837 /* StreamResourceTests.swift */; };
 		0B9AD2AC23A0200300158D50 /* M3U8PlaylistTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */; };
 		0B9AD2B423A0317600158D50 /* DataExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */; };
 		0B9AD2B623A0335700158D50 /* StringExtensionsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */; };
@@ -144,6 +145,7 @@
 		0B7C1CA323A1426500F9E69A /* MockFileHandleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockFileHandleable.swift; sourceTree = "<group>"; };
 		0B7C1CA523A1432100F9E69A /* MockAVAssetResourceLoaderDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAVAssetResourceLoaderDelegate.swift; sourceTree = "<group>"; };
 		0B7C1CA723A1438200F9E69A /* MockObserversHandleable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockObserversHandleable.swift; sourceTree = "<group>"; };
+		0B9A16E2249D237D00E9F837 /* StreamResourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreamResourceTests.swift; sourceTree = "<group>"; };
 		0B9AD2AB23A0200300158D50 /* M3U8PlaylistTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8PlaylistTests.swift; sourceTree = "<group>"; };
 		0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataExtensionsTests.swift; sourceTree = "<group>"; };
 		0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensionsTests.swift; sourceTree = "<group>"; };
@@ -369,6 +371,7 @@
 			children = (
 				0B9AD2BA23A03C0B00158D50 /* ItemInformationTests.swift */,
 				0B9AD2BC23A043D800158D50 /* DownloadStateTests.swift */,
+				0B9A16E2249D237D00E9F837 /* StreamResourceTests.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -731,6 +734,7 @@
 				0B519864239AF06300AEC201 /* FunCheck.swift in Sources */,
 				0B354AFC2396953C009CE690 /* MockRequestable.swift in Sources */,
 				0BEC4B16239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift in Sources */,
+				0B9A16E3249D237D00E9F837 /* StreamResourceTests.swift in Sources */,
 				0B354B012396953C009CE690 /* DataExtensions.swift in Sources */,
 				0BEC4B18239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift in Sources */,
 				0B7C1C9E23A13F6C00F9E69A /* MockPlaylistLoadable.swift in Sources */,
