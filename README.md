@@ -89,9 +89,14 @@ If you prefer not to use dependency managers, you can integrate *VidLoader* into
 ## Usage
 
 To use the library, it is suggested to create a singleton of *VidLoader* class (each *VidLoader* instance will have the same session identifier that can lead to unexpected behavior in case of multiple instances) and access public functions of it:
+- `func download(_ values: DownloadValues)` call this method to start item download. *DownloadValues* contains:
+  - `identifier`: item's unique identifier;
+  - `url`: m3u8 URL;
+  - `title`: item's title that will be presented in the phone settings;
+  - `artworkData`: item's optional thumbnail that will be presented in the phone settings;
+  - `minRequiredBitrate`: lowest media bitrate to be used that is greater than or equal to this value, bits per second. If it's nil, then the highest media bitrate will be selected by default;
 - `observe(with observer: VidObserver?) `: add an observer that will be called when the state of an item changes;
 - `remove(observer: VidObserver?)`: remove observer from observers list;
-- `download(identifier: String, url: URL, title: String, artworkData: Data?)`: call this method to start item download;
 - `cancel(identifier: String)`: call cancel method when download must be stoped;
 - `state(for identifier: String) -> DownloadState`: get current download state of the item, if downloader doesn't have any information about it, the state will be **unknown**;
 - `asset(location: URL) -> AVURLAsset?`: returns AVURLAsset that will provide the encryption key when video player will demand. The AVAssetResourceLoaderDelegate of the asset will be handled in *VidLoader* framework;
