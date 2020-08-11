@@ -28,7 +28,8 @@ final class StreamResourceTests: XCTestCase {
     
     func test_GenerateStreamResource_WithChunkKey_FileTypeVariant() {
         // GIVEN
-        let givenData = "no_chunk_key_inside\(variantChunkKey)".data!
+        let variantChunkKey = "#EXTINF"
+        let givenData = "chunk_key_inside\(variantChunkKey)".data!
         let givenResponse = HTTPURLResponse.mock()
         let expectedFileType: StreamResource.FileType = .variant
         

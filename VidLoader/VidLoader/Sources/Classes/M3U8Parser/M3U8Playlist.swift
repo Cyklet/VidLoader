@@ -8,7 +8,22 @@
 
 import AVFoundation
 
-let variantChunkKey = "#EXTINF"
+
+private struct RegexStrings {
+    private static let uri = "URI=\""
+
+    static let key: String = {
+        let encryptionKey = "#EXT-X-KEY"
+
+        return "\(encryptionKey)[\\S\\s\\n]*?\(uri)([^\\n,\"]+)"
+    }()
+    static let mediaSection: String = {
+        let mediaSectionKey = "#EXT-X-MAP"
+        
+        return "\(mediaSectionKey)(?!https)[\\S\\s\\n]*?\(uri)([^\\n,\"]+)"
+    }()
+    static let relativeChunks = "(?<=\\n)(?!#|https)[\\S\\s]*?(?=\\n)"
+}
 
 protocol PlaylistParser {
     func adjust(data: Data, with baseURL: URL, completion: @escaping (Result<Data, M3U8Error>) -> Void)
@@ -16,15 +31,6 @@ protocol PlaylistParser {
 
 final class M3U8Playlist: PlaylistParser {
     private let requestable: Requestable
-    private let keyRegex: String = {
-        let encryptionKey = "#EXT-X-KEY"
-        let uriKey = "URI=\""
-
-        return "\(encryptionKey)[\\S\\s\\n]*?\(uriKey)([^\\n,\"]+)"
-    }()
-    private let relativeChunksRegex: String = {
-        return "\(variantChunkKey).*?[,\\n]((?!\(SchemeType.original.rawValue)).[\\S\\s]+?(?=\\n|#))"
-    }()
 
     init(requestable: Requestable = URLSession.shared) {
         self.requestable = requestable
@@ -54,7 +60,7 @@ final class M3U8Playlist: PlaylistParser {
     private func replacePaths(response: String,
                               with baseURL: URL,
                               completion: @escaping (Result<Data, M3U8Error>) -> Void) {
-        let keysURLs = response.matches(for: keyRegex).compactMap { generateURL(keyPath: $0, baseURL: baseURL) }
+        let keysURLs = response.matches(for: RegexStrings.key).compactMap { generateURL(keyPath: $0, baseURL: baseURL) }
         guard !keysURLs.isEmpty else {
             return completion(.failure(.keyURLMissing))
         }
@@ -121,8 +127,8 @@ final class M3U8Playlist: PlaylistParser {
         guard let originalBaseURL = baseURL.withScheme(scheme: .original)?.deletingLastPathComponent() else {
             return response
         }
-        let chunks = response.matches(for: relativeChunksRegex)
-        let keys = response.matches(for: keyRegex).filter { URL(string: $0)?.scheme == nil }
+        let chunks = response.matches(for: RegexStrings.mediaSection) + response.matches(for: RegexStrings.relativeChunks)
+        let keys = response.matches(for: RegexStrings.key).filter { URL(string: $0)?.scheme == nil }
         return (chunks + keys).reduce(into: response) { result, path in
             let absoluteURLString = originalBaseURL.appendingPathComponent(path).absoluteString
             result = result.replacingOccurrences(of: path, with: absoluteURLString)
