@@ -14,7 +14,8 @@ protocol KeyLoadable: AVAssetResourceLoaderDelegate {
 
 final class KeyLoader: NSObject, KeyLoadable {
     private let schemeHandler: SchemeHandleable
-    let queue = DispatchQueue(label: "com.vidloader.resource_loader_key_dispatch_url")
+    /// Key loader is used to decrypt videos that are playing in AVPlayer on the main thread
+    let queue = DispatchQueue.main
 
     init(schemeHandler: SchemeHandleable = SchemeHandler.init()) {
         self.schemeHandler = schemeHandler
