@@ -97,19 +97,9 @@ final class M3U8PlaylistTests: XCTestCase {
         // GIVEN
         let baseURL = URL.mock(stringURL: "https://base_url")
         let baseURLString = baseURL.absoluteString
-        let givenResponse = """
-            #EXT-X-KEY:random_staff URI=\"relative_random_path\"#EXTINF:12.012,1920_00001.ts
-            #EXTINF:12.012,\n1920_00002.ts
-            #EXTINF:12.012,/1920_00003.ts\n#EXTINF:12.012,../1920_00004.ts#EXT-X-ENDLIST
-            #EXT-X-KEY:random_staff URI=\"http://unique_relative_path\"#EXTINF:12.012,1920_00001.ts
-        """
+        let givenResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"relative_random_path\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\n#EXT-X-BITRATE:194\naudio_english_192_1.mp4\n#EXTINF:5.99467,\n/audio_english_192_2.mp4\n"
         let base64String = "Ym9uZF9qYW1lc19ib25k"
-        let expectedResponse = """
-            #EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"#EXTINF:12.012,\(baseURLString)/1920_00001.ts
-            #EXTINF:12.012,\n\(baseURLString)/1920_00002.ts
-            #EXTINF:12.012,\(baseURLString)/1920_00003.ts\n#EXTINF:12.012,\(baseURLString)/../1920_00004.ts#EXT-X-ENDLIST
-            #EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"#EXTINF:12.012,\(baseURLString)/1920_00001.ts
-        """
+        let expectedResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"\(baseURLString)/audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\n#EXT-X-BITRATE:194\n\(baseURLString)/audio_english_192_1.mp4\n#EXTINF:5.99467,\n\(baseURLString)/audio_english_192_2.mp4\n"
         let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedResponse))
         var finalResult: Result<Data, M3U8Error>?
         requestable.dataTaskStub = .mock()
@@ -129,17 +119,9 @@ final class M3U8PlaylistTests: XCTestCase {
         // GIVEN
         let baseURL = URL.mock(stringURL: "https://base_url")
         let baseURLString = baseURL.absoluteString
-        let givenResponse = """
-            #EXTINF:12.012,1920_00001.ts
-            #EXTINF:12.012,\n1920_00002.ts
-            #EXTINF:12.012,/1920_00003.ts\n#EXTINF:12.012,../1920_00004.ts#EXT-X-ENDLIST
-        """
+        let givenResponse = "#EXTINF:12.012,\n1920_00001.ts\n#EXTINF:12.012,\n1920_00002.ts\n#EXTINF:12.012,\n/1920_00003.ts\n#EXTINF:12.012,\n../1920_00004.ts\n#EXT-X-ENDLIST"
         let base64String = "Ym9uZF9qYW1lc19ib25k"
-        let expectedResponse = """
-            #EXTINF:12.012,\(baseURLString)/1920_00001.ts
-            #EXTINF:12.012,\n\(baseURLString)/1920_00002.ts
-            #EXTINF:12.012,\(baseURLString)/1920_00003.ts\n#EXTINF:12.012,\(baseURLString)/../1920_00004.ts#EXT-X-ENDLIST
-        """
+        let expectedResponse = "#EXTINF:12.012,\n\(baseURLString)/1920_00001.ts\n#EXTINF:12.012,\n\(baseURLString)/1920_00002.ts\n#EXTINF:12.012,\n\(baseURLString)/1920_00003.ts\n#EXTINF:12.012,\n\(baseURLString)/../1920_00004.ts\n#EXT-X-ENDLIST"
         let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedResponse))
         var finalResult: Result<Data, M3U8Error>?
         requestable.dataTaskStub = .mock()

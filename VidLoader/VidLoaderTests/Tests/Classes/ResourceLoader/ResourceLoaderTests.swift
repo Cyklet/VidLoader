@@ -218,6 +218,7 @@ final class ResourceLoaderTests: XCTestCase {
         var keyDidLoad = false
         let expectedData = Data.mock(string: "expected_data")
         playlistParser.adjustStub = .success(.mock())
+        let variantChunkKey = "#EXTINF"
         setupResourceLoader(streamResource: StreamResource.mock(data: .mock(string: variantChunkKey)),
                             taskDidFail: { error in resultError = error },
                             keyDidLoad: { keyDidLoad = true })

@@ -8,6 +8,8 @@
 
 import Foundation
 
+private let variantChunkKey = "#EXTINF"
+
 struct StreamResource: Equatable {
     enum FileType {
         case master
