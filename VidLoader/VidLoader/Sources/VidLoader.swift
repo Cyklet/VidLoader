@@ -142,8 +142,8 @@ public final class VidLoader: VidLoadable {
 
     public func asset(location: URL) -> AVURLAsset? {
         let urlAsset = AVURLAsset(url: location)
-        urlAsset.resourceLoader.setDelegate(keyLoader, queue: keyLoader.queue)
         urlAsset.resourceLoader.preloadsEligibleContentKeys = true
+        urlAsset.resourceLoader.setDelegate(keyLoader, queue: keyLoader.queue)
 
         return urlAsset
     }
