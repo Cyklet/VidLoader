@@ -14,9 +14,8 @@ protocol KeyLoadable: AVAssetResourceLoaderDelegate {
 
 final class KeyLoader: NSObject, KeyLoadable {
     private let schemeHandler: SchemeHandleable
-    /// Key loader is used to decrypt videos that are playing in AVPlayer on the main thread
-    let queue = DispatchQueue.main
-
+    let queue = DispatchQueue(label: "com.vidloader.resource_loader_key_dispatch_url")
+    
     init(schemeHandler: SchemeHandleable = SchemeHandler.init()) {
         self.schemeHandler = schemeHandler
     }
@@ -27,11 +26,13 @@ final class KeyLoader: NSObject, KeyLoadable {
                         shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         guard let url = loadingRequest.request.url else { return false }
         if let persistentKey = schemeHandler.persistentKey(from: url) {
-            let keyResponse = URLResponse(url: url,
-                                          mimeType: AVStreamingKeyDeliveryPersistentContentKeyType,
-                                          expectedContentLength: persistentKey.count,
-                                          textEncodingName: nil)
-            loadingRequest.setup(response: keyResponse, data: persistentKey)
+            queue.asyncAfter(deadline: .now() + 0.01, execute: {
+                let keyResponse = URLResponse(url: url,
+                                              mimeType: AVStreamingKeyDeliveryPersistentContentKeyType,
+                                              expectedContentLength: persistentKey.count,
+                                              textEncodingName: nil)
+                loadingRequest.setup(response: keyResponse, data: persistentKey)
+            })
         }
 
         return true

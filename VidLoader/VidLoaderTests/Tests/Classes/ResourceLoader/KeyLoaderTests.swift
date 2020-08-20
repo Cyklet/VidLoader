@@ -49,6 +49,7 @@ final class KeyLoaderTests: XCTestCase {
         // WHEN
         let resultShouldWait = keyLoader.resourceLoader(.mock(),
                                                         shouldWaitForLoadingOfRequestedResource: loadingRequest)
+        _ = XCTWaiter.wait(for: [.init()], timeout: 0.01)
         
         // THEN
         XCTAssertTrue(resultShouldWait)
