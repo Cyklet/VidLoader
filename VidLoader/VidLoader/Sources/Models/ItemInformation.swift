@@ -60,8 +60,10 @@ public struct ItemInformation: Codable, Equatable {
 
     var inProgress: Bool {
         switch state {
-        case .failed, .canceled, .completed, .unknown, .prefetching, .waiting, .paused: return false
-        case .running, .noConnection, .keyLoaded: return true
+        case .failed, .canceled, .completed, .unknown, .prefetching, .waiting, .paused:
+            return false
+        case .running, .noConnection, .keyLoaded:
+            return true
         }
     }
 
