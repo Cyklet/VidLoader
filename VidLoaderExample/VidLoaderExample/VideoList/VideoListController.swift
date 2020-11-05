@@ -59,12 +59,14 @@ class VideoListController: UIViewController, UITableViewDelegate, UITableViewDat
         table.dataSource = self
         table.register(UINib(nibName: VideoCell.identifier, bundle: nil),
                        forCellReuseIdentifier: VideoCell.identifier)
-        dataProvider.setupActions(
+        let videoListActions = VideoListActions(
+            reloadData: { [weak self] in self?.table.reloadData() },
             showRemoveActionSheet: { [weak self] data in self?.showRemoveActionsSheet(with: data) },
             showStopActionSheet: { [weak self] data in self?.showStopActionsSheet(with: data) },
             showFailedActionSheet: { [weak self] data in self?.showFailedActionSheet(with: data) },
-            reloadData: { [weak self] in self?.table.reloadData() }
-        )
+            showRunningActions: { [weak self] data in self?.showRunningActions(with: data) },
+            showPausedActions: { [weak self] data in self?.showPausedActions(with: data) })
+        dataProvider.setup(videoListActions: videoListActions)
     }
 
     private func showRemoveActionsSheet(with data: VideoData) {
@@ -94,6 +96,30 @@ class VideoListController: UIViewController, UITableViewDelegate, UITableViewDat
         }))
         actionSheet.addAction(UIAlertAction(title: "Retry", style: .default, handler: { [weak self] _ in
             self?.dataProvider.startDownload(with: data)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(actionSheet, animated: true)
+    }
+    
+    private func showRunningActions(with data: VideoData) {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Stop", style: .destructive, handler: { [weak self] _ in
+            self?.dataProvider.stopDownload(with: data)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Pause", style: .destructive, handler: { [weak self] _ in
+            self?.dataProvider.pauseDownload(with: data)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(actionSheet, animated: true)
+    }
+    
+    private func showPausedActions(with data: VideoData) {
+        let actionSheet = UIAlertController(title: nil, message: nil, preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Stop", style: .destructive, handler: { [weak self] _ in
+            self?.dataProvider.stopDownload(with: data)
+        }))
+        actionSheet.addAction(UIAlertAction(title: "Resume", style: .destructive, handler: { [weak self] _ in
+            self?.dataProvider.resumeDownload(with: data)
         }))
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(actionSheet, animated: true)

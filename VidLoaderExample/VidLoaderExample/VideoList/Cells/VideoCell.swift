@@ -14,6 +14,8 @@ struct VideoCellActions {
     let cancelDownload: () -> Void
     let startDownload: () -> Void
     let resumeFailedVideo: () -> Void
+    let showRunningActions: () -> Void
+    let showPausedActions: () -> Void
 }
 
 struct VideoCellModel {
@@ -32,6 +34,12 @@ final class VideoCell: UITableViewCell {
     private var actions: VideoCellActions?
     private var state: DownloadState = .unknown
     private var observer: VidObserver?
+    
+    private struct Colors {
+        static let limeGreen: UIColor = .init(red: 50 / 255.0, green: 205 / 255.0 , blue: 50 / 255.0, alpha: 1)
+        static let fireBrick: UIColor = .init(red: 178 / 255.0, green: 34 / 255.0 , blue: 34 / 255.0, alpha: 1)
+        static let gold: UIColor = .init(red: 255 / 255.0, green: 215 / 255.0 , blue: 0 / 255.0, alpha: 1)
+    }
 
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -63,18 +71,23 @@ final class VideoCell: UITableViewCell {
         case .completed:
             setupButton(title: "Downloaded")
         case .failed:
-            setupButton(title: "Failed")
+            setupButton(title: "Failed", color: Colors.fireBrick)
         case .prefetching:
             setupButton(title: "Prefetchin")
-        case .running(let progress), .suspended(let progress):
+        case .running(let progress), .noConnection(let progress):
             setupButton(title: "\(String(format: "%.0f", progress * 100)) %")
+        case .paused(let progress):
+            setupButton(title: "\(String(format: "%.0f", progress * 100)) %", color: Colors.gold)
         case .waiting:
             setupButton(title: "Waiting")
         }
     }
 
-    private func setupButton(title: String) {
-        DispatchQueue.main.async { self.stateButton.setTitle(title, for: .normal) }
+    private func setupButton(title: String, color: UIColor = Colors.limeGreen) {
+        DispatchQueue.main.async {
+            self.stateButton.setTitle(title, for: .normal)
+            self.stateButton.setTitleColor(color, for: .normal)
+        }
     }
 
     // MARK: - Actions
@@ -89,8 +102,12 @@ final class VideoCell: UITableViewCell {
             actions?.resumeFailedVideo()
         case .canceled, .unknown:
             actions?.startDownload()
-        case .waiting, .running, .suspended:
+        case .waiting:
             actions?.cancelDownload()
+        case .running, .noConnection:
+            actions?.showRunningActions()
+        case .paused:
+            actions?.showPausedActions()
         }
     }
 }

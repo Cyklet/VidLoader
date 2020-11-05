@@ -60,18 +60,20 @@ public struct ItemInformation: Codable, Equatable {
 
     var inProgress: Bool {
         switch state {
-        case .failed, .canceled, .completed, .unknown, .prefetching, .waiting: return false
-        case .running, .suspended, .keyLoaded: return true
+        case .failed, .canceled, .completed, .unknown, .prefetching, .waiting, .paused: return false
+        case .running, .noConnection, .keyLoaded: return true
         }
     }
 
     var isCancelled: Bool {
         switch state {
-        case .canceled: return true
+        case .canceled:
+            return true
         case .keyLoaded, .failed,
-             .completed,
+             .completed, .paused,
              .running, .unknown, .waiting,
-             .suspended, .prefetching: return false
+             .noConnection, .prefetching:
+            return false
         }
     }
     
@@ -81,38 +83,50 @@ public struct ItemInformation: Codable, Equatable {
         }
         return [AVAssetDownloadTaskMinimumRequiredMediaBitrateKey: NSNumber(integerLiteral: minRequiredBitrate)]
     }
+
+    var isPaused: Bool {
+        switch state {
+        case .paused:
+            return true
+        case .keyLoaded, .failed,
+             .completed, .waiting,
+             .running, .unknown,
+             .prefetching, .canceled, .noConnection:
+            return false
+        }
+    }
 }
 
 extension ItemInformation {
     static let _state = Lens<ItemInformation, DownloadState>(
         get: { $0.state },
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $1.path,
-                                mediaLink: $1.mediaLink, progress: $1.progress,
-                                state: $0, downloadedBytes: $1.downloadedBytes,
-                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
+                               mediaLink: $1.mediaLink, progress: $1.progress,
+                               state: $0, downloadedBytes: $1.downloadedBytes,
+                               artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 
     static let _path = Lens<ItemInformation, String?>(
         get: { $0.path },
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $0,
-                                mediaLink: $1.mediaLink, progress: $1.progress,
-                                state: $1.state, downloadedBytes: $1.downloadedBytes,
-                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
+                               mediaLink: $1.mediaLink, progress: $1.progress,
+                               state: $1.state, downloadedBytes: $1.downloadedBytes,
+                               artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 
     static let _progress = Lens<ItemInformation, Double>(
         get: { $0.progress },
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $1.path,
-                                mediaLink: $1.mediaLink, progress: $0,
-                                state: $1.state, downloadedBytes: $1.downloadedBytes,
-                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
+                               mediaLink: $1.mediaLink, progress: $0,
+                               state: $1.state, downloadedBytes: $1.downloadedBytes,
+                               artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 
     static let _downloadedBytes = Lens<ItemInformation, Int>(
         get: { $0.downloadedBytes },
         set: { ItemInformation(identifier: $1.identifier, title: $1.title, path: $1.path,
-                                mediaLink: $1.mediaLink, progress: $1.progress,
-                                state: $1.state, downloadedBytes: $0,
-                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
+                               mediaLink: $1.mediaLink, progress: $1.progress,
+                               state: $1.state, downloadedBytes: $0,
+                               artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate) }
     )
 }
