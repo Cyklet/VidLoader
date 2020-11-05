@@ -62,7 +62,7 @@ final class NetworkHandler: NSObject, Network {
 
     private var newState: NetworkState {
         switch (reachable?.connection, isMobileDataAccessEnabled) {
-        case (.unavailable, _), (.none, _), (.cellular, false): return .unavailable
+        case (.unavailable, _), (nil, _), (.none?, _), (.cellular, false): return .unavailable
         default: return .available
         }
     }
