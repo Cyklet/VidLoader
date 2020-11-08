@@ -70,7 +70,7 @@ final class DownloadStateTests: XCTestCase {
     
     func test_EncodeDecode_Suspended_State() {
         // GIVEN
-        let expectedState: DownloadState = .suspended(0.3)
+        let expectedState: DownloadState = .noConnection(0.3)
         
         // WHEN
         let data = try! encoder.encode(expectedState)

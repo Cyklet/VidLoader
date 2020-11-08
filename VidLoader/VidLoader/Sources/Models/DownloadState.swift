@@ -13,7 +13,8 @@ public enum DownloadState: Equatable, Codable {
     case prefetching
     case waiting
     case running(Double)
-    case suspended(Double)
+    case noConnection(Double)
+    case paused(Double)
     case completed
     case canceled
     case failed(error: DownloadError)
@@ -22,11 +23,11 @@ public enum DownloadState: Equatable, Codable {
     // MARK: - Private
 
     private enum CodingKeys: String, CodingKey {
-      case base, downloadError, progress
+        case base, downloadError, progress
     }
 
     private enum Base: String, Codable {
-      case prefetching, running, suspended, completed, canceled, unknown, waiting, failed, keyLoaded
+        case prefetching, running, noConnection, paused, completed, canceled, unknown, waiting, failed, keyLoaded
     }
 
     public init(from decoder: Decoder) throws {
@@ -38,9 +39,9 @@ public enum DownloadState: Equatable, Codable {
         case .running:
             let progress = try container.decode(Double.self, forKey: .progress)
             self = .running(progress)
-        case .suspended:
+        case .noConnection:
             let progress = try container.decode(Double.self, forKey: .progress)
-            self = .suspended(progress)
+            self = .noConnection(progress)
         case .completed:
             self = .completed
         case .canceled:
@@ -54,6 +55,9 @@ public enum DownloadState: Equatable, Codable {
             self = .failed(error: error)
         case .keyLoaded:
             self = .keyLoaded
+        case .paused:
+            let progress = try container.decode(Double.self, forKey: .progress)
+            self = .paused(progress)
         }
     }
 
@@ -65,8 +69,8 @@ public enum DownloadState: Equatable, Codable {
         case .running(let progress):
             try container.encode(Base.running, forKey: .base)
             try container.encode(progress, forKey: .progress)
-        case .suspended(let progress):
-            try container.encode(Base.suspended, forKey: .base)
+        case .noConnection(let progress):
+            try container.encode(Base.noConnection, forKey: .base)
             try container.encode(progress, forKey: .progress)
         case .completed:
             try container.encode(Base.completed, forKey: .base)
@@ -81,6 +85,9 @@ public enum DownloadState: Equatable, Codable {
             try container.encode(error, forKey: .downloadError)
         case .keyLoaded:
             try container.encode(Base.keyLoaded, forKey: .base)
+        case .paused(let progress):
+            try container.encode(Base.paused, forKey: .base)
+            try container.encode(progress, forKey: .progress)
         }
     }
 }

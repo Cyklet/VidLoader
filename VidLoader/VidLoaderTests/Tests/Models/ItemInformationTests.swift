@@ -74,7 +74,7 @@ final class ItemInformationTests: XCTestCase {
     func test_ItemsStatesForProgress_ItemsAreDifferent_ResultSameAsExpectations() {
         // GIVEN
         let items: [ItemInformation] = [.mock(state: .unknown), .mock(state: .prefetching), .mock(state: .waiting),
-                                        .mock(state: .running(0)), .mock(state: .suspended(0)), .mock(state: .completed),
+                                        .mock(state: .running(0)), .mock(state: .noConnection(0)), .mock(state: .completed),
                                         .mock(state: .canceled), .mock(state: .failed(error: .unknown)), .mock(state: .keyLoaded)]
         let expectedResult = [false, false, false, true, true, false, false, false, true]
         
@@ -88,7 +88,7 @@ final class ItemInformationTests: XCTestCase {
     func test_ItemsStatesForCancel_ItemsAreDifferent_ResultSameAsExpectations() {
         // GIVEN
         let items: [ItemInformation] = [.mock(state: .unknown), .mock(state: .prefetching), .mock(state: .waiting),
-                                        .mock(state: .running(0)), .mock(state: .suspended(0)), .mock(state: .completed),
+                                        .mock(state: .running(0)), .mock(state: .noConnection(0)), .mock(state: .completed),
                                         .mock(state: .canceled), .mock(state: .failed(error: .unknown)), .mock(state: .keyLoaded)]
         let expectedResult = [false, false, false, false, false, false, true, false, false]
         

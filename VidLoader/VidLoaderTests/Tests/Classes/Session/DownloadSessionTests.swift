@@ -255,7 +255,7 @@ final class DownloadSessionTests: XCTestCase {
         let givenItem: ItemInformation = ItemInformation.mock(identifier: givenIdentifier)
         let givenURL: URL = .mock(stringURL: "local_download_path")
         let expectedItem = givenItem |> ItemInformation._path .~ givenURL.absoluteString
-        let expectedState: DownloadState = .suspended(expectedItem.progress)
+        let expectedState: DownloadState = .noConnection(expectedItem.progress)
         session.setup(injectedSession: avDownloadSession, stateChanged: { state, item in
             resultState = state
             resultItem = item
@@ -584,5 +584,109 @@ final class DownloadSessionTests: XCTestCase {
         // THEN
         XCTAssertEqual(expectedState, resultState)
         XCTAssertEqual(expectedItem, resultItem)
+    }
+
+    func test_SessionContainsTask_PauseWasCalled_TaskWasPassed() {
+        // GIVEN
+        let stateChangeFunc = FuncCheck<(DownloadState, ItemInformation)>()
+        session.setup(injectedSession: avDownloadSession,
+                      stateChanged: { stateChangeFunc.call(($0, $1)) })
+        let givenIdentifier = "suspend_task"
+        let givenItem = ItemInformation.mock(identifier: givenIdentifier, progress: 23)
+        let expectedState = DownloadState.paused(givenItem.progress)
+        let expectedItem = givenItem |> ItemInformation._state .~ expectedState
+        let givenTask = MockAVAssetDownloadTask()
+        givenTask.save(item: givenItem)
+        avDownloadSession.getAllTasksStub = [givenTask]
+        
+        // WHEN
+        session.suspendTask(identifier: givenIdentifier)
+        
+        // THEN
+        XCTAssertEqual(stateChangeFunc.arguments?.0, expectedState)
+        XCTAssertEqual(stateChangeFunc.arguments?.1, expectedItem)
+        XCTAssertEqual(givenTask.item, expectedItem)
+        XCTAssertTrue(givenTask.suspendFunc.wasCalled())
+    }
+    
+    func test_SessionNotContainsTask_PauseWasCalled_StateNotChanged() {
+        // GIVEN
+        let stateChangeFunc = FuncCheck<(DownloadState, ItemInformation)>()
+        session.setup(injectedSession: avDownloadSession,
+                      stateChanged: { stateChangeFunc.call(($0, $1)) })
+        let givenIdentifier = "suspend_task"
+        
+        // WHEN
+        session.suspendTask(identifier: givenIdentifier)
+        
+        // THEN
+        XCTAssertNil(stateChangeFunc.arguments?.0)
+        XCTAssertNil(stateChangeFunc.arguments?.1)
+    }
+    
+    func test_SessionContainsTask_ResumeWasCalled_TaskWasResumed() {
+        // GIVEN
+        let stateChangeFunc = FuncCheck<(DownloadState, ItemInformation)>()
+        session.setup(injectedSession: avDownloadSession,
+                      stateChanged: { stateChangeFunc.call(($0, $1)) })
+        let givenIdentifier = "resume_task"
+        let givenItem = ItemInformation.mock(identifier: givenIdentifier, progress: 23)
+        let expectedState = DownloadState.waiting
+        let expectedItem = givenItem |> ItemInformation._state .~ expectedState
+        let givenTask = MockAVAssetDownloadTask()
+        givenTask.save(item: givenItem)
+        avDownloadSession.getAllTasksStub = [givenTask]
+        
+        // WHEN
+        session.resumeTask(identifier: givenIdentifier)
+        
+        // THEN
+        XCTAssertEqual(stateChangeFunc.arguments?.0, expectedState)
+        XCTAssertEqual(stateChangeFunc.arguments?.1, expectedItem)
+        XCTAssertEqual(givenTask.item, expectedItem)
+        XCTAssertTrue(givenTask.resumeFunc.wasCalled())
+    }
+    
+    func test_SessionNotContainsTask_ResumeWasCalled_StateNotChanged() {
+        // GIVEN
+        let stateChangeFunc = FuncCheck<(DownloadState, ItemInformation)>()
+        session.setup(injectedSession: avDownloadSession,
+                      stateChanged: { stateChangeFunc.call(($0, $1)) })
+        let givenIdentifier = "resume_task"
+        
+        // WHEN
+        session.resumeTask(identifier: givenIdentifier)
+        
+        // THEN
+        XCTAssertNil(stateChangeFunc.arguments?.0)
+        XCTAssertNil(stateChangeFunc.arguments?.1)
+    }
+    
+    func test_TaskWasPaused_SuspendAllTasks_SuspendNotCalled() {
+        // GIVEN
+        session.setup(injectedSession: avDownloadSession, stateChanged: nil)
+        let task = MockAVAssetDownloadTask()
+        task.save(item: .mock(state: .paused(10)))
+        avDownloadSession.getAllTasksStub = [task]
+        
+        // WHEN
+        session.suspendAllTasks()
+        
+        // THEN
+        XCTAssertFalse(task.suspendFunc.wasCalled())
+    }
+
+    func test_TaskWasPaused_ResumeAllTasks_ResumeNotCalled() {
+        // GIVEN
+        session.setup(injectedSession: avDownloadSession, stateChanged: nil)
+        let task = MockAVAssetDownloadTask()
+        task.save(item: .mock(state: .paused(10)))
+        avDownloadSession.getAllTasksStub = [task]
+        
+        // WHEN
+        session.resumeAllTasks()
+        
+        // THEN
+        XCTAssertFalse(task.resumeFunc.wasCalled())
     }
 }

@@ -22,6 +22,14 @@ public protocol VidLoadable {
     /// Call this method to start item download
     func download(_ values: DownloadValues)
 
+    /// Call resume method when a download should be unpaused
+    /// - Parameter identifier: Item unique identifier
+    func resume(identifier: String)
+
+    /// Call pause method when download must be suspended
+    /// - Parameter identifier: Item unique identifier
+    func pause(identifier: String)
+
     /// Call cancel method when download must be stoped
     /// - Parameter identifier: Item unique identifier
     func cancel(identifier: String)
@@ -124,7 +132,14 @@ public final class VidLoader: VidLoadable {
             self?.requestPlaylist(for: item, url: url)
         })
     }
-            
+
+    public func resume(identifier: String) {
+        session.resumeTask(identifier: identifier)
+    }
+
+    public func pause(identifier: String) {
+        session.suspendTask(identifier: identifier)
+    }
 
     public func cancel(identifier: String) {
         playlistLoader.cancel(identifier: identifier)
@@ -194,10 +209,10 @@ public final class VidLoader: VidLoadable {
         case .failed, .unknown, .canceled:
             remove(item: newItem)
             startNewTaskIfNeeded()
-        case .keyLoaded:
+        case .keyLoaded, .paused:
             activeItems[activeItem.identifier] = newItem
             startNewTaskIfNeeded()
-        case .prefetching, .running, .suspended, .waiting:
+        case .prefetching, .running, .noConnection, .waiting:
             activeItems[activeItem.identifier] = newItem
         }
     }

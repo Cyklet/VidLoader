@@ -14,6 +14,8 @@ protocol Session {
     func addNewTask(urlAsset: AVURLAsset, for item: ItemInformation) -> AVAssetDownloadTask?
     func cancelTask(identifier: String, hasNotFound: @escaping () -> Void)
     func sendKeyLoaded(item: ItemInformation)
+    func suspendTask(identifier: String)
+    func resumeTask(identifier: String)
     func suspendAllTasks()
     func resumeAllTasks()
     func setup(injectedSession: AVAssetDownloadURLSession?, stateChanged: ((DownloadState, ItemInformation) -> Void)?)
@@ -30,14 +32,14 @@ final class DownloadSession: NSObject {
     }
 
     // MARK: - Private
-
+    
     // Session is a lazy var property, it will be initialized when `get all tasks` will be called in the
     // vidloader class, before this session observables also must be set. If this object is created in the `init` of the
     // main class, then we will lose all calls that are coming between application starts and observable was set.
     private lazy var session: AVAssetDownloadURLSession = {
         return injectedSession ?? AVAssetDownloadURLSession(configuration: self.configuration,
-                                                             assetDownloadDelegate: self,
-                                                             delegateQueue: .main)
+                                                            assetDownloadDelegate: self,
+                                                            delegateQueue: .main)
     }()
 
     private var configuration: URLSessionConfiguration {
@@ -110,15 +112,45 @@ extension DownloadSession: Session {
         }
     }
 
+    func suspendTask(identifier: String) {
+        task(identifier: identifier) { [weak self] task in
+            guard let task = task, let item = task.item else {
+                return
+            }
+            let newItem = item |> ItemInformation._state .~ .paused(item.progress)
+            task.save(item: newItem)
+            self?.stateChanged?(newItem.state, newItem)
+            task.suspend()
+        }
+    }
+
     func suspendAllTasks() {
         allTasks {
-            $0.forEach { $0.suspend() }
+            $0.forEach {
+                if $0.item?.isPaused == true { return }
+                $0.suspend()
+            }
+        }
+    }
+
+    func resumeTask(identifier: String) {
+        task(identifier: identifier) { [weak self] task in
+            guard let task = task, let item = task.item else {
+                return
+            }
+            let newItem = item |> ItemInformation._state .~ .waiting
+            task.save(item: newItem)
+            self?.stateChanged?(newItem.state, newItem)
+            task.resume()
         }
     }
 
     func resumeAllTasks() {
         allTasks {
-            $0.forEach { $0.resume() }
+            $0.forEach {
+                if $0.item?.isPaused == true { return }
+                return $0.resume()
+            }
         }
     }
 
@@ -142,7 +174,7 @@ extension DownloadSession: AVAssetDownloadDelegate {
         guard let item = assetDownloadTask.item else { return }
         switch assetDownloadTask.state {
         case .suspended:
-            stateChanged?(.suspended(item.progress), item)
+            stateChanged?(.noConnection(item.progress), item)
         // `.canceling` can be thrown when application just launched with active downloads
         case .canceling:
             stateChanged?(.canceled, item)
@@ -180,7 +212,6 @@ extension DownloadSession: AVAssetDownloadDelegate {
         guard let item = task.item else { return }
 
         guard !item.isCancelled else {
-//            stateChanged?(.canceled, asset) ? ** side effects ** ?
             return
         }
         guard let error = error, !task.hasFailed else { return }

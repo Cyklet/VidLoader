@@ -13,15 +13,23 @@ import VidLoader
 
 protocol VideoListDataProviding {
     var items: [VideoData] { get }
-    func setupActions(showRemoveActionSheet: @escaping (VideoData) -> Void,
-                      showStopActionSheet: @escaping (VideoData) -> Void,
-                      showFailedActionSheet: @escaping (VideoData) -> Void,
-                      reloadData: @escaping () -> Void)
+    func setup(videoListActions: VideoListActions)
     func urlAsset(row: Int) -> AVURLAsset?
     func videoModel(row: Int) -> VideoCellModel
     func deleteVideo(with data: VideoData)
     func startDownload(with data: VideoData)
     func stopDownload(with data: VideoData)
+    func pauseDownload(with data: VideoData)
+    func resumeDownload(with data: VideoData)
+}
+
+struct VideoListActions {
+    let reloadData: () -> Void
+    let showRemoveActionSheet: (VideoData) -> Void
+    let showStopActionSheet: (VideoData) -> Void
+    let showFailedActionSheet: (VideoData) -> Void
+    let showRunningActions: (VideoData) -> Void
+    let showPausedActions: (VideoData) -> Void
 }
 
 final class VideoListDataProvider: VideoListDataProviding {
@@ -30,11 +38,8 @@ final class VideoListDataProvider: VideoListDataProviding {
     private let vidLoaderHandler: VidLoaderHandler
     private let fileManager: FileManager
     private(set) var items: [VideoData] = []
-    private var showRemoveActionSheet: ((VideoData) -> Void)?
-    private var showStopActionSheet: ((VideoData) -> Void)?
-    private var showFailedActionSheet: ((VideoData) -> Void)?
-    private var reloadData: (() -> Void)?
     private var observer: VidObserver?
+    private var videoListActions: VideoListActions?
 
     init(userDefaults: UserDefaults = .standard,
          itemsKey: String = "vid_loader_example_items",
@@ -51,14 +56,8 @@ final class VideoListDataProvider: VideoListDataProviding {
         setupObservers()
     }
 
-    func setupActions(showRemoveActionSheet: @escaping (VideoData) -> Void,
-                      showStopActionSheet: @escaping (VideoData) -> Void,
-                      showFailedActionSheet: @escaping (VideoData) -> Void,
-                      reloadData: @escaping () -> Void) {
-        self.showRemoveActionSheet = showRemoveActionSheet
-        self.showStopActionSheet = showStopActionSheet
-        self.showFailedActionSheet = showFailedActionSheet
-        self.reloadData = reloadData
+    func setup(videoListActions: VideoListActions) {
+        self.videoListActions = videoListActions
     }
 
     func urlAsset(row: Int) -> AVURLAsset? {
@@ -69,10 +68,12 @@ final class VideoListDataProvider: VideoListDataProviding {
     func videoModel(row: Int) -> VideoCellModel {
         let videoData = items[row]
         let actions = VideoCellActions(
-            deleteVideo: { [weak self] in self?.showRemoveActionSheet?(videoData) },
-            cancelDownload: { [weak self] in self?.showStopActionSheet?(videoData) },
+            deleteVideo: { [weak self] in self?.videoListActions?.showRemoveActionSheet(videoData) },
+            cancelDownload: { [weak self] in self?.videoListActions?.showStopActionSheet(videoData) },
             startDownload: { [weak self] in self?.startDownload(with: videoData) },
-            resumeFailedVideo: { [weak self] in self?.showFailedActionSheet?(videoData) }
+            resumeFailedVideo: { [weak self] in self?.videoListActions?.showFailedActionSheet(videoData) },
+            showRunningActions: { [weak self] in self?.videoListActions?.showRunningActions(videoData) },
+            showPausedActions: { [weak self] in self?.videoListActions?.showPausedActions(videoData) }
         )
 
         return VideoCellModel(identifier: videoData.identifier, title: videoData.title,
@@ -97,10 +98,18 @@ final class VideoListDataProvider: VideoListDataProviding {
     func stopDownload(with data: VideoData) {
         guard vidLoaderHandler.loader.state(for: data.identifier) != .unknown else {
             removeVideo(identifier: data.identifier, location: nil, state: .unknown)
-            reloadData?()
+            videoListActions?.reloadData()
             return
         }
         vidLoaderHandler.loader.cancel(identifier: data.identifier)
+    }
+    
+    func pauseDownload(with data: VideoData) {
+        vidLoaderHandler.loader.pause(identifier: data.identifier)
+    }
+
+    func resumeDownload(with data: VideoData) {
+        vidLoaderHandler.loader.resume(identifier: data.identifier)
     }
 
     // MARK: - Private functions

@@ -21,7 +21,7 @@ extension URLSessionTask {
         case .failed: return  true
         case .keyLoaded, .canceled, .completed, .prefetching,
              .running, .unknown, .waiting,
-             .suspended: return false
+             .noConnection, .paused: return false
         }
     }
 
