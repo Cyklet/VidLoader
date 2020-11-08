@@ -58,4 +58,14 @@ final class MockSession: Session {
         setupFuncCheck.call(injectedSession)
         setupStub = stateChanged
     }
+
+    let resumeTaskFuncCheck = FuncCheck<String>()
+    func resumeTask(identifier: String) {
+        resumeTaskFuncCheck.call(identifier)
+    }
+
+    let suspendTaskFuncCheck = FuncCheck<String>()
+    func suspendTask(identifier: String) {
+        suspendTaskFuncCheck.call(identifier)
+    }
 }

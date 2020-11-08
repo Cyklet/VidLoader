@@ -98,11 +98,25 @@ To use the library, it is suggested to create a singleton of *VidLoader* class (
 - `observe(with observer: VidObserver?) `: add an observer that will be called when the state of an item changes;
 - `remove(observer: VidObserver?)`: remove observer from observers list;
 - `cancel(identifier: String)`: call cancel method when download must be stoped;
+- `pause(identifier: String)`: call pause method when download must be suspended;
+- `resume(identifier: String)`: call resume method when download must be unpaused;
 - `state(for identifier: String) -> DownloadState`: get current download state of the item, if downloader doesn't have any information about it, the state will be **unknown**;
 - `asset(location: URL) -> AVURLAsset?`: returns AVURLAsset that will provide the encryption key when video player will demand. The AVAssetResourceLoaderDelegate of the asset will be handled in *VidLoader* framework;
 - `cancelActiveItems()`: cancel all active items that are currently downloading or preparing to download;
 - `enableMobileDataAccess()`: enable mobile data download availability, if the user has only mobile data connection, download will continue;
-- `disableMobileDataAccess()`:  disable mobile data download availability, if the user has only mobile data connection, download will be paused;
+- `disableMobileDataAccess()`: disable mobile data download availability, if the user has only mobile data connection, download will be paused;
+
+## Download States
+- `unknown`: the framework doesn't have any information about the item, download is not in progress;
+- `prefetching`: `.m3u8` playlists files fetching is in progress;
+- `waiting`: item is waiting in queue, number of concurrent downloads is set during `VidLoader` init `maxConcurrentDownloads`;
+- `running`: item is currently downloading by `AVAssetDownloadURLSession`, with `progress` as an associated value;
+- `noConnection`: when the internet connection is not stable download can be suspended automatically to decrease failed downloads, with `progress` as an associated value;
+- `paused`: download was suspended by the user, with a `progress` as an associated value;
+- `completed`: download just finished, after this, all information about it is removed from the framework, the developer should save file path and download state on their side;
+- `canceled`: when system/user cancels download, this state will fire;
+- `failed`: as soon as the download will fail this state will fire with `DownloadError` as an associated value;
+- `keyLoaded`: framework finished downloading encryption key.
 
 ## Configurations
 

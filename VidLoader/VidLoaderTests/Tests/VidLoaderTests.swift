@@ -351,7 +351,6 @@ final class VidLoaderTests: XCTestCase {
         // THEN
         XCTAssertTrue(session.suspendAllTasksFuncCheck.wasCalled())
     }
-    
 
     func test_StartNextDownload_URLAssetCreationFailed_FailEventWillFire() {
         // GIVEN
@@ -429,5 +428,29 @@ final class VidLoaderTests: XCTestCase {
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.1, expectedItem)
         XCTAssertTrue(givenTask.resumeFunc.wasCalled())
         XCTAssertEqual(resourcesDelegatesHandler.addFuncCheck.arguments?.0, givenIdentifier)
+    }
+
+    func test_SessionWasSet_PausedWasCalled_SessionWillPauseTask() {
+        // GIVEN
+        let givenIdentifer = "pause_item"
+        vidLoader = createVidLoader()
+        
+        // WHEN
+        vidLoader.pause(identifier: givenIdentifer)
+    
+        // THEN
+        XCTAssertTrue(session.suspendTaskFuncCheck.wasCalled(with: givenIdentifer))
+    }
+
+    func test_SessionWasSet_ResumeWasCalled_SessionWillResumeTask() {
+        // GIVEN
+        let givenIdentifer = "resume_item"
+        vidLoader = createVidLoader()
+        
+        // WHEN
+        vidLoader.resume(identifier: givenIdentifer)
+    
+        // THEN
+        XCTAssertTrue(session.resumeTaskFuncCheck.wasCalled(with: givenIdentifer))
     }
 }

@@ -26,11 +26,11 @@ public enum DownloadError: Swift.Error, Equatable, Codable {
     }
 
     private enum CodingKeys: String, CodingKey {
-        case base, vidLoaderError
+      case base, vidLoaderError
     }
 
     private enum Base: String, Codable {
-        case unknown, taskNotCreated, custom
+      case unknown, taskNotCreated, custom
     }
 
     public init(from decoder: Decoder) throws {

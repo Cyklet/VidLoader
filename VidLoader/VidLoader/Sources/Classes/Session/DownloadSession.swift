@@ -117,9 +117,10 @@ extension DownloadSession: Session {
             guard let task = task, let item = task.item else {
                 return
             }
+            let newItem = item |> ItemInformation._state .~ .paused(item.progress)
+            task.save(item: newItem)
+            self?.stateChanged?(newItem.state, newItem)
             task.suspend()
-            task.update(state: .paused(item.progress))
-            self?.stateChanged?(.paused(item.progress), item)
         }
     }
 
@@ -137,8 +138,9 @@ extension DownloadSession: Session {
             guard let task = task, let item = task.item else {
                 return
             }
-            task.update(state: .waiting)
-            self?.stateChanged?(.waiting, item)
+            let newItem = item |> ItemInformation._state .~ .waiting
+            task.save(item: newItem)
+            self?.stateChanged?(newItem.state, newItem)
             task.resume()
         }
     }

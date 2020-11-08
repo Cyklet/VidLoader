@@ -22,7 +22,7 @@ public protocol VidLoadable {
     /// Call this method to start item download
     func download(_ values: DownloadValues)
 
-    /// Call resume method when a  download should be unpaused
+    /// Call resume method when a download should be unpaused
     /// - Parameter identifier: Item unique identifier
     func resume(identifier: String)
 
