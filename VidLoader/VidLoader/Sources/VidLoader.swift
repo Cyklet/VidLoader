@@ -246,9 +246,12 @@ public final class VidLoader: VidLoadable {
             let url = URL(string: item.mediaLink) else { return }
         switch schemeHandler.urlAsset(with: url) {
         case .success(let urlAsset):
-            startTask(urlAsset: urlAsset, streamResource: streamResource.1, item: item)
+            startTask(urlAsset: urlAsset,
+                      streamResource: streamResource.1,
+                      item: item |> ItemInformation._state .~ .running(0))
         case .failure(let error):
-            handle(event: .failed(error: .init(error: error)), activeItem: item)
+            handle(event: .failed(error: .init(error: error)),
+                   activeItem: item)
         }
     }
 
