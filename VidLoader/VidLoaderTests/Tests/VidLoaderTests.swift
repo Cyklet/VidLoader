@@ -428,6 +428,7 @@ final class VidLoaderTests: XCTestCase {
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.1, expectedItem)
         XCTAssertTrue(givenTask.resumeFunc.wasCalled())
         XCTAssertEqual(resourcesDelegatesHandler.addFuncCheck.arguments?.0, givenIdentifier)
+        XCTAssertEqual(session.addNewTaskFuncCheck.arguments?.1, givenItem |> ItemInformation._state .~ .running(0))
     }
 
     func test_SessionWasSet_PausedWasCalled_SessionWillPauseTask() {
