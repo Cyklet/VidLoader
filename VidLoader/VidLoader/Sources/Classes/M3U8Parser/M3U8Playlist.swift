@@ -8,21 +8,24 @@
 
 import AVFoundation
 
-
 private struct RegexStrings {
     private static let uri = "URI=\""
+    // \r\n -> windows
+    // \r -> old macs
+    // \n -> unix
+    private static let newLine = "\\r\\n|\\r|\\n"
 
     static let key: String = {
         let encryptionKey = "#EXT-X-KEY"
 
-        return "\(encryptionKey)[\\S\\s\\n]*?\(uri)([^\\n,\"]+)"
+        return "\(encryptionKey)[\\S\\s\(newLine)]*?\(uri)([^\(newLine),\"]+)"
     }()
     static let mediaSection: String = {
         let mediaSectionKey = "#EXT-X-MAP"
         
-        return "\(mediaSectionKey)(?!https)[\\S\\s\\n]*?\(uri)([^\\n,\"]+)"
+        return "\(mediaSectionKey)(?!https)[\\S\\s\(newLine)]*?\(uri)([^\(newLine),\"]+)"
     }()
-    static let relativeChunks = "(?<=\\n)(?!#|https)[\\S\\s]*?(?=\\n)"
+    static let relativeChunks = "(?<=\(newLine))(?!#|https)[\\S\\s]*?(?=\(newLine))"
 }
 
 protocol PlaylistParser {
