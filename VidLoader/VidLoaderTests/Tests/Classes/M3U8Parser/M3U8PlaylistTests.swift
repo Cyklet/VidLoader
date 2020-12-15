@@ -97,9 +97,9 @@ final class M3U8PlaylistTests: XCTestCase {
         // GIVEN
         let baseURL = URL.mock(stringURL: "https://base_url")
         let baseURLString = baseURL.absoluteString
-        let givenResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"relative_random_path\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\n#EXT-X-BITRATE:194\naudio_english_192_1.mp4\n#EXTINF:5.99467,\n/audio_english_192_2.mp4\n"
+        let givenResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"relative_random_path\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\r\n#EXT-X-BITRATE:194\r\naudio_english_192_1.mp4\r\n#EXTINF:6,\n/audio_english_192_2.mp4\n#EXTINF:7,\r/audio_english_192_3.mp4\r"
         let base64String = "Ym9uZF9qYW1lc19ib25k"
-        let expectedResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"\(baseURLString)/audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\n#EXT-X-BITRATE:194\n\(baseURLString)/audio_english_192_1.mp4\n#EXTINF:5.99467,\n\(baseURLString)/audio_english_192_2.mp4\n"
+        let expectedResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(base64String)\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"\(baseURLString)/audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\r\n#EXT-X-BITRATE:194\r\n\(baseURLString)/audio_english_192_1.mp4\r\n#EXTINF:6,\n\(baseURLString)/audio_english_192_2.mp4\n#EXTINF:7,\r\(baseURLString)/audio_english_192_3.mp4\r"
         let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedResponse))
         var finalResult: Result<Data, M3U8Error>?
         requestable.dataTaskStub = .mock()
