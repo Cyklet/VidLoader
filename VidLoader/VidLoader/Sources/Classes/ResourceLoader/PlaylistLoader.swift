@@ -10,7 +10,7 @@ import Foundation
 
 protocol PlaylistLoadable {
     var nextStreamResource: (String, StreamResource)? { get }
-    func load(identifier: String, at url: URL,
+    func load(identifier: String, at url: URL, headers: [String: String]?,
               completion: @escaping Completion<Result<Void, Error>>)
     func cancel(identifier: String)
 }
@@ -33,14 +33,19 @@ final class PlaylistLoader: PlaylistLoadable {
         return streamsResources.value.removeFirst()
     }
 
-    func load(identifier: String, at url: URL, completion: @escaping Completion<Result<Void, Error>>) {
+    func load(identifier: String, at url: URL, headers: [String: String]?, completion: @escaping Completion<Result<Void, Error>>) {
         let handle: (HTTPURLResponse, Data) -> Void = { [weak self] response, data in
             let streamResource = StreamResource(response: response, data: data)
             self?.addStreamResource(streamResource, identifier: identifier)
             completion(.success(()))
         }
 
-        let dataTask = requestable.dataTask(with: URLRequest(url: url)) { [weak self] data, response, error in
+        var urlRequest = URLRequest(url: url)
+        headers?.forEach {
+            urlRequest.addValue($0.value, forHTTPHeaderField: $0.key)
+        }
+    
+        let dataTask = requestable.dataTask(with: urlRequest) { [weak self] data, response, error in
             self?.removeFromRelay(identifier)
             guard let response = response as? HTTPURLResponse, let data = data else {
                 return completion(.failure(error ?? DownloadError.unknown))

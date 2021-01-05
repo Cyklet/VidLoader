@@ -17,17 +17,20 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     private let masterParser: MasterParser
     private let playlistParser: PlaylistParser
     private var streamResource: StreamResource?
+    private let headers: [String: String]?
     private let requestable: Requestable
     private let schemeHandler: SchemeHandleable
     
     init(observer: ResourceLoaderObserver,
          streamResource: StreamResource,
+         headers: [String: String]? = nil,
          masterParser: MasterParser = M3U8Master(),
          playlistParser: PlaylistParser = M3U8Playlist(),
          requestable: Requestable = URLSession.shared,
          schemeHandler: SchemeHandleable = SchemeHandler.init()) {
         self.observer = observer
         self.streamResource = streamResource
+        self.headers = headers
         self.masterParser = masterParser
         self.playlistParser = playlistParser
         self.requestable = requestable
@@ -63,7 +66,11 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
         
     private func request(with url: URL,
                          completion: @escaping Completion<Result<(HTTPURLResponse, Data), Error>>) {
-        let request = URLRequest(url: url)
+        var request = URLRequest(url: url)
+        headers?.forEach {
+            request.addValue($0.value, forHTTPHeaderField: $0.key)
+        }
+        
         let task = requestable.dataTask(with: request) { data, response, error in
             guard let response = response as? HTTPURLResponse, let data = data else {
                 return completion(.failure(error ?? DownloadError.unknown))
@@ -98,7 +105,7 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
                                     loadingRequest: AVAssetResourceLoadingRequest) {
         switch result {
         case .success(let response):
-            playlistParser.adjust(data: response.1, with: baseURL, completion: { [weak self] result in
+            playlistParser.adjust(data: response.1, with: baseURL, headers: headers, completion: { [weak self] result in
                 switch result {
                 case .success(let newData): loadingRequest.setup(response: response.0, data: newData)
                 case .failure(let error): self?.observer.taskDidFail(.m3u8(error))

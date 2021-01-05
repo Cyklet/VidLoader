@@ -124,7 +124,8 @@ public final class VidLoader: VidLoadable {
                                    mediaLink: url.absoluteString,
                                    state: .unknown,
                                    artworkData: values.artworkData,
-                                   minRequiredBitrate: values.minRequiredBitrate)
+                                   minRequiredBitrate: values.minRequiredBitrate,
+                                   headers: values.headers)
         activeItems[identifier] = item
         handle(event: .prefetching, activeItem: item)
         session.task(identifier: identifier, completion: { [weak self] task in
@@ -236,7 +237,7 @@ public final class VidLoader: VidLoadable {
                 self?.handle(event: .failed(error: .init(error: error)), activeItem: item)
             }
         }
-        playlistLoader.load(identifier: item.identifier, at: url, completion: handleResult)
+        playlistLoader.load(identifier: item.identifier, at: url, headers: item.headers, completion: handleResult)
     }
 
     private func startNewTaskIfNeeded() {
@@ -274,7 +275,7 @@ public final class VidLoader: VidLoadable {
             self?.handle(event: .failed(error: .init(error: error)), activeItem: item)
         }
         let observer = ResourceLoaderObserver(taskDidFail: taskDidFail, keyDidLoad: keyDidLoad)
-        let resourceLoader = ResourceLoader(observer: observer, streamResource: streamResource)
+        let resourceLoader = ResourceLoader(observer: observer, streamResource: streamResource, headers: item.headers)
         task.urlAsset.resourceLoader.setDelegate(resourceLoader, queue: resourceLoader.queue)
         task.urlAsset.resourceLoader.preloadsEligibleContentKeys = true
         resourcesDelegatesHandler.add(identifier: item.identifier, loader: resourceLoader)
