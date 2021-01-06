@@ -29,7 +29,7 @@ private struct RegexStrings {
 }
 
 protocol PlaylistParser {
-    func adjust(data: Data, with baseURL: URL, completion: @escaping (Result<Data, M3U8Error>) -> Void)
+    func adjust(data: Data, with baseURL: URL, headers: [String: String]?, completion: @escaping (Result<Data, M3U8Error>) -> Void)
 }
 
 final class M3U8Playlist: PlaylistParser {
@@ -41,10 +41,15 @@ final class M3U8Playlist: PlaylistParser {
 
     // MARK: - StreamContentRepresentable
     
-    func adjust(data: Data, with baseURL: URL, completion: @escaping (Result<Data, M3U8Error>) -> Void) {
+    private var headers: [String: String]?
+    
+    func adjust(data: Data, with baseURL: URL, headers: [String: String]?, completion: @escaping (Result<Data, M3U8Error>) -> Void) {
         guard let response = data.string else {
             return completion(.failure(.dataConversion))
         }
+        
+        self.headers = headers
+        
         let newResponse = replaceRelativeChunks(response: response, with: baseURL)
         replacePaths(response: newResponse, with: baseURL, completion: { result in
             switch result {
@@ -98,8 +103,13 @@ final class M3U8Playlist: PlaylistParser {
         })
     }
     
-    private func downloadKey(from url: URL, completion: @escaping (Result<String, M3U8Error>) -> Void) {
-        let task = requestable.dataTask(with: URLRequest(url: url)) { data, _, error in
+    private func downloadKey(from url: URL, headers: [String: String]? = nil, completion: @escaping (Result<String, M3U8Error>) -> Void) {
+        var urlRequest = URLRequest(url: url)
+        self.headers?.forEach{
+            urlRequest.addValue($0.value, forHTTPHeaderField: $0.key)
+        }
+        
+        let task = requestable.dataTask(with: urlRequest) { data, _, error in
             guard let data = data else {
                 return completion(.failure(.custom(error ?|> VidLoaderError.init)))
             }
