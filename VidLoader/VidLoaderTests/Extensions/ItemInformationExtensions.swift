@@ -7,6 +7,7 @@
 //
 
 @testable import VidLoader
+import Foundation
 
 extension ItemInformation {
     static func mock(identifier: String = "", title: String? = nil, path: String? = nil,

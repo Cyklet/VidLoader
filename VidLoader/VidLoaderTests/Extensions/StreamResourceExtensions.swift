@@ -7,6 +7,7 @@
 //
 
 @testable import VidLoader
+import Foundation
 
 extension StreamResource {
     static func mock(response: HTTPURLResponse = .mock(), data: Data = .mock()) -> StreamResource {
