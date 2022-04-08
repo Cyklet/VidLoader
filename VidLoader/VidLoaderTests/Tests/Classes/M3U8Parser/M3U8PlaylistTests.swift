@@ -28,7 +28,7 @@ final class M3U8PlaylistTests: XCTestCase {
         var finalResult: Result<Data, M3U8Error>?
         
         // WHEN
-        parser.adjust(data: .mock(string: givenString), with: baseURL, completion: { result in
+        parser.adjust(data: .mock(string: givenString), with: baseURL, headers: nil, completion: { result in
             finalResult = result
         })
         
@@ -44,7 +44,7 @@ final class M3U8PlaylistTests: XCTestCase {
         var finalResult: Result<Data, M3U8Error>?
         
         // WHEN
-        parser.adjust(data: .mock(string: givenString), with: baseURL, completion: { result in
+        parser.adjust(data: .mock(string: givenString), with: baseURL, headers: nil, completion: { result in
             finalResult = result
         })
         
@@ -61,14 +61,16 @@ final class M3U8PlaylistTests: XCTestCase {
         var finalResult: Result<Data, M3U8Error>?
         requestable.dataTaskStub = .mock()
         requestable.completionHandlerStub = (nil, nil, givenError)
+        let givenHeaders: [String: String] = [:]
         
         // WHEN
-        parser.adjust(data: .mock(string: givenString), with: baseURL, completion: { result in
+        parser.adjust(data: .mock(string: givenString), with: baseURL, headers: givenHeaders, completion: { result in
             finalResult = result
         })
         
         // THEN
         XCTAssertEqual(expectedResult, finalResult)
+        XCTAssertEqual(requestable.dataTaskFuncCheck.arguments?.allHTTPHeaderFields, nil)
     }
     
     
@@ -83,14 +85,16 @@ final class M3U8PlaylistTests: XCTestCase {
         requestable.dataTaskStub = .mock()
         let expectedData = Data(base64Encoded: base64String)
         requestable.completionHandlerStub = (expectedData, HTTPURLResponse.mock(), nil)
+        let givenHeaders = ["User-Agent" : "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"]
         
         // WHEN
-        parser.adjust(data: .mock(string: givenString), with: baseURL, completion: { result in
+        parser.adjust(data: .mock(string: givenString), with: baseURL, headers: givenHeaders, completion: { result in
             finalResult = result
         })
         
         // THEN
         XCTAssertEqual(expectedResult, finalResult)
+        XCTAssertEqual(requestable.dataTaskFuncCheck.arguments?.allHTTPHeaderFields, givenHeaders)
     }
     
     func test_AdjustPlaylistSchemes_RelativePaths_AdjustWillSucceed() {
@@ -105,14 +109,16 @@ final class M3U8PlaylistTests: XCTestCase {
         requestable.dataTaskStub = .mock()
         let expectedData = Data(base64Encoded: base64String)
         requestable.completionHandlerStub = (expectedData, HTTPURLResponse.mock(), nil)
+        let givenHeaders: [String: String]? = nil
         
         // WHEN
-        parser.adjust(data: .mock(string: givenResponse), with: baseURL, completion: { result in
+        parser.adjust(data: .mock(string: givenResponse), with: baseURL, headers: givenHeaders, completion: { result in
             finalResult = result
         })
         
         // THEN
         XCTAssertEqual(expectedResult, finalResult)
+        XCTAssertEqual(requestable.dataTaskFuncCheck.arguments?.allHTTPHeaderFields, givenHeaders)
     }
     
     func test_AdjustPlaylistSchemes_RelativePathsWithoutEncryptionKey_AdjustWillSucceed() {
@@ -129,7 +135,7 @@ final class M3U8PlaylistTests: XCTestCase {
         requestable.completionHandlerStub = (expectedData, HTTPURLResponse.mock(), nil)
         
         // WHEN
-        parser.adjust(data: .mock(string: givenResponse), with: baseURL, completion: { result in
+        parser.adjust(data: .mock(string: givenResponse), with: baseURL, headers: nil, completion: { result in
             finalResult = result
         })
         
