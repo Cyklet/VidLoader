@@ -9,8 +9,10 @@
 import AVFoundation
 
 final class MockAVAssetDownloadTask: AVAssetDownloadTask {
-
-    init(noUse: Bool? = nil) {}
+    
+    convenience init(noUse: Bool? = nil) {
+        self.init()
+    }
     
     override var urlAsset: AVURLAsset {
         return .mock()

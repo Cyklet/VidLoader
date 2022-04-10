@@ -7,6 +7,7 @@
 //
 
 @testable import VidLoader
+import Foundation
 
 final class MockKeyLoadable: NSObject, KeyLoadable {
     var queueFuncCheck = EmptyFuncCheck()
