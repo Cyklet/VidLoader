@@ -7,6 +7,7 @@
 //
 
 @testable import VidLoader
+import Foundation
 
 struct MockPlaylistParser: PlaylistParser {
 

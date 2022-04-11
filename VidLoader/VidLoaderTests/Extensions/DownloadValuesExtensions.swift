@@ -6,6 +6,7 @@
 //  Copyright © 2020 Petre. All rights reserved.
 //
 @testable import VidLoader
+import Foundation
 
 extension DownloadValues {
     static func mock(identifier: String = "persitent_identifier", url: URL = .mock(),

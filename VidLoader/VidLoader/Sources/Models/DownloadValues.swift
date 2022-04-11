@@ -5,6 +5,7 @@
 //  Created by Petre on 6/18/20.
 //  Copyright © 2020 Petre. All rights reserved.
 //
+import Foundation
 
 public struct DownloadValues {
     let identifier: String

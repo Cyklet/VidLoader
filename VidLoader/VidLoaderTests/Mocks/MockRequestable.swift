@@ -7,6 +7,7 @@
 //
 
 @testable import VidLoader
+import Foundation
 
 final class MockRequestable: Requestable {
 
