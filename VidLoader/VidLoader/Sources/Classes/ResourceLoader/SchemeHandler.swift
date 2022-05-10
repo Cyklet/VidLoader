@@ -26,7 +26,7 @@ struct SchemeHandler: SchemeHandleable {
             return .failure(.urlScheme)
         }
         
-        let options = createCookieOptionsWith(domain: mediaURL?.host, headers: headers)
+        let options = CookieOptionsUtils.createCookieOptionsWith(domain: mediaURL?.host, headers: headers)
         return .success(AVURLAsset(url: url, options: options))
     }
     
@@ -35,28 +35,5 @@ struct SchemeHandler: SchemeHandleable {
               let adoptURL = url.withScheme(scheme: nil) else { return nil }
         
         return Data(base64Encoded: adoptURL.absoluteString)
-    }
-    
-    private func createCookieOptionsWith(domain: String?, headers: [String: String]?) -> [String : Any]? {
-        guard let domain = domain else { return nil }
-        
-        if let headers = headers {
-            for key in headers.keys {
-                let cookie: [HTTPCookiePropertyKey : Any] = [
-                    HTTPCookiePropertyKey.domain: domain,
-                    HTTPCookiePropertyKey.path: "/",
-                    HTTPCookiePropertyKey.secure: true,
-                    HTTPCookiePropertyKey.init("HttpsOnly"): true,
-                    HTTPCookiePropertyKey.value: headers[key] ?? "",
-                    HTTPCookiePropertyKey.name: key
-                ]
-                if let httpCookie = HTTPCookie(properties: cookie) {
-                    HTTPCookieStorage.shared.setCookie(httpCookie)
-                }
-            }
-        }
-        
-        guard let cookies = HTTPCookieStorage.shared.cookies else { return nil }
-        return [AVURLAssetHTTPCookiesKey: cookies]
     }
 }

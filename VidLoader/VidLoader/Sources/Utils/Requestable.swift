@@ -8,7 +8,7 @@
 
 import Foundation
 
-protocol Requestable: class {
+protocol Requestable: AnyObject {
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask
 }
 
