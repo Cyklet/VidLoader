@@ -7,10 +7,13 @@
 //
 
 import AVFoundation
+import Foundation
 
 final class MockAVAssetDownloadURLSession: AVAssetDownloadURLSession {
 
-    init(noUse: Bool? = nil) {}
+    convenience init(noUse: Bool? = nil) {
+        self.init()
+    }
     
     var getAllTaskFuncCheck = EmptyFuncCheck()
     var getAllTasksStub: [MockAVAssetDownloadTask] = []

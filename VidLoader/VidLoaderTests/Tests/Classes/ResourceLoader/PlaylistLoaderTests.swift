@@ -9,14 +9,14 @@ import XCTest
 @testable import VidLoader
 
 final class PlaylistLoaderTests: XCTestCase {
-    private var requastable: MockRequestable!
+    private var requestable: MockRequestable!
     private var playlistLoader: PlaylistLoader!
 
     override func setUp() {
         super.setUp()
 
-        requastable = MockRequestable()
-        playlistLoader = PlaylistLoader(requestable: requastable)
+        requestable = MockRequestable()
+        playlistLoader = PlaylistLoader(requestable: requestable)
     }
 
     func test_NextResource_ArrayIsEmpty_ResultNil() {
@@ -38,15 +38,17 @@ final class PlaylistLoaderTests: XCTestCase {
         let mockResponse: HTTPURLResponse = .mock(url: mockURL)
         let mockResource = StreamResource.mock(response: mockResponse, data: data)
         let expectedResult: (String, StreamResource)? = (mockIdentifier, mockResource)
-        requastable.completionHandlerStub = (data, mockResponse, nil)
-        requastable.dataTaskStub = .mock()
-        playlistLoader.load(identifier: mockIdentifier, at: mockURL) { _ in }
+        requestable.completionHandlerStub = (data, mockResponse, nil)
+        requestable.dataTaskStub = .mock()
+        let givenHeaders = ["User-Agent" : "Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1"]
+        playlistLoader.load(identifier: mockIdentifier, at: mockURL, headers: givenHeaders) { _ in }
 
         // WHEN
         let finalResult = playlistLoader.nextStreamResource
 
         // THEN
         XCTAssertTrue(finalResult == expectedResult)
+        XCTAssertEqual(requestable.dataTaskFuncCheck.arguments?.allHTTPHeaderFields, givenHeaders)
     }
 
     func test_LoadResource_FailedWithServerError_CompletionWithError() {
@@ -54,12 +56,13 @@ final class PlaylistLoaderTests: XCTestCase {
         let mockIdentifier = "FailedIdentifier"
         let expectedError: ResourceLoadingError = .urlScheme
         let mockDataTask: CustomDataTask = .mock()
-        requastable.completionHandlerStub = (nil, nil, expectedError)
-        requastable.dataTaskStub = mockDataTask
+        requestable.completionHandlerStub = (nil, nil, expectedError)
+        requestable.dataTaskStub = mockDataTask
         var resultError: ResourceLoadingError?
+        let givenHeaders: [String: String]? = nil
 
         // WHEN
-        playlistLoader.load(identifier: mockIdentifier, at: .mock()) { response in
+        playlistLoader.load(identifier: mockIdentifier, at: .mock(), headers: givenHeaders) { response in
             switch response {
             case .success: return
             case .failure(let error): resultError = error as? ResourceLoadingError
@@ -69,6 +72,7 @@ final class PlaylistLoaderTests: XCTestCase {
         // THEN
         XCTAssertEqual(resultError, expectedError)
         XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
+        XCTAssertEqual(requestable.dataTaskFuncCheck.arguments?.allHTTPHeaderFields, givenHeaders)
     }
     
     func test_LoadResource_FailedWithNilError_CompletionWithUnknownError() {
@@ -76,12 +80,13 @@ final class PlaylistLoaderTests: XCTestCase {
         let mockIdentifier = "FailedIdentifier"
         let expectedError: DownloadError = .unknown
         let mockDataTask: CustomDataTask = .mock()
-        requastable.completionHandlerStub = (nil, nil, nil)
-        requastable.dataTaskStub = mockDataTask
+        requestable.completionHandlerStub = (nil, nil, nil)
+        requestable.dataTaskStub = mockDataTask
         var resultError: DownloadError?
+        let givenHeaders: [String: String]? = [:]
 
         // WHEN
-        playlistLoader.load(identifier: mockIdentifier, at: .mock()) { response in
+        playlistLoader.load(identifier: mockIdentifier, at: .mock(), headers: givenHeaders) { response in
             switch response {
             case .success: return
             case .failure(let error): resultError = error as? DownloadError
@@ -91,18 +96,19 @@ final class PlaylistLoaderTests: XCTestCase {
         // THEN
         XCTAssertEqual(resultError, expectedError)
         XCTAssertTrue(mockDataTask.resumeFuncCheck.wasCalled())
+        XCTAssertEqual(requestable.dataTaskFuncCheck.arguments?.allHTTPHeaderFields, nil)
     }
 
     func test_LoadResource_Success_CompletionWithSuccess() {
         // GIVEN
         let mockIdentifier = "SuccessIdentifier"
         let mockDataTask: CustomDataTask = .mock()
-        requastable.completionHandlerStub = (.mock(), HTTPURLResponse.mock(), nil)
-        requastable.dataTaskStub = mockDataTask
+        requestable.completionHandlerStub = (.mock(), HTTPURLResponse.mock(), nil)
+        requestable.dataTaskStub = mockDataTask
         var result = false
 
         // WHEN
-        playlistLoader.load(identifier: mockIdentifier, at: .mock()) { response in
+        playlistLoader.load(identifier: mockIdentifier, at: .mock(), headers: nil) { response in
             switch response {
             case .success: result = true
             case .failure: return
@@ -121,9 +127,9 @@ final class PlaylistLoaderTests: XCTestCase {
         let data = Data.mock(string: mockIdentifier)
         let mockURL: URL = .mock(stringURL: "https://test.next.resource")
         let mockResponse: HTTPURLResponse = .mock(url: mockURL)
-        requastable.completionHandlerStub = (data, mockResponse, nil)
-        requastable.dataTaskStub = mockDataTask
-        playlistLoader.load(identifier: mockIdentifier, at: mockURL) { _ in }
+        requestable.completionHandlerStub = (data, mockResponse, nil)
+        requestable.dataTaskStub = mockDataTask
+        playlistLoader.load(identifier: mockIdentifier, at: mockURL, headers: nil) { _ in }
 
         // WHEN
         playlistLoader.cancel(identifier: mockIdentifier)
@@ -144,10 +150,10 @@ final class PlaylistLoaderTests: XCTestCase {
         let mockResponse: HTTPURLResponse = .mock(url: mockURL)
         let mockResource = StreamResource.mock(response: mockResponse, data: data)
         let expectedResult: (String, StreamResource)? = (mockIdentifier2, mockResource)
-        requastable.completionHandlerStub = (data, mockResponse, nil)
-        requastable.dataTaskStub = .mock()
-        playlistLoader.load(identifier: mockIdentifier1, at: mockURL) { _ in }
-        playlistLoader.load(identifier: mockIdentifier2, at: mockURL) { _ in }
+        requestable.completionHandlerStub = (data, mockResponse, nil)
+        requestable.dataTaskStub = .mock()
+        playlistLoader.load(identifier: mockIdentifier1, at: mockURL, headers: nil) { _ in }
+        playlistLoader.load(identifier: mockIdentifier2, at: mockURL, headers: nil) { _ in }
 
         // WHEN
         playlistLoader.cancel(identifier: mockIdentifier1)

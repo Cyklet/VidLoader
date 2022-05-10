@@ -7,14 +7,15 @@
 //
 
 @testable import VidLoader
+import Foundation
 
 final class MockPlaylistLoadable: PlaylistLoadable {
     var nextStreamResource: (String, StreamResource)?
     
-    var loadFuncCheck = FuncCheck<(String, URL)>()
+    var loadFuncCheck = FuncCheck<(String, URL, [String : String]?)>()
     var loadStub: Result<Void, Error> = .success(())
-    func load(identifier: String, at url: URL, completion: @escaping Completion<Result<Void, Error>>) {
-        loadFuncCheck.call((identifier, url))
+    func load(identifier: String, at url: URL, headers: [String : String]?, completion: @escaping Completion<Result<Void, Error>>) {
+        loadFuncCheck.call((identifier, url, headers))
         completion(loadStub)
     }
     
