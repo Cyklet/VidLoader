@@ -69,9 +69,9 @@ final class VidLoaderTests: XCTestCase {
         let givenState: DownloadState = .completed
         let givenIdentifier = "unique_identifier"
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier)
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: givenItem)
-        session.allTasksStub = [task, task, MockAVAssetDownloadTask()]
+        session.allTasksStub = [task, task, MockAVAssetDownloadTask.mock()]
         let expectedItem = givenItem |> ItemInformation._state .~ givenState
         
         // WHEN
@@ -118,7 +118,7 @@ final class VidLoaderTests: XCTestCase {
         // GIVEN
         let givenIdentifier = "persitent_identifier"
         let givenItem = ItemInformation.mock(identifier: givenIdentifier)
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: givenItem)
         session.allTasksStub = [task]
         vidLoader = createVidLoader()
@@ -173,7 +173,7 @@ final class VidLoaderTests: XCTestCase {
                                                 state: .prefetching,
                                                 artworkData: givenData)
         session.allTasksStub = []
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: expectedItem)
         session.taskStub = task
         vidLoader = createVidLoader()
@@ -222,7 +222,7 @@ final class VidLoaderTests: XCTestCase {
         let givenIdentifier = "random_given_identifier"
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier)
         let expectedItem = givenItem |> ItemInformation._state .~ .canceled
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: givenItem)
         session.allTasksStub = [task]
         vidLoader = createVidLoader()
@@ -243,7 +243,7 @@ final class VidLoaderTests: XCTestCase {
         // GIVEN
         let givenIdentifier = "random_given_identifier"
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier)
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: givenItem)
         session.allTasksStub = [task]
         vidLoader = createVidLoader()
@@ -276,7 +276,7 @@ final class VidLoaderTests: XCTestCase {
         let givenIdentifier = "identifier_to_search"
         let expectedState: DownloadState = .keyLoaded
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier, state: expectedState)
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: givenItem)
         session.allTasksStub = [task]
         vidLoader = createVidLoader()
@@ -306,7 +306,7 @@ final class VidLoaderTests: XCTestCase {
         // GIVEN
         let givenIdentifier = "identifier_to_cancel"
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier)
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: givenItem)
         session.allTasksStub = [task]
         vidLoader = createVidLoader()
@@ -357,7 +357,7 @@ final class VidLoaderTests: XCTestCase {
         let givenURL: URL = .mock(stringURL: "url_to_download_from")
         let givenIdentifier = "item_to_download"
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier, mediaLink: givenURL.absoluteString, state: .waiting)
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.save(item: givenItem)
         session.allTasksStub = [givenTask]
         let expectedError: ResourceLoadingError = .unknown
@@ -383,7 +383,7 @@ final class VidLoaderTests: XCTestCase {
         let givenURL: URL = .mock(stringURL: "url_to_download_from")
         let givenIdentifier = "item_to_download"
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier, mediaLink: givenURL.absoluteString, state: .waiting)
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.save(item: givenItem)
         let expectedItem = givenItem |> ItemInformation._state .~ .keyLoaded
         schemeHandler.urlAssetStub = .success(.mock())
@@ -408,7 +408,7 @@ final class VidLoaderTests: XCTestCase {
         let givenURL: URL = .mock(stringURL: "url_to_download_from")
         let givenIdentifier = "item_to_download"
         let givenItem: ItemInformation = .mock(identifier: givenIdentifier, mediaLink: givenURL.absoluteString, state: .waiting)
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.save(item: givenItem)
         let expectedItem = givenItem |> ItemInformation._state .~ .keyLoaded
         schemeHandler.urlAssetStub = .success(.mock())

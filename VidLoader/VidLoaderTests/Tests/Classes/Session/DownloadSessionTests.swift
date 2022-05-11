@@ -18,14 +18,14 @@ final class DownloadSessionTests: XCTestCase {
         super.setUp()
         
         session = DownloadSession()
-        avDownloadSession = MockAVAssetDownloadURLSession()
+        avDownloadSession = MockAVAssetDownloadURLSession.mock()
     }
     
     func test_GetAllTasks_SessionContainsActiveTasks_ResultContainsThem() {
         // GIVEN
         session.setup(injectedSession: avDownloadSession, stateChanged: nil)
         var resultTasks: [AVAssetDownloadTask]?
-        let expectedTasks = [MockAVAssetDownloadTask(), MockAVAssetDownloadTask()]
+        let expectedTasks = [MockAVAssetDownloadTask.mock(), MockAVAssetDownloadTask.mock()]
         avDownloadSession.getAllTasksStub = expectedTasks
         
         // WHEN
@@ -41,7 +41,7 @@ final class DownloadSessionTests: XCTestCase {
         // GIVEN
         session.setup(injectedSession: avDownloadSession, stateChanged: nil)
         let givenIdentifier = "task_to_search"
-        let expectedTask = MockAVAssetDownloadTask()
+        let expectedTask = MockAVAssetDownloadTask.mock()
         let givenItem = ItemInformation.mock(identifier: givenIdentifier)
         (expectedTask as URLSessionTask).save(item: givenItem)
         var resultTask: AVAssetDownloadTask?
@@ -88,7 +88,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let expectedTask = MockAVAssetDownloadTask()
+        let expectedTask = MockAVAssetDownloadTask.mock()
         (expectedTask as URLSessionTask).save(item: expectedItem)
         avDownloadSession.makeAssetDownloadTaskStub = expectedTask
         
@@ -144,7 +144,7 @@ final class DownloadSessionTests: XCTestCase {
         session.setup(injectedSession: avDownloadSession, stateChanged: nil)
         let givenIdentifier = "cancel_task_identifier"
         var hasNotFound: Bool?
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.save(item: .mock(identifier: givenIdentifier))
         avDownloadSession.getAllTasksStub = [givenTask]
         
@@ -159,8 +159,8 @@ final class DownloadSessionTests: XCTestCase {
     func test_SuspendAllTasks_SessionContainsTasks_AllTasksSuspended() {
         // GIVEN
         session.setup(injectedSession: avDownloadSession, stateChanged: nil)
-        let firstTask = MockAVAssetDownloadTask()
-        let secondTask = MockAVAssetDownloadTask()
+        let firstTask = MockAVAssetDownloadTask.mock()
+        let secondTask = MockAVAssetDownloadTask.mock()
         avDownloadSession.getAllTasksStub = [firstTask, secondTask]
         
         // WHEN
@@ -174,8 +174,8 @@ final class DownloadSessionTests: XCTestCase {
     func test_ResumeAllTasks_SessionContainsTasks_AllTasksResumed() {
         // GIVEN
         session.setup(injectedSession: avDownloadSession, stateChanged: nil)
-        let firstTask = MockAVAssetDownloadTask()
-        let secondTask = MockAVAssetDownloadTask()
+        let firstTask = MockAVAssetDownloadTask.mock()
+        let secondTask = MockAVAssetDownloadTask.mock()
         avDownloadSession.getAllTasksStub = [firstTask, secondTask]
         
         // WHEN
@@ -215,7 +215,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.save(item: givenItem)
         avDownloadSession.getAllTasksStub = [givenTask]
         
@@ -237,7 +237,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         
         // WHEN
         session.urlSession(avDownloadSession, assetDownloadTask: givenTask, didFinishDownloadingTo: .mock())
@@ -260,7 +260,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .suspended
         givenTask.save(item: givenItem)
         
@@ -285,7 +285,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .canceling
         givenTask.save(item: givenItem)
         
@@ -310,7 +310,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .completed
         givenTask.save(item: givenItem)
         
@@ -335,7 +335,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .running
         givenTask.save(item: givenItem)
         
@@ -361,7 +361,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .running
         givenTask.error = givenDownloadError
         givenTask.save(item: givenItem)
@@ -387,7 +387,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .completed
         givenTask.save(item: givenItem)
         
@@ -409,7 +409,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .completed
         givenTask.save(item: givenItem)
         
@@ -431,7 +431,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .running
         
         // WHEN
@@ -459,7 +459,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .running
         givenTask.countOfBytesReceivedStub = Int64(expectedBytes)
         givenTask.save(item: givenItem)
@@ -485,7 +485,7 @@ final class DownloadSessionTests: XCTestCase {
             resultState = state
             resultItem = item
         })
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .running
         
         // WHEN
@@ -506,7 +506,7 @@ final class DownloadSessionTests: XCTestCase {
             resultItem = item
         })
         let givenItem: ItemInformation = .mock(state: .canceled)
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .completed
         givenTask.save(item: givenItem)
         
@@ -527,7 +527,7 @@ final class DownloadSessionTests: XCTestCase {
             resultItem = item
         })
         let givenItem: ItemInformation = .mock(state: .running(0))
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .completed
         givenTask.save(item: givenItem)
         
@@ -549,7 +549,7 @@ final class DownloadSessionTests: XCTestCase {
             resultItem = item
         })
         let givenItem: ItemInformation = .mock(state: .failed(error: .unknown))
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .running
         givenTask.save(item: givenItem)
         
@@ -574,7 +574,7 @@ final class DownloadSessionTests: XCTestCase {
             resultItem = item
         })
         
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.stateStub = .running
         givenTask.save(item: givenItem)
         
@@ -595,7 +595,7 @@ final class DownloadSessionTests: XCTestCase {
         let givenItem = ItemInformation.mock(identifier: givenIdentifier, progress: 23)
         let expectedState = DownloadState.paused(givenItem.progress)
         let expectedItem = givenItem |> ItemInformation._state .~ expectedState
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.save(item: givenItem)
         avDownloadSession.getAllTasksStub = [givenTask]
         
@@ -633,7 +633,7 @@ final class DownloadSessionTests: XCTestCase {
         let givenItem = ItemInformation.mock(identifier: givenIdentifier, progress: 23)
         let expectedState = DownloadState.waiting
         let expectedItem = givenItem |> ItemInformation._state .~ expectedState
-        let givenTask = MockAVAssetDownloadTask()
+        let givenTask = MockAVAssetDownloadTask.mock()
         givenTask.save(item: givenItem)
         avDownloadSession.getAllTasksStub = [givenTask]
         
@@ -665,7 +665,7 @@ final class DownloadSessionTests: XCTestCase {
     func test_TaskWasPaused_SuspendAllTasks_SuspendNotCalled() {
         // GIVEN
         session.setup(injectedSession: avDownloadSession, stateChanged: nil)
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: .mock(state: .paused(10)))
         avDownloadSession.getAllTasksStub = [task]
         
@@ -679,7 +679,7 @@ final class DownloadSessionTests: XCTestCase {
     func test_TaskWasPaused_ResumeAllTasks_ResumeNotCalled() {
         // GIVEN
         session.setup(injectedSession: avDownloadSession, stateChanged: nil)
-        let task = MockAVAssetDownloadTask()
+        let task = MockAVAssetDownloadTask.mock()
         task.save(item: .mock(state: .paused(10)))
         avDownloadSession.getAllTasksStub = [task]
         

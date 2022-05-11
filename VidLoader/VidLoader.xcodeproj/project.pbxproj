@@ -88,6 +88,7 @@
 		0BA35D7823855206004B2F31 /* Lens.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BA35D5323855206004B2F31 /* Lens.swift */; };
 		0BE0DF4F23AAC65C0064F50E /* MockMasterParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE0DF4E23AAC65C0064F50E /* MockMasterParser.swift */; };
 		0BE0DF5123AAC6720064F50E /* MockPlaylistParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE0DF5023AAC6720064F50E /* MockPlaylistParser.swift */; };
+		0BE731B5282C5D9A00D5C1AC /* SelectorExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BE731B4282C5D9A00D5C1AC /* SelectorExtensions.swift */; };
 		0BEC4B02239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B01239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift */; };
 		0BEC4B04239E9FFF00AA39D9 /* Swizzling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B03239E9FFF00AA39D9 /* Swizzling.swift */; };
 		0BEC4B06239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B05239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift */; };
@@ -195,6 +196,7 @@
 		0BA35D5323855206004B2F31 /* Lens.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Lens.swift; sourceTree = "<group>"; };
 		0BE0DF4E23AAC65C0064F50E /* MockMasterParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMasterParser.swift; sourceTree = "<group>"; };
 		0BE0DF5023AAC6720064F50E /* MockPlaylistParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockPlaylistParser.swift; sourceTree = "<group>"; };
+		0BE731B4282C5D9A00D5C1AC /* SelectorExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectorExtensions.swift; sourceTree = "<group>"; };
 		0BEC4B01239E9FBF00AA39D9 /* AVAssetResourceLoaderExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoaderExtensions.swift; sourceTree = "<group>"; };
 		0BEC4B03239E9FFF00AA39D9 /* Swizzling.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swizzling.swift; sourceTree = "<group>"; };
 		0BEC4B05239EA04400AA39D9 /* AVAssetResourceLoadingRequestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoadingRequestExtensions.swift; sourceTree = "<group>"; };
@@ -362,6 +364,7 @@
 				0B9AD2B323A0317600158D50 /* DataExtensionsTests.swift */,
 				0B9AD2B523A0335700158D50 /* StringExtensionsTests.swift */,
 				0B9AD2B723A0381E00158D50 /* AVAssetResourceLoadingRequestExtensionsTests.swift */,
+				0BE731B4282C5D9A00D5C1AC /* SelectorExtensions.swift */,
 			);
 			path = ExtensionsTests;
 			sourceTree = "<group>";
@@ -732,6 +735,7 @@
 				0BEC4B12239EDF0600AA39D9 /* DownloadErrorTests.swift in Sources */,
 				0B7C1CA023A1410A00F9E69A /* MockNetwork.swift in Sources */,
 				0B519864239AF06300AEC201 /* FunCheck.swift in Sources */,
+				0BE731B5282C5D9A00D5C1AC /* SelectorExtensions.swift in Sources */,
 				0B354AFC2396953C009CE690 /* MockRequestable.swift in Sources */,
 				0BEC4B16239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift in Sources */,
 				0B9A16E3249D237D00E9F837 /* StreamResourceTests.swift in Sources */,

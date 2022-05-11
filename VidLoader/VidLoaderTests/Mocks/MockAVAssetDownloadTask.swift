@@ -8,10 +8,39 @@
 
 import AVFoundation
 
+extension MockAVAssetDownloadTask {
+    static func mock() -> MockAVAssetDownloadTask {
+        let finalSelector = Selector.defaultInit
+        let initialSelector = #selector(NSObject.init)
+        let initialInit = class_getInstanceMethod(self, initialSelector)!
+        let finalInit = class_getInstanceMethod(self, finalSelector)!
+        let finalInitImpl = method_getImplementation(finalInit)
+        typealias FinalInit = @convention(c) (AnyObject, Selector) -> MockAVAssetDownloadTask
+        typealias InitialInit = @convention(block) (AnyObject, Selector) -> MockAVAssetDownloadTask
+        let finalBlockInit = unsafeBitCast(finalInitImpl, to: FinalInit.self)
+        var task: MockAVAssetDownloadTask!
+        let newBlock: InitialInit = { obj, sel in
+            task = finalBlockInit(obj, finalSelector)
+            return task
+        }
+        method_setImplementation(initialInit, imp_implementationWithBlock(newBlock))
+        perform(Selector.defaultNew)
+        task.mockSetup()
+        
+        return task
+    }
+}
+
 final class MockAVAssetDownloadTask: AVAssetDownloadTask {
     
-    convenience init(noUse: Bool? = nil) {
-        self.init()
+    // Swizzled initialization doesn't setup initial state of properties
+    func mockSetup() {
+        resumeFunc = .init()
+        suspendFunc = .init()
+        cancelFunc = .init()
+        taskDescriptionSetFunc = .init()
+        stateStub = .running
+        countOfBytesReceivedStub = 0
     }
     
     override var urlAsset: AVURLAsset {

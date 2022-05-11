@@ -54,8 +54,7 @@ extension AVAssetResourceLoadingRequest {
             return request
         }
         method_setImplementation(initialInit, imp_implementationWithBlock(newBlock))
-        let newSelector = Selector(("new"))
-        perform(newSelector)
+        perform(Selector.defaultNew)
         
         return request
     }
