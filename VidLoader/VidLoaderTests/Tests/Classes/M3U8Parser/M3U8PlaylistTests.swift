@@ -142,4 +142,31 @@ final class M3U8PlaylistTests: XCTestCase {
         // THEN
         XCTAssertEqual(expectedResult, finalResult)
     }
+    
+    func test_AdjustPlaylistSchemes_URLsContainsSameNumber_AdjustWillSucceed() {
+        // GIVEN
+        let baseURL = URL.mock(stringURL: "https://base_url")
+        let baseURLString = baseURL.absoluteString
+        let givenResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"relative_random_path=1\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\r\n#EXT-X-BITRATE:194\r\naudio_english_192_1.mp4\r\n#EXTINF:6,\n/audio_english_192_2.mp4\n#EXTINF:7,\r/audio_english_192_3.mp4\r\n#EXT-X-KEY:random_staff URI=\"relative_random_path=12\"\n"
+        let firstKey64String = "Zmlyc3RrZXk="
+        let secondKey64String = "c2Vjb25ka2V5"
+        let expectedResponse = "EXT-X-PLAYLIST-TYPE:VOD\n#EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(firstKey64String)\"\n#EXT-X-INDEPENDENT-SEGMENTS\n#EXT-X-MAP:URI=\"\(baseURLString)/audio_english_192_0.mp4\"\n#EXTINF:5.99467,\t\r\n#EXT-X-BITRATE:194\r\n\(baseURLString)/audio_english_192_1.mp4\r\n#EXTINF:6,\n\(baseURLString)/audio_english_192_2.mp4\n#EXTINF:7,\r\(baseURLString)/audio_english_192_3.mp4\r\n#EXT-X-KEY:random_staff URI=\"\(SchemeType.key.rawValue):\(secondKey64String)\"\n"
+        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedResponse))
+        var finalResult: Result<Data, M3U8Error>?
+        requestable.dataTaskStub = .mock()
+        let expectedFirstKey = Data(base64Encoded: firstKey64String)!
+        let expectedSecondKey = Data(base64Encoded: secondKey64String)!
+        requestable.dataArrayStub = [expectedFirstKey, expectedSecondKey]
+        requestable.completionHandlerStub = (nil, HTTPURLResponse.mock(), nil)
+        let givenHeaders: [String: String]? = nil
+        
+        // WHEN
+        parser.adjust(data: .mock(string: givenResponse), with: baseURL, headers: givenHeaders, completion: { result in
+            finalResult = result
+        })
+        
+        // THEN
+        XCTAssertEqual(expectedResult, finalResult)
+        XCTAssertEqual(requestable.dataTaskFuncCheck.arguments?.allHTTPHeaderFields, givenHeaders)
+    }
 }

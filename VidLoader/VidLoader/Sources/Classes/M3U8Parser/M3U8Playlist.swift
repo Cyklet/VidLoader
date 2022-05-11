@@ -68,13 +68,16 @@ final class M3U8Playlist: PlaylistParser {
     private func replacePaths(response: String,
                               with baseURL: URL,
                               completion: @escaping (Result<Data, M3U8Error>) -> Void) {
+        let quotationMark = "\""
         let keysURLs = response.matches(for: RegexStrings.key).compactMap { generateURL(keyPath: $0, baseURL: baseURL) }
         guard !keysURLs.isEmpty else {
             return completion(.failure(.keyURLMissing))
         }
         download(keysURLs: keysURLs) { result in
             let newResponse = result.reduce(response, { result, values in
-                result.replacingOccurrences(of: values.0, with: values.1)
+                let url = quotationMark + values.0 + quotationMark
+                let key = quotationMark + values.1 + quotationMark
+                return result.replacingOccurrences(of: url, with: key)
             })
             guard let data = newResponse.data else {
                 return completion(.failure(.dataConversion))

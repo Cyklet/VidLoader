@@ -11,12 +11,15 @@ import Foundation
 
 final class MockRequestable: Requestable {
 
+    var dataArrayStub: [Data] = []
     var completionHandlerStub: (Data?, URLResponse?, Error?)
     var dataTaskStub: CustomDataTask!
     var dataTaskFuncCheck = FuncCheck<URLRequest>()
     func dataTask(with request: URLRequest, completionHandler: @escaping (Data?, URLResponse?, Error?) -> Void) -> URLSessionDataTask {
         dataTaskFuncCheck.call(request)
-        completionHandler(completionHandlerStub.0, completionHandlerStub.1, completionHandlerStub.2)
+        let data = completionHandlerStub.0 ?? dataArrayStub.first
+        dataArrayStub = Array(dataArrayStub.dropFirst())
+        completionHandler(data, completionHandlerStub.1, completionHandlerStub.2)
         return dataTaskStub
     }
 }
