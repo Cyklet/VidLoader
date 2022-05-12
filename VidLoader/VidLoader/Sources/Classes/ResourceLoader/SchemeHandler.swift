@@ -26,7 +26,10 @@ struct SchemeHandler: SchemeHandleable {
             return .failure(.urlScheme)
         }
         
-        let options = CookieOptionsUtils.createCookieOptionsWith(domain: mediaURL?.host, headers: headers)
+        var options = [String: Any]()
+        if let cookiesArray = HTTPCookieStorage.shared.cookies {
+            options["AVURLAssetHTTPHeaderFieldsKey"] = HTTPCookie.requestHeaderFields(with: cookiesArray)
+        }
         return .success(AVURLAsset(url: url, options: options))
     }
     

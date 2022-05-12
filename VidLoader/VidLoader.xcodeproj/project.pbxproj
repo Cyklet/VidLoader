@@ -99,7 +99,6 @@
 		0BEC4B16239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B15239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift */; };
 		0BEC4B18239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BEC4B17239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift */; };
 		D1069515282AB5400068EEDD /* CookieOptionsUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1069514282AB5400068EEDD /* CookieOptionsUtils.swift */; };
-		D1069517282AB56B0068EEDD /* CookieLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1069516282AB56B0068EEDD /* CookieLoader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -208,7 +207,6 @@
 		0BEC4B15239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAVAssetDownloadURLSession.swift; sourceTree = "<group>"; };
 		0BEC4B17239EE20F00AA39D9 /* MockAVAssetDownloadTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAVAssetDownloadTask.swift; sourceTree = "<group>"; };
 		D1069514282AB5400068EEDD /* CookieOptionsUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieOptionsUtils.swift; sourceTree = "<group>"; };
-		D1069516282AB56B0068EEDD /* CookieLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookieLoader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -473,7 +471,6 @@
 				0BA35D3123855206004B2F31 /* ResourceLoader.swift */,
 				0BA35D3223855206004B2F31 /* ResourcesDelegatesHandler.swift */,
 				0BA35D3323855206004B2F31 /* KeyLoader.swift */,
-				D1069516282AB56B0068EEDD /* CookieLoader.swift */,
 			);
 			path = ResourceLoader;
 			sourceTree = "<group>";
@@ -694,7 +691,6 @@
 				0BA35D6E23855206004B2F31 /* StreamResource.swift in Sources */,
 				0BA35D7723855206004B2F31 /* Operators.swift in Sources */,
 				0BA35D5F23855206004B2F31 /* VidLoader.swift in Sources */,
-				D1069517282AB56B0068EEDD /* CookieLoader.swift in Sources */,
 				0BA35D7323855206004B2F31 /* URLExtensions.swift in Sources */,
 				0BA35D7623855206004B2F31 /* CMTimeRangeExtensions.swift in Sources */,
 				0BA35D5423855206004B2F31 /* FileManageable.swift in Sources */,

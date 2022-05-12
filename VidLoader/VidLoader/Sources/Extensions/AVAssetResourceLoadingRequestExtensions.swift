@@ -16,16 +16,4 @@ extension AVAssetResourceLoadingRequest {
         dataRequest?.respond(with: data)
         finishLoading()
     }
-    
-    @objc public func process(url: URL, cookies: [String: String]) {
-        guard let cookies = CookieOptionsUtils.createCookieOptionsWith(domain: url.host, headers: cookies) else { return }
-        var redirectRequest = URLRequest(url: url)
-        for key in cookies.keys {
-            if let value = cookies[key] as? String {
-                redirectRequest.addValue(value, forHTTPHeaderField: key)
-            }
-        }
-        self.redirect = redirectRequest
-        finishLoading()
-    }
 }

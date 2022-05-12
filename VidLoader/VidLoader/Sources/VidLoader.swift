@@ -116,6 +116,7 @@ public final class VidLoader: VidLoadable {
     }
 
     public func download(_ values: DownloadValues) {
+        CookieOptionsUtils.insertCookieOptionsWith(domain: values.url.host, headers: values.headers)
         let identifier = values.identifier
         guard activeItems[identifier] == nil else { return }
         let url = values.url
@@ -257,18 +258,11 @@ public final class VidLoader: VidLoadable {
     }
 
     private func startTask(urlAsset: AVURLAsset, streamResource: StreamResource, item: ItemInformation) {
-        addCookiesTo(urlAsset: urlAsset, headers: item.headers)
         guard let task = session.addNewTask(urlAsset: urlAsset, for: item) else {
             return
         }
         setupResourceDelegate(item: item, task: task, streamResource: streamResource)
         task.resume()
-    }
-
-    private func addCookiesTo(urlAsset: AVURLAsset, headers: [String: String]?) {
-        guard let headers = headers else { return }
-        let cookieLoader = CookieLoader(headers: headers)
-        urlAsset.resourceLoader.setDelegate(cookieLoader, queue: cookieLoader.queue)
     }
     
     func setupResourceDelegate(item: ItemInformation,
