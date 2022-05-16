@@ -9,7 +9,7 @@
 import AVFoundation
 
 protocol SchemeHandleable {
-    func urlAsset(with mediaURL: URL?, headers: [String: String]?) -> Result<AVURLAsset, ResourceLoadingError>
+    func urlAsset(with mediaURL: URL?) -> Result<AVURLAsset, ResourceLoadingError>
     func persistentKey(from url: URL) -> Data?
 }
 
@@ -21,7 +21,7 @@ enum SchemeType: String {
 
 struct SchemeHandler: SchemeHandleable {
     
-    func urlAsset(with mediaURL: URL?, headers: [String: String]?) -> Result<AVURLAsset, ResourceLoadingError> {
+    func urlAsset(with mediaURL: URL?) -> Result<AVURLAsset, ResourceLoadingError> {
         guard let url = mediaURL?.withScheme(scheme: .custom) else {
             return .failure(.urlScheme)
         }
