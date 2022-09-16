@@ -52,8 +52,8 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
         } else {
             switch streamResource?.fileType {
             case .master:
-                self.adjustMasterFile(streamResource: self.streamResource!, loadingRequest: loadingRequest)
-                self.streamResource = nil
+                adjustMasterFile(streamResource: streamResource!, loadingRequest: loadingRequest)
+                streamResource = nil
                 // For m3u8 master file shouldWaitForLoadingOfRequestedResource in iOS 16 behaves differently,
                 // adjustMasterFile is a sync operation without having any request in place.
                 // Session is failling with CoreMediaErrorDomain Code=-12640, to avoid this issue we either return false in this case
