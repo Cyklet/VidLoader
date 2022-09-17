@@ -82,7 +82,11 @@ final class ResourceLoaderTests: XCTestCase {
                                                               shouldWaitForLoadingOfRequestedResource: loadingRequest)
         
         // THEN
-        XCTAssertTrue(requestShouldWait)
+        if #available(iOS 16, *) {
+            XCTAssertFalse(requestShouldWait)
+        } else {
+            XCTAssertTrue(requestShouldWait)
+        }
         XCTAssertNil(loadingRequest.setupFuncDidCall)
         XCTAssertEqual(expectedError, resultError)
         XCTAssertFalse(keyDidLoad)
@@ -108,7 +112,11 @@ final class ResourceLoaderTests: XCTestCase {
                                                               shouldWaitForLoadingOfRequestedResource: loadingRequest)
         
         // THEN
-        XCTAssertTrue(requestShouldWait)
+        if #available(iOS 16, *) {
+            XCTAssertFalse(requestShouldWait)
+        } else {
+            XCTAssertTrue(requestShouldWait)
+        }
         XCTAssertEqual(loadingRequest.setupFuncDidCall, true)
         XCTAssertNil(resultError)
         XCTAssertFalse(keyDidLoad)

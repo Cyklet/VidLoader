@@ -54,13 +54,23 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
             case .master:
                 adjustMasterFile(streamResource: streamResource!, loadingRequest: loadingRequest)
                 streamResource = nil
+                // For m3u8 master file shouldWaitForLoadingOfRequestedResource in iOS 16 behaves differently,
+                // adjustMasterFile is a sync operation without having any request in place.
+                // Session is failling with CoreMediaErrorDomain Code=-12640, to avoid this issue we either return false in this case
+                // session doesn't wait for the results that are already provided OR we add an artificial delay for adjustMasterFile that can have edge cases
+                // in case session still needs more time to handle AVAssetResourceLoadingRequest finishLoading operation it will fail
+                if #available(iOS 16, *) {
+                    return false
+                } else {
+                    return true
+                }
             case .none, .variant:
                 performPlaylistRequest(with: url, loadingRequest: loadingRequest)
             }
         }
-        
         return true
     }
+
     
     // MARK: - Private
         
