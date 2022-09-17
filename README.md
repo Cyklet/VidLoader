@@ -3,6 +3,7 @@
 ![Pods](https://img.shields.io/badge/Cocoapods-compatible-2ad403.svg?style=plastic)
 ![Carthage](https://img.shields.io/badge/Carthage-compatible-2ad403.svg?style=plastic)
 ![License](https://img.shields.io/badge/License-MIT-000000.svg?style=plastic)
+![SwiftPackageManager](https://img.shields.io/badge/SwiftPackageManager-compatible-2ad403.svg?style=plastic)
 
 # VidLoader
 
@@ -81,6 +82,11 @@ github "Cyklet/VidLoader" ~> #tag
 ```
 
 Run `carthage update` to build the framework and drag the built `VidLoader.framework` into your Xcode project.
+
+
+### Swift Package Manager
+
+Open Xcode project, select File > Swift Packages > Add Package Dependency and enter GitHub repository URL -> https://github.com/Cyklet/VidLoader
 
 ### Manually
 
