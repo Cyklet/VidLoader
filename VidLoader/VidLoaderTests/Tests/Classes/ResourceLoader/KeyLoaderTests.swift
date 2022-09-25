@@ -23,7 +23,7 @@ final class KeyLoaderTests: XCTestCase {
         // GIVEN
         let expectedURL = URL.mock()
         let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: expectedURL)
-        let loadingRequest = AVAssetResourceLoadingRequest.mock(requestInfo: requestInfo)
+        let loadingRequest = AVAssetResourceLoadingRequest.mockWithCustomSetup(requestInfo: requestInfo)
         schemeHandler.persistentKeyStub = nil
         keyLoader = KeyLoader(schemeHandler: schemeHandler)
         
@@ -41,7 +41,7 @@ final class KeyLoaderTests: XCTestCase {
         // GIVEN
         let expectedURL = URL.mock()
         let requestInfo = AVAssetResourceLoadingRequest.mockRequestInfo(infoURL: expectedURL)
-        let loadingRequest = AVAssetResourceLoadingRequest.mock(requestInfo: requestInfo)
+        let loadingRequest = AVAssetResourceLoadingRequest.mockWithCustomSetup(requestInfo: requestInfo)
         let mockData = Data.mock(string: "mock_key_data")
         schemeHandler.persistentKeyStub = mockData
         keyLoader = KeyLoader(schemeHandler: schemeHandler)

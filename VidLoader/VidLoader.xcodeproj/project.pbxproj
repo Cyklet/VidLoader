@@ -12,6 +12,7 @@
 		0B1495B3239FEF2D007ED700 /* AVURLAssetExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1495B2239FEF2D007ED700 /* AVURLAssetExtensions.swift */; };
 		0B1495B523A002C1007ED700 /* CMTimeRangeExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1495B423A002C1007ED700 /* CMTimeRangeExtensions.swift */; };
 		0B1495BC23A0104D007ED700 /* M3U8MasterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1495BB23A0104D007ED700 /* M3U8MasterTests.swift */; };
+		0B1DA59628E04260005534F0 /* AVAssetResourceLoadingContentInformationRequestExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B1DA59528E04260005534F0 /* AVAssetResourceLoadingContentInformationRequestExtensions.swift */; };
 		0B354AFB2396953C009CE690 /* CustomDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AED2396953C009CE690 /* CustomDataTask.swift */; };
 		0B354AFC2396953C009CE690 /* MockRequestable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AEE2396953C009CE690 /* MockRequestable.swift */; };
 		0B354AFD2396953C009CE690 /* PlaylistLoaderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B354AF12396953C009CE690 /* PlaylistLoaderTests.swift */; };
@@ -117,6 +118,7 @@
 		0B1495B2239FEF2D007ED700 /* AVURLAssetExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVURLAssetExtensions.swift; sourceTree = "<group>"; };
 		0B1495B423A002C1007ED700 /* CMTimeRangeExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMTimeRangeExtensions.swift; sourceTree = "<group>"; };
 		0B1495BB23A0104D007ED700 /* M3U8MasterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = M3U8MasterTests.swift; sourceTree = "<group>"; };
+		0B1DA59528E04260005534F0 /* AVAssetResourceLoadingContentInformationRequestExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AVAssetResourceLoadingContentInformationRequestExtensions.swift; sourceTree = "<group>"; };
 		0B354AED2396953C009CE690 /* CustomDataTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomDataTask.swift; sourceTree = "<group>"; };
 		0B354AEE2396953C009CE690 /* MockRequestable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRequestable.swift; sourceTree = "<group>"; };
 		0B354AF12396953C009CE690 /* PlaylistLoaderTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaylistLoaderTests.swift; sourceTree = "<group>"; };
@@ -326,6 +328,7 @@
 				0B1495B2239FEF2D007ED700 /* AVURLAssetExtensions.swift */,
 				0B1495B423A002C1007ED700 /* CMTimeRangeExtensions.swift */,
 				0B07F6A8249BF00600F99458 /* DownloadValuesExtensions.swift */,
+				0B1DA59528E04260005534F0 /* AVAssetResourceLoadingContentInformationRequestExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -737,6 +740,7 @@
 				0B519864239AF06300AEC201 /* FunCheck.swift in Sources */,
 				0BE731B5282C5D9A00D5C1AC /* SelectorExtensions.swift in Sources */,
 				0B354AFC2396953C009CE690 /* MockRequestable.swift in Sources */,
+				0B1DA59628E04260005534F0 /* AVAssetResourceLoadingContentInformationRequestExtensions.swift in Sources */,
 				0BEC4B16239EE11100AA39D9 /* MockAVAssetDownloadURLSession.swift in Sources */,
 				0B9A16E3249D237D00E9F837 /* StreamResourceTests.swift in Sources */,
 				0B354B012396953C009CE690 /* DataExtensions.swift in Sources */,

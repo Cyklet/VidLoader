@@ -10,7 +10,7 @@ import AVFoundation
 import Foundation
 
 extension MockAVAssetDownloadURLSession {
-    static func mock(shouldSwizzle: Bool = true) -> MockAVAssetDownloadURLSession {
+    static func mock() -> MockAVAssetDownloadURLSession {
         let finalSelector = Selector.defaultInit
         let initialSelector = #selector(NSObject.init)
         let initialInit = class_getInstanceMethod(self, initialSelector)!
