@@ -10,11 +10,11 @@
 import Foundation
 
 struct MockMasterParser: MasterParser {
-    
+   
     var adjustFuncCheck = FuncCheck<Data>()
     var adjustStub: Result<Data, M3U8Error> = .success(.mock())
-    func adjust(data: Data) -> Result<Data, M3U8Error> {
+    func adjust(data: Data, completion: @escaping (Result<Data, M3U8Error>) -> Void) {
         adjustFuncCheck.call(data)
-        return adjustStub
+        completion(adjustStub)
     }
 }

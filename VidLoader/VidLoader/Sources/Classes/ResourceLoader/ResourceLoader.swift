@@ -54,16 +54,6 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
             case .master:
                 adjustMasterFile(streamResource: streamResource!, loadingRequest: loadingRequest)
                 streamResource = nil
-                // For m3u8 master file shouldWaitForLoadingOfRequestedResource in iOS 16 behaves differently,
-                // adjustMasterFile is a sync operation without having any request in place.
-                // Session is failling with CoreMediaErrorDomain Code=-12640, to avoid this issue we either return false in this case
-                // session doesn't wait for the results that are already provided OR we add an artificial delay for adjustMasterFile that can have edge cases
-                // in case session still needs more time to handle AVAssetResourceLoadingRequest finishLoading operation it will fail
-                if #available(iOS 16, *) {
-                    return false
-                } else {
-                    return true
-                }
             case .none, .variant:
                 performPlaylistRequest(with: url, loadingRequest: loadingRequest)
             }
@@ -103,11 +93,12 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     
     private func adjustMasterFile(streamResource: StreamResource,
                                   loadingRequest: AVAssetResourceLoadingRequest) {
-        let result = masterParser.adjust(data: streamResource.data)
-        switch result {
-        case .success(let newData): loadingRequest.setup(response: streamResource.response, data: newData)
-        case .failure(let error): observer.taskDidFail(.m3u8(error))
-        }
+        masterParser.adjust(data: streamResource.data, completion: { [weak self] result in
+            switch result {
+            case .success(let newData): loadingRequest.setup(response: streamResource.response, data: newData)
+            case .failure(let error): self?.observer.taskDidFail(.m3u8(error))
+            }
+        })
     }
     
     private func adjustPlaylistFile(result: Result<(HTTPURLResponse, Data), Error>,
