@@ -10,11 +10,17 @@ import XCTest
 
 final class M3U8MasterTest: XCTestCase {
     private var parser: M3U8Master!
+    private var executionQueue: MockVidLoaderExecutionQueue!
+    private var time: DispatchTime!
     
     override func setUp() {
         super.setUp()
         
-        parser = M3U8Master()
+        executionQueue = .init()
+        let newTime = DispatchTime.now()
+        time = newTime
+        let timeCall: () -> DispatchTime = { newTime }
+        parser = M3U8Master(executionQueue: executionQueue, time: timeCall)
     }
     
     func test_AdjustMasterScheme_OriginalSchemeExist_SchemeIsReplaced() {
@@ -22,23 +28,31 @@ final class M3U8MasterTest: XCTestCase {
         let path = "random_path"
         let givenString = "\(SchemeType.original.rawValue)://\(path)"
         let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: "\(SchemeType.custom.rawValue)://\(path)"))
+        let finalResultFuncCheck = FuncCheck<Result<Data, M3U8Error>>()
+        let expectedDelay = time + 0.5
         
         // WHEN
-        let finalResult: Result<Data, M3U8Error> = parser.adjust(data: .mock(string: givenString))
+        parser.adjust(data: .mock(string: givenString),
+                      completion: { finalResultFuncCheck.call($0) })
         
         // THEN
-        XCTAssertEqual(expectedResult, finalResult)
+        XCTAssertTrue(finalResultFuncCheck.wasCalled(with: expectedResult))
+        XCTAssertTrue(executionQueue.asyncAfterFuncCheck.wasCalled(with: expectedDelay))
     }
     
     func test_AdjustMasterScheme_OriginalSchemeNotExist_SchemeIsNotReplaced() {
         // GIVEN
         let givenString = "wrong_scheme://random.path.co"
         let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: givenString))
+        let finalResultFuncCheck = FuncCheck<Result<Data, M3U8Error>>()
+        let expectedDelay = time + 0.5
         
         // WHEN
-        let finalResult = parser.adjust(data: .mock(string: givenString))
+        parser.adjust(data: .mock(string: givenString),
+                      completion: { finalResultFuncCheck.call($0) })
         
         // THEN
-        XCTAssertEqual(expectedResult, finalResult)
+        XCTAssertTrue(finalResultFuncCheck.wasCalled(with: expectedResult))
+        XCTAssertTrue(executionQueue.asyncAfterFuncCheck.wasCalled(with: expectedDelay))
     }
 }
