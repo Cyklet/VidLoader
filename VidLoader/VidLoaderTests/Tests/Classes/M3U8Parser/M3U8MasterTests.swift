@@ -10,49 +10,115 @@ import XCTest
 
 final class M3U8MasterTest: XCTestCase {
     private var parser: M3U8Master!
-    private var executionQueue: MockVidLoaderExecutionQueue!
-    private var time: DispatchTime!
     
     override func setUp() {
         super.setUp()
         
-        executionQueue = .init()
-        let newTime = DispatchTime.now()
-        time = newTime
-        let timeCall: () -> DispatchTime = { newTime }
-        parser = M3U8Master(executionQueue: executionQueue, time: timeCall)
+        parser = M3U8Master()
     }
     
-    func test_AdjustMasterScheme_OriginalSchemeExist_SchemeIsReplaced() {
+    func test_AdjustMasterScheme_RelativeURLS_BaseURLAttached() {
         // GIVEN
-        let path = "random_path"
-        let givenString = "\(SchemeType.original.rawValue)://\(path)"
-        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: "\(SchemeType.custom.rawValue)://\(path)"))
-        let finalResultFuncCheck = FuncCheck<Result<Data, M3U8Error>>()
-        let expectedDelay = time + 0.5
+        let urlPath = "parser.m3u8.test"
+        let givenBaseURL = URL.mock(stringURL: "https://\(urlPath)")
+        let expectedURLString = "\(SchemeType.variant.rawValue)://\(urlPath)/"
+        let master = """
+#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=YES,AUTOSELECT=YES,FORCED=NO,LANGUAGE="en",URI="cc/en/en.m3u8"
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="english_64",LANGUAGE="en",NAME="English",AUTOSELECT=YES,DEFAULT=YES,URI="audio_english_64/prog_index.m3u8"
+
+#EXT-X-STREAM-INF:BANDWIDTH=446094,AVERAGE-BANDWIDTH=187133,VIDEO-RANGE=SDR,CODECS="avc1.4d401f,mp4a.40.5",RESOLUTION=960x540,FRAME-RATE=29.970,AUDIO="english_64",SUBTITLES="subs"
+avc_540p_2000/prog_index.m3u8
+#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=167915,AVERAGE-BANDWIDTH=49610,CODECS="avc1.4d401f",RESOLUTION=960x540,URI="avc_540p_2000/iframe_index.m3u8"
+"""
+        let expectedMaster = """
+#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=YES,AUTOSELECT=YES,FORCED=NO,LANGUAGE="en",URI="\(expectedURLString)cc/en/en.m3u8"
+#EXT-X-MEDIA:TYPE=AUDIO,GROUP-ID="english_64",LANGUAGE="en",NAME="English",AUTOSELECT=YES,DEFAULT=YES,URI="\(expectedURLString)audio_english_64/prog_index.m3u8"
+
+#EXT-X-STREAM-INF:BANDWIDTH=446094,AVERAGE-BANDWIDTH=187133,VIDEO-RANGE=SDR,CODECS="avc1.4d401f,mp4a.40.5",RESOLUTION=960x540,FRAME-RATE=29.970,AUDIO="english_64",SUBTITLES="subs"
+\(expectedURLString)avc_540p_2000/prog_index.m3u8
+#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=167915,AVERAGE-BANDWIDTH=49610,CODECS="avc1.4d401f",RESOLUTION=960x540,URI="\(expectedURLString)avc_540p_2000/iframe_index.m3u8"
+"""
+        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedMaster))
         
         // WHEN
-        parser.adjust(data: .mock(string: givenString),
-                      completion: { finalResultFuncCheck.call($0) })
+        let result = parser.adjust(data: .mock(string: master), baseURL: givenBaseURL)
         
         // THEN
-        XCTAssertTrue(finalResultFuncCheck.wasCalled(with: expectedResult))
-        XCTAssertTrue(executionQueue.asyncAfterFuncCheck.wasCalled(with: expectedDelay))
+        XCTAssertEqual(expectedResult, result)
+    }
+    
+    func test_AdjustMasterScheme_AbsoluteURLs_SchemesAreReplaced() {
+        // GIVEN
+        let urlPath = "parser.m3u8.test"
+        let givenBaseURL = URL.mock(stringURL: "https://\(urlPath)")
+        let master = """
+#EXTM3U
+
+#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=YES,AUTOSELECT=YES,FORCED=NO,LANGUAGE="en",URI="https://avid.test.co/unknown/videos/en.m3u8"
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2200000
+https://avid.test.co/unknown/videos/best_26075.m3u8
+"""
+        let expectedMaster = """
+#EXTM3U
+
+#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=YES,AUTOSELECT=YES,FORCED=NO,LANGUAGE="en",URI="\(SchemeType.variant.rawValue)://avid.test.co/unknown/videos/en.m3u8"
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2200000
+\(SchemeType.variant.rawValue)://avid.test.co/unknown/videos/best_26075.m3u8
+"""
+        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedMaster))
+        
+        // WHEN
+        let result = parser.adjust(data: .mock(string: master), baseURL: givenBaseURL)
+        
+        // THEN
+        XCTAssertEqual(expectedResult, result)
+    }
+    
+    func test_AdjustMasterScheme_MixedURLs_SchemesAreReplacedAndBaseURLAttached() {
+        // GIVEN
+        let urlPath = "parser.m3u8.test"
+        let givenBaseURL = URL.mock(stringURL: "https://\(urlPath)")
+        let expectedURLString = "\(SchemeType.variant.rawValue)://\(urlPath)/"
+        let master = """
+#EXTM3U
+#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=YES,AUTOSELECT=YES,FORCED=NO,LANGUAGE="en",URI="https://avid.test.co/unknown/videos/en.m3u8"
+
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2200000
+https://avid.test.co/unknown/videos/best_26075.m3u8
+
+#EXT-X-STREAM-INF:BANDWIDTH=446094,AVERAGE-BANDWIDTH=187133,VIDEO-RANGE=SDR,CODECS="avc1.4d401f,mp4a.40.5",RESOLUTION=960x540,FRAME-RATE=29.970,AUDIO="english_64",SUBTITLES="subs"
+avc_540p_2000/prog_index.m3u8
+#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=167915,AVERAGE-BANDWIDTH=49610,CODECS="avc1.4d401f",RESOLUTION=960x540,URI="avc_540p_2000/iframe_index.m3u8"
+"""
+        let expectedMaster = """
+#EXTM3U
+#EXT-X-MEDIA:TYPE=SUBTITLES,GROUP-ID="subs",NAME="English",DEFAULT=YES,AUTOSELECT=YES,FORCED=NO,LANGUAGE="en",URI="\(SchemeType.variant.rawValue)://avid.test.co/unknown/videos/en.m3u8"
+
+#EXT-X-STREAM-INF:PROGRAM-ID=1,BANDWIDTH=2200000
+\(SchemeType.variant.rawValue)://avid.test.co/unknown/videos/best_26075.m3u8
+
+#EXT-X-STREAM-INF:BANDWIDTH=446094,AVERAGE-BANDWIDTH=187133,VIDEO-RANGE=SDR,CODECS="avc1.4d401f,mp4a.40.5",RESOLUTION=960x540,FRAME-RATE=29.970,AUDIO="english_64",SUBTITLES="subs"
+\(expectedURLString)avc_540p_2000/prog_index.m3u8
+#EXT-X-I-FRAME-STREAM-INF:BANDWIDTH=167915,AVERAGE-BANDWIDTH=49610,CODECS="avc1.4d401f",RESOLUTION=960x540,URI="\(expectedURLString)avc_540p_2000/iframe_index.m3u8"
+"""
+        let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: expectedMaster))
+        
+        // WHEN
+        let result = parser.adjust(data: .mock(string: master), baseURL: givenBaseURL)
+        
+        // THEN
+        XCTAssertEqual(expectedResult, result)
     }
     
     func test_AdjustMasterScheme_OriginalSchemeNotExist_SchemeIsNotReplaced() {
         // GIVEN
         let givenString = "wrong_scheme://random.path.co"
         let expectedResult: Result<Data, M3U8Error> = .success(.mock(string: givenString))
-        let finalResultFuncCheck = FuncCheck<Result<Data, M3U8Error>>()
-        let expectedDelay = time + 0.5
         
         // WHEN
-        parser.adjust(data: .mock(string: givenString),
-                      completion: { finalResultFuncCheck.call($0) })
+        let result = parser.adjust(data: .mock(string: givenString), baseURL: URL.mock())
         
         // THEN
-        XCTAssertTrue(finalResultFuncCheck.wasCalled(with: expectedResult))
-        XCTAssertTrue(executionQueue.asyncAfterFuncCheck.wasCalled(with: expectedDelay))
+        XCTAssertEqual(expectedResult, result)
     }
 }

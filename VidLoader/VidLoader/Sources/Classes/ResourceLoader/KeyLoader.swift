@@ -31,7 +31,7 @@ final class KeyLoader: NSObject, KeyLoadable {
                                               mimeType: AVStreamingKeyDeliveryPersistentContentKeyType,
                                               expectedContentLength: persistentKey.count,
                                               textEncodingName: nil)
-                loadingRequest.setup(response: keyResponse, data: persistentKey)
+                loadingRequest.setup(response: keyResponse, data: persistentKey, isEntireLengthAvailableOnDemand: false)
             })
         }
 
