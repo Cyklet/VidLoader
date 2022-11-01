@@ -15,7 +15,6 @@ final class StreamResourceTests: XCTestCase {
         // GIVEN
         let givenData = "no_chunk_key_inside".data!
         let givenResponse = HTTPURLResponse.mock()
-        let expectedFileType: StreamResource.FileType = .master
         
         // WHEN
         let resultStream = StreamResource(response: givenResponse, data: givenData)
@@ -23,7 +22,6 @@ final class StreamResourceTests: XCTestCase {
         // THEN
         XCTAssertEqual(givenData, resultStream.data)
         XCTAssertEqual(givenResponse, resultStream.response)
-        XCTAssertEqual(expectedFileType, resultStream.fileType)
     }
     
     func test_GenerateStreamResource_WithChunkKey_FileTypeVariant() {
@@ -31,7 +29,6 @@ final class StreamResourceTests: XCTestCase {
         let variantChunkKey = "#EXTINF"
         let givenData = "chunk_key_inside\(variantChunkKey)".data!
         let givenResponse = HTTPURLResponse.mock()
-        let expectedFileType: StreamResource.FileType = .variant
         
         // WHEN
         let resultStream = StreamResource(response: givenResponse, data: givenData)
@@ -39,6 +36,5 @@ final class StreamResourceTests: XCTestCase {
         // THEN
         XCTAssertEqual(givenData, resultStream.data)
         XCTAssertEqual(givenResponse, resultStream.response)
-        XCTAssertEqual(expectedFileType, resultStream.fileType)
     }
 }

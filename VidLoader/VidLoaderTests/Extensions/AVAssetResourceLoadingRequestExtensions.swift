@@ -29,7 +29,7 @@ extension AVAssetResourceLoadingRequest {
         }
     }
 
-    @objc func mockSetup(response: URLResponse, data: Data) {
+    @objc func mockSetup(response: URLResponse, data: Data, isEntireLengthAvailableOnDemand: Bool) {
         setupFuncDidCall = true
     }
     
@@ -63,7 +63,7 @@ extension AVAssetResourceLoadingRequest {
         return create(with: resourceLoader,
                       requestInfo: requestInfo,
                       requestID: requestID,
-                      swizzleAction: { swizzle(className: self, original: #selector(setup(response:data:)), new: #selector(mockSetup(response:data:))) })
+                      swizzleAction: { swizzle(className: self, original: #selector(setup(response:data:isEntireLengthAvailableOnDemand:)), new: #selector(mockSetup(response:data:isEntireLengthAvailableOnDemand:))) })
     }
 
     static private func create(with resourceLoader: AVAssetResourceLoader = .mock(),

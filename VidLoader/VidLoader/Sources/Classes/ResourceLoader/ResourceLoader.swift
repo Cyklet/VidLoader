@@ -16,7 +16,7 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     private let observer: ResourceLoaderObserver
     private let masterParser: MasterParser
     private let playlistParser: PlaylistParser
-    private var streamResource: StreamResource?
+    private var streamResource: StreamResource
     private let headers: [String: String]?
     private let requestable: Requestable
     private let schemeHandler: SchemeHandleable
@@ -42,23 +42,23 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     func resourceLoader(_ resourceLoader: AVAssetResourceLoader,
                         shouldWaitForLoadingOfRequestedResource loadingRequest: AVAssetResourceLoadingRequest) -> Bool {
         guard let url = loadingRequest.request.url else { return false }
-        if let persistentKey = schemeHandler.persistentKey(from: url) {
-            let keyResponse = URLResponse(url: url,
-                                          mimeType: AVStreamingKeyDeliveryPersistentContentKeyType,
-                                          expectedContentLength: persistentKey.count,
-                                          textEncodingName: nil)
-            loadingRequest.setup(response: keyResponse, data: persistentKey)
-            observer.keyDidLoad()
-        } else {
-            switch streamResource?.fileType {
-            case .master:
-                adjustMasterFile(streamResource: streamResource!, loadingRequest: loadingRequest)
-                streamResource = nil
-            case .none, .variant:
-                performPlaylistRequest(with: url, loadingRequest: loadingRequest)
+        let scheme = schemeHandler.schemeType(from: url)
+        switch scheme {
+        case .key:
+            guard let persistentKey = schemeHandler.persistentKey(from: url) else {
+                return false
             }
+            setup(persistentKey: persistentKey, url: url, loadingRequest: loadingRequest)
+            return true
+        case .master:
+            adjustMasterFile(streamResource: streamResource, baseURL: url, loadingRequest: loadingRequest)
+            return true
+        case .variant:
+            performPlaylistRequest(with: url, loadingRequest: loadingRequest)
+            return true
+        case .original, .none:
+            return false
         }
-        return true
     }
 
     
@@ -92,13 +92,13 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
     // MARK: Parse Files
     
     private func adjustMasterFile(streamResource: StreamResource,
+                                  baseURL: URL,
                                   loadingRequest: AVAssetResourceLoadingRequest) {
-        masterParser.adjust(data: streamResource.data, completion: { [weak self] result in
-            switch result {
-            case .success(let newData): loadingRequest.setup(response: streamResource.response, data: newData)
-            case .failure(let error): self?.observer.taskDidFail(.m3u8(error))
-            }
-        })
+        let result = masterParser.adjust(data: streamResource.data, baseURL: baseURL)
+        switch result {
+        case .success(let newData): loadingRequest.setup(response: streamResource.response, data: newData, isEntireLengthAvailableOnDemand: true)
+        case .failure(let error): observer.taskDidFail(.m3u8(error))
+        }
     }
     
     private func adjustPlaylistFile(result: Result<(HTTPURLResponse, Data), Error>,
@@ -108,12 +108,21 @@ final class ResourceLoader: NSObject, AVAssetResourceLoaderDelegate {
         case .success(let response):
             playlistParser.adjust(data: response.1, with: baseURL, headers: headers, completion: { [weak self] result in
                 switch result {
-                case .success(let newData): loadingRequest.setup(response: response.0, data: newData)
+                case .success(let newData): loadingRequest.setup(response: response.0, data: newData, isEntireLengthAvailableOnDemand: false)
                 case .failure(let error): self?.observer.taskDidFail(.m3u8(error))
                 }
             })
         case .failure(let error):
             observer.taskDidFail(.custom(.init(error: error)))
         }
+    }
+    
+    private func setup(persistentKey: Data, url: URL, loadingRequest: AVAssetResourceLoadingRequest) {
+        let keyResponse = URLResponse(url: url,
+                                      mimeType: AVStreamingKeyDeliveryContentKeyType,
+                                      expectedContentLength: persistentKey.count,
+                                      textEncodingName: nil)
+        loadingRequest.setup(response: keyResponse, data: persistentKey, isEntireLengthAvailableOnDemand: true)
+        observer.keyDidLoad()
     }
 }

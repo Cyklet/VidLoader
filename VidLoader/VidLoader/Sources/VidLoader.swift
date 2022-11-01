@@ -242,13 +242,13 @@ public final class VidLoader: VidLoadable {
 
     private func startNewTaskIfNeeded() {
         if activeItems.filter({ $1.inProgress }).count >= maxConcurrentDownloads { return }
-        guard let streamResource = playlistLoader.nextStreamResource,
-            let item = activeItems[streamResource.0],
-            let url = URL(string: item.mediaLink) else { return }
-        switch schemeHandler.urlAsset(with: url) {
+        guard let (identifier, streamResource) = playlistLoader.nextStreamResource,
+              let item = activeItems[identifier],
+              let url = URL(string: item.mediaLink) else { return }
+        switch schemeHandler.urlAsset(with: url, data: streamResource.data) {
         case .success(let urlAsset):
             startTask(urlAsset: urlAsset,
-                      streamResource: streamResource.1,
+                      streamResource: streamResource,
                       item: item |> ItemInformation._state .~ .running(0))
         case .failure(let error):
             handle(event: .failed(error: .init(error: error)),

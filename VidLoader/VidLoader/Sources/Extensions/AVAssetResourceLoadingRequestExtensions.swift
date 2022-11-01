@@ -9,10 +9,13 @@
 import AVFoundation
 
 extension AVAssetResourceLoadingRequest {
-    @objc public func setup(response: URLResponse, data: Data) {
+    @objc public func setup(response: URLResponse, data: Data, isEntireLengthAvailableOnDemand: Bool) {
         contentInformationRequest?.contentType = response.mimeType |> generateAllowedContentType
         contentInformationRequest?.isByteRangeAccessSupported = true
         contentInformationRequest?.contentLength = response.expectedContentLength
+        if #available(iOS 16, *) {
+            contentInformationRequest?.isEntireLengthAvailableOnDemand = isEntireLengthAvailableOnDemand
+        }
         dataRequest?.respond(with: data)
         finishLoading()
     }

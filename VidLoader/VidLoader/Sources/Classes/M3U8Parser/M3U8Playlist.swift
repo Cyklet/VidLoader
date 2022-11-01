@@ -8,26 +8,6 @@
 
 import AVFoundation
 
-private struct RegexStrings {
-    private static let uri = "URI=\""
-    // \r\n -> windows
-    // \r -> old macs
-    // \n -> unix
-    private static let newLine = "\\r\\n|\\r|\\n"
-
-    static let key: String = {
-        let encryptionKey = "#EXT-X-KEY"
-
-        return "\(encryptionKey)[\\S\\s\(newLine)]*?\(uri)([^\(newLine),\"]+)"
-    }()
-    static let mediaSection: String = {
-        let mediaSectionKey = "#EXT-X-MAP"
-        
-        return "\(mediaSectionKey)(?!https)[\\S\\s\(newLine)]*?\(uri)([^\(newLine),\"]+)"
-    }()
-    static let relativeChunks = "(?<=\(newLine))(?!#|https)[\\S\\s]*?(?=\(newLine))"
-}
-
 protocol PlaylistParser {
     func adjust(data: Data, with baseURL: URL, headers: [String: String]?, completion: @escaping (Result<Data, M3U8Error>) -> Void)
 }
@@ -138,12 +118,12 @@ final class M3U8Playlist: PlaylistParser {
     /// - Parameters:
     ///   - response: Variant response string
     ///   - baseURL: Master/variant URL
-    /// - Returns: Update response with absolute URLs inside of it
+    /// - Returns: Updated response with absolute URLs
     private func replaceRelativeChunks(response: String, with baseURL: URL) -> String {
         guard let originalBaseURL = baseURL.withScheme(scheme: .original)?.deletingLastPathComponent() else {
             return response
         }
-        let chunks = response.matches(for: RegexStrings.mediaSection) + response.matches(for: RegexStrings.relativeChunks)
+        let chunks = response.matches(for: RegexStrings.mediaSection) + response.matches(for: RegexStrings.relativePlaylist)
         let keys = response.matches(for: RegexStrings.key).filter { URL(string: $0)?.scheme == nil }
         return (chunks + keys).reduce(into: response) { result, path in
             let absoluteURLString = originalBaseURL.appendingPathComponent(path).absoluteString

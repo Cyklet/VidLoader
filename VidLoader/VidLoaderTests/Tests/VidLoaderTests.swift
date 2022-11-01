@@ -372,7 +372,7 @@ final class VidLoaderTests: XCTestCase {
         session.setupStub?(.keyLoaded, givenItem)
         
         // THEN
-        XCTAssertTrue(schemeHandler.urlAssetFuncCheck.wasCalled(with: givenURL))
+        XCTAssertEqual(givenURL, schemeHandler.urlAssetFuncCheck.arguments?.0)
         XCTAssertEqual(observersHandler.fireFuncCheck.count, 4)
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.0, ObserverType.single(givenIdentifier))
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.1, expectedItem)
@@ -397,7 +397,7 @@ final class VidLoaderTests: XCTestCase {
         session.setupStub?(.keyLoaded, givenItem)
         
         // THEN
-        XCTAssertTrue(schemeHandler.urlAssetFuncCheck.wasCalled(with: givenURL))
+        XCTAssertEqual(givenURL, schemeHandler.urlAssetFuncCheck.arguments?.0)
         XCTAssertEqual(observersHandler.fireFuncCheck.count, 2)
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.0, ObserverType.single(givenIdentifier))
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.1, expectedItem)
@@ -422,7 +422,7 @@ final class VidLoaderTests: XCTestCase {
         session.setupStub?(.keyLoaded, givenItem)
         
         // THEN
-        XCTAssertTrue(schemeHandler.urlAssetFuncCheck.wasCalled(with: givenURL))
+        XCTAssertEqual(givenURL, schemeHandler.urlAssetFuncCheck.arguments?.0)
         XCTAssertEqual(observersHandler.fireFuncCheck.count, 2)
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.0, ObserverType.single(givenIdentifier))
         XCTAssertEqual(observersHandler.fireFuncCheck.arguments?.1, expectedItem)

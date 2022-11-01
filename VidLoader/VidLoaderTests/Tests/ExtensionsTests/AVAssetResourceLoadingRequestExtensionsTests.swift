@@ -18,16 +18,20 @@ final class AVAssetResourceLoadingRequestTests: XCTestCase {
         let expectedContentType = "custom_type"
         let expectedIsByteRangeAccessSupported = true
         let expectedContentLength = 1231
+        let expectedEntireLengthAvailableOnDemand = true
         let response: HTTPURLResponse = .mock(mimeType: expectedContentType, expectedContentLength: expectedContentLength)
         resourceLoading.contentInformationRequestStub = .mock(loadingRequest: resourceLoading, allowedContentTypes: nil)
         
         // WHEN
-        resourceLoading.setup(response: response, data: .mock())
+        resourceLoading.setup(response: response, data: .mock(), isEntireLengthAvailableOnDemand: true)
         
         // THEN
         XCTAssertEqual(expectedContentType, resourceLoading.contentInformationRequest?.contentType)
         XCTAssertEqual(expectedIsByteRangeAccessSupported, resourceLoading.contentInformationRequest?.isByteRangeAccessSupported)
         XCTAssertEqual(Int64(expectedContentLength), resourceLoading.contentInformationRequest?.contentLength)
+        if #available(iOS 16, *) {
+            XCTAssertEqual(expectedEntireLengthAvailableOnDemand, resourceLoading.contentInformationRequest?.isEntireLengthAvailableOnDemand)
+        }
     }
     
     func test_SetupLoadingRequest_AllowedTypesAreEmpty_ContentTypeIsNil() {
@@ -35,14 +39,18 @@ final class AVAssetResourceLoadingRequestTests: XCTestCase {
         let resourceLoading = AVAssetResourceLoadingRequest.mockWithCustomContentInfoRequest()
         let expectedContentType: String? = nil
         let givenContentType = "custom_type"
+        let expectedEntireLengthAvailableOnDemand = false
         let response: HTTPURLResponse = .mock(mimeType: givenContentType, expectedContentLength: 10)
         resourceLoading.contentInformationRequestStub = .mock(loadingRequest: resourceLoading, allowedContentTypes: [])
         
         // WHEN
-        resourceLoading.setup(response: response, data: .mock())
+        resourceLoading.setup(response: response, data: .mock(), isEntireLengthAvailableOnDemand: false)
         
         // THEN
         XCTAssertEqual(expectedContentType, resourceLoading.contentInformationRequest?.contentType)
+        if #available(iOS 16, *) {
+            XCTAssertEqual(expectedEntireLengthAvailableOnDemand, resourceLoading.contentInformationRequest?.isEntireLengthAvailableOnDemand)
+        }
     }
     
     func test_SetupLoadingRequest_AllowedTypesDoNotContainGivenType_ContentTypeIsNil() {
@@ -51,14 +59,18 @@ final class AVAssetResourceLoadingRequestTests: XCTestCase {
         let expectedContentType: String? = nil
         let givenContentType = "custom_type"
         let allowedTypes = ["random_type1", "random_type2"]
+        let expectedEntireLengthAvailableOnDemand = true
         let response: HTTPURLResponse = .mock(mimeType: givenContentType, expectedContentLength: 10)
         resourceLoading.contentInformationRequestStub = .mock(loadingRequest: resourceLoading, allowedContentTypes: allowedTypes as NSArray)
         
         // WHEN
-        resourceLoading.setup(response: response, data: .mock())
+        resourceLoading.setup(response: response, data: .mock(), isEntireLengthAvailableOnDemand: true)
         
         // THEN
         XCTAssertEqual(expectedContentType, resourceLoading.contentInformationRequest?.contentType)
+        if #available(iOS 16, *) {
+            XCTAssertEqual(expectedEntireLengthAvailableOnDemand, resourceLoading.contentInformationRequest?.isEntireLengthAvailableOnDemand)
+        }
     }
     
     func test_SetupLoadingRequest_AllowedTypesContainGivenType_ContentTypeIsNil() {
@@ -67,13 +79,17 @@ final class AVAssetResourceLoadingRequestTests: XCTestCase {
         let givenContentType = "custom_type"
         let expectedContentType = givenContentType
         let allowedTypes = ["random_type1", givenContentType]
+        let expectedEntireLengthAvailableOnDemand = false
         let response: HTTPURLResponse = .mock(mimeType: givenContentType, expectedContentLength: 10)
         resourceLoading.contentInformationRequestStub = .mock(loadingRequest: resourceLoading, allowedContentTypes: allowedTypes as NSArray)
         
         // WHEN
-        resourceLoading.setup(response: response, data: .mock())
+        resourceLoading.setup(response: response, data: .mock(), isEntireLengthAvailableOnDemand: false)
         
         // THEN
         XCTAssertEqual(expectedContentType, resourceLoading.contentInformationRequest?.contentType)
+        if #available(iOS 16, *) {
+            XCTAssertEqual(expectedEntireLengthAvailableOnDemand, resourceLoading.contentInformationRequest?.isEntireLengthAvailableOnDemand)
+        }
     }
 }

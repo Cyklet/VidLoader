@@ -10,7 +10,6 @@ import Foundation
 
 protocol VidLoaderExecutionQueueable {
     func async(execution: @escaping () -> Void)
-    func asyncAfter(deadline: DispatchTime, execution: @escaping() -> Void)
 }
 
 final class VidLoaderExecutionQueue: VidLoaderExecutionQueueable {
@@ -22,9 +21,5 @@ final class VidLoaderExecutionQueue: VidLoaderExecutionQueueable {
 
     func async(execution: @escaping () -> Void) {
         queue.async { execution() }
-    }
-    
-    func asyncAfter(deadline: DispatchTime, execution: @escaping() -> Void) {
-        queue.asyncAfter(deadline: deadline, execute: execution)
     }
 }
