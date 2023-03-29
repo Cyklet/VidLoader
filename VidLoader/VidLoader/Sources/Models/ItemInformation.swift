@@ -32,12 +32,15 @@ public struct ItemInformation: Codable, Equatable {
     let minRequiredBitrate: Int?
     ///HTTPHeader to be used when headers is necessary to download m3u8 or key files
     let headers: [String: String]?
+    
+    let urlAssetCookies: URLAssetCookies?
 
     init(identifier: String, title: String?, path: String? = nil,
          mediaLink: String = "", progress: Double = 0,
          state: DownloadState, downloadedBytes: Int = 0,
          artworkData: Data?, minRequiredBitrate: Int?,
-         headers: [String: String]? = nil) {
+         headers: [String: String]? = nil,
+         urlAssetCookies: URLAssetCookies? = nil) {
         self.identifier = identifier
         self.title = title
         self.path = path
@@ -48,6 +51,7 @@ public struct ItemInformation: Codable, Equatable {
         self.artworkData = artworkData
         self.minRequiredBitrate = minRequiredBitrate
         self.headers = headers
+        self.urlAssetCookies = urlAssetCookies
     }
 
     public var location: URL? {

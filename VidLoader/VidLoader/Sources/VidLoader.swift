@@ -245,7 +245,7 @@ public final class VidLoader: VidLoadable {
         guard let (identifier, streamResource) = playlistLoader.nextStreamResource,
               let item = activeItems[identifier],
               let url = URL(string: item.mediaLink) else { return }
-        switch schemeHandler.urlAsset(with: url, data: streamResource.data) {
+        switch schemeHandler.urlAsset(with: url, data: streamResource.data, urlAssetCookies: item.urlAssetCookies) {
         case .success(let urlAsset):
             startTask(urlAsset: urlAsset,
                       streamResource: streamResource,

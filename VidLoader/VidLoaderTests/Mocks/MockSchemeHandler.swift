@@ -20,7 +20,7 @@ final class MockSchemeHandler: SchemeHandleable {
 
     var urlAssetFuncCheck = FuncCheck<(URL?, Data)>()
     var urlAssetStub: Result<AVURLAsset, ResourceLoadingError> = .failure(.unknown)
-    func urlAsset(with mediaURL: URL?, data: Data) -> Result<AVURLAsset, ResourceLoadingError> {
+    func urlAsset(with mediaURL: URL?, data: Data, urlAssetCookies: URLAssetCookies?) -> Result<AVURLAsset, ResourceLoadingError> {
         urlAssetFuncCheck.call((mediaURL, data))
         return urlAssetStub
     }
