@@ -14,15 +14,6 @@ struct URLAssetCookies : Codable, Equatable {
         case unarchiveFailed
     }
 
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let data = try container.decode(Data.self)
-        guard let values = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [HTTPCookie] else {
-            throw Error.unarchiveFailed
-        }
-        self.values = values
-    }
-    
     public init(url: URL, headers: [String: String]?) {
         var domain: String?
         if #available(iOS 16.0, *) {
@@ -50,10 +41,22 @@ struct URLAssetCookies : Codable, Equatable {
         self.values = cookies
     }
     
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let data = try container.decode(Data.self)
+        guard let values = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data) as? [HTTPCookie] else {
+            throw Error.unarchiveFailed
+        }
+        self.values = values
+    }
     
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         let data = try NSKeyedArchiver.archivedData(withRootObject: values, requiringSecureCoding: false)
         try container.encode(data)
+    }
+    
+    public func getRequestHeaderFields() -> [String: String]? {
+        return HTTPCookie.requestHeaderFields(with: values)
     }
 }
