@@ -30,9 +30,9 @@ struct SchemeHandler: SchemeHandleable {
         
         var options = [String: Any]()
         if let urlAssetCookies = urlAssetCookies {
-                 options["AVURLAssetHTTPHeaderFieldsKey"] = urlAssetCookies.values
-              }
-
+            options["AVURLAssetHTTPHeaderFieldsKey"] = HTTPCookie.requestHeaderFields(with: urlAssetCookies.values)
+        }
+        
         return .success(AVURLAsset(url: url, options: options))
     }
 
