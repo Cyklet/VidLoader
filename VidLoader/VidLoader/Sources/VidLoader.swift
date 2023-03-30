@@ -119,12 +119,6 @@ public final class VidLoader: VidLoadable {
         let identifier = values.identifier
         guard activeItems[identifier] == nil else { return }
         let url = values.url
-        var domain: String?
-        if #available(iOS 16.0, *) {
-            domain = url.host()
-        } else {
-            domain = url.host
-        }
         let item = ItemInformation(identifier: identifier,
                                    title: values.title.removingIllegalCharacters,
                                    mediaLink: url.absoluteString,
@@ -132,7 +126,7 @@ public final class VidLoader: VidLoadable {
                                    artworkData: values.artworkData,
                                    minRequiredBitrate: values.minRequiredBitrate,
                                    headers: values.headers,
-                                   urlAssetCookies: URLAssetCookies(domain: domain, headers: values.headers))
+                                   urlAssetCookies: URLAssetCookies(url: url, headers: values.headers))
         activeItems[identifier] = item
         handle(event: .prefetching, activeItem: item)
         session.task(identifier: identifier, completion: { [weak self] task in

@@ -23,7 +23,13 @@ struct URLAssetCookies : Codable, Equatable {
         self.values = values
     }
     
-    public init(domain: String?, headers: [String: String]?) {
+    public init(url: URL, headers: [String: String]?) {
+        var domain: String?
+        if #available(iOS 16.0, *) {
+            domain = url.host()
+        } else {
+            domain = url.host
+        }
         
         var cookies:[HTTPCookie] = []
         if let domain = domain, let headers = headers {

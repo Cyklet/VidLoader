@@ -114,7 +114,8 @@ extension ItemInformation {
                                mediaLink: $1.mediaLink, progress: $1.progress,
                                state: $0, downloadedBytes: $1.downloadedBytes,
                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate,
-                               headers: $1.headers) }
+                               headers: $1.headers,
+                               urlAssetCookies: $1.urlAssetCookies) }
     )
 
     static let _path = Lens<ItemInformation, String?>(
@@ -123,7 +124,8 @@ extension ItemInformation {
                                mediaLink: $1.mediaLink, progress: $1.progress,
                                state: $1.state, downloadedBytes: $1.downloadedBytes,
                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate,
-                               headers: $1.headers) }
+                               headers: $1.headers,
+                               urlAssetCookies: $1.urlAssetCookies) }
     )
 
     static let _progress = Lens<ItemInformation, Double>(
@@ -132,7 +134,8 @@ extension ItemInformation {
                                mediaLink: $1.mediaLink, progress: $0,
                                state: $1.state, downloadedBytes: $1.downloadedBytes,
                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate,
-                               headers: $1.headers) }
+                               headers: $1.headers,
+                               urlAssetCookies: $1.urlAssetCookies) }
     )
 
     static let _downloadedBytes = Lens<ItemInformation, Int>(
@@ -141,6 +144,7 @@ extension ItemInformation {
                                mediaLink: $1.mediaLink, progress: $1.progress,
                                state: $1.state, downloadedBytes: $0,
                                artworkData: $1.artworkData, minRequiredBitrate: $1.minRequiredBitrate,
-                               headers: $1.headers) }
+                               headers: $1.headers,
+                               urlAssetCookies: $1.urlAssetCookies) }
     )
 }
