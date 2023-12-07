@@ -37,7 +37,8 @@ public struct ItemInformation: Codable, Equatable {
          mediaLink: String = "", progress: Double = 0,
          state: DownloadState, downloadedBytes: Int = 0,
          artworkData: Data?, minRequiredBitrate: Int?,
-         headers: [String: String]? = nil) {
+         headers: [String: String]? = nil,
+         urlAssetCookies: URLAssetCookies? = nil) {
         self.identifier = identifier
         self.title = title
         self.path = path

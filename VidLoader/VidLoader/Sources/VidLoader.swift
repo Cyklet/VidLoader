@@ -119,13 +119,14 @@ public final class VidLoader: VidLoadable {
         let identifier = values.identifier
         guard activeItems[identifier] == nil else { return }
         let url = values.url
+        let urlAssetCookies = URLAssetCookies(url: url, headers: values.headers)
         let item = ItemInformation(identifier: identifier,
                                    title: values.title.removingIllegalCharacters,
                                    mediaLink: url.absoluteString,
                                    state: .unknown,
                                    artworkData: values.artworkData,
                                    minRequiredBitrate: values.minRequiredBitrate,
-                                   headers: values.headers)
+                                   headers: urlAssetCookies.getRequestHeaderFields())
         activeItems[identifier] = item
         handle(event: .prefetching, activeItem: item)
         session.task(identifier: identifier, completion: { [weak self] task in
@@ -245,7 +246,7 @@ public final class VidLoader: VidLoadable {
         guard let (identifier, streamResource) = playlistLoader.nextStreamResource,
               let item = activeItems[identifier],
               let url = URL(string: item.mediaLink) else { return }
-        switch schemeHandler.urlAsset(with: url, data: streamResource.data) {
+        switch schemeHandler.urlAsset(with: url, data: streamResource.data, headers: item.headers) {
         case .success(let urlAsset):
             startTask(urlAsset: urlAsset,
                       streamResource: streamResource,

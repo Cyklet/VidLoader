@@ -60,7 +60,7 @@ final class SchemeHandlerTests: XCTestCase {
         let expectedResult: Result<AVURLAsset, ResourceLoadingError> = .failure(.urlScheme)
         
         // WHEN
-        let finalResult = schemeHandler.urlAsset(with: url, data: .init())
+        let finalResult = schemeHandler.urlAsset(with: url, data: .init(), headers: nil)
         
         // THEN
         XCTAssertEqual(expectedResult, finalResult)
@@ -73,7 +73,7 @@ final class SchemeHandlerTests: XCTestCase {
         let givenData = Data.mock(string: "#WRONG-E-X-T-I-N-F")
         
         // WHEN
-        let resultScheme = try? schemeHandler.urlAsset(with: url, data: givenData).get().url.scheme
+        let resultScheme = try? schemeHandler.urlAsset(with: url, data: givenData, headers: nil).get().url.scheme
         
         // THEN
         XCTAssertEqual(expectedScheme, resultScheme)
@@ -86,7 +86,7 @@ final class SchemeHandlerTests: XCTestCase {
         let givenData = Data.mock(string: "#EXTINF")
         
         // WHEN
-        let resultScheme = try? schemeHandler.urlAsset(with: url, data: givenData).get().url.scheme
+        let resultScheme = try? schemeHandler.urlAsset(with: url, data: givenData, headers: nil).get().url.scheme
         
         // THEN
         XCTAssertEqual(expectedScheme, resultScheme)
